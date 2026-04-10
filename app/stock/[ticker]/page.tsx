@@ -307,13 +307,13 @@ export default function StockDetailPage({
             </div>
           </motion.div>
 
-          {/* Stock News */}
+          {/* Stock News (mobile only) */}
           {stockNews.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, duration: 0.3 }}
-              className="mt-7 md:mt-8"
+              className="mt-7 md:mt-8 lg:hidden"
             >
               <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">NEWS</h3>
               <div className="space-y-2">
@@ -467,6 +467,26 @@ export default function StockDetailPage({
               </div>
               <p className="text-[10px] text-white/20 mt-1">MCSE Exchange</p>
             </div>
+
+            {/* Stock News (desktop sidebar) */}
+            {stockNews.length > 0 && (
+              <div className="p-6 border-t border-white/8">
+                <p className="text-[9px] tracking-[0.15em] text-white/25 mb-3">NEWS ({stockNews.length})</p>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {stockNews.map((news, i) => (
+                    <div key={i} className="border border-white/8 p-3 hover:bg-white/[0.02] transition-colors">
+                      <p className="text-[11px] text-white/60 leading-relaxed mb-1.5 line-clamp-2">{news.headline}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[8px] tracking-[0.1em] text-white/20">{news.time}</span>
+                        <span className={`text-[9px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                          {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         </aside>
       </div>

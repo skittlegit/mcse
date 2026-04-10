@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, EyeOff, Plus, X } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
@@ -17,6 +17,10 @@ export default function WatchlistPage() {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("ticker");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [showValues, setShowValues] = useState(true);
+  const [watchlists, setWatchlists] = useState<string[]>(["My Watchlist"]);
+  const [activeList, setActiveList] = useState(0);
+  const [newListName, setNewListName] = useState("");
 
   const filtered = watchlist.filter(
     (s) =>
@@ -61,11 +65,17 @@ export default function WatchlistPage() {
   return (
     <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center gap-3 mb-5">
         <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase">
           WATCHLIST
         </h1>
-        <span className="text-[10px] text-white/30 tracking-[0.1em]">{sorted.length} STOCKS</span>
+        <button
+          onClick={() => setShowValues(!showValues)}
+          className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-150"
+        >
+          {showValues ? <Eye size={13} /> : <EyeOff size={13} />}
+        </button>
+        <span className="text-[10px] text-white/30 tracking-[0.1em] ml-auto">{sorted.length} STOCKS</span>
       </div>
 
       {/* Search */}
@@ -74,8 +84,69 @@ export default function WatchlistPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="SEARCH STOCKS..."
-        className="w-full h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-150 mb-6"
+        className="w-full h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-150 mb-4"
       />
+
+      {/* Watchlist tabs */}
+      <div className="flex items-center gap-0 mb-6 overflow-x-auto scrollbar-hide">
+        {watchlists.map((name, i) => (
+          <button
+            key={i}
+            onClick={() => setActiveList(i)}
+            className={`px-4 py-2 text-[10px] tracking-[0.15em] border transition-all duration-150 whitespace-nowrap flex items-center gap-2 ${
+              activeList === i
+                ? "bg-white text-black border-white"
+                : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+            }`}
+          >
+            {name.toUpperCase()}
+            {watchlists.length > 1 && activeList === i && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const next = watchlists.filter((_, idx) => idx !== i);
+                  setWatchlists(next);
+                  setActiveList(Math.max(0, i - 1));
+                }}
+                className="hover:text-red-400 cursor-pointer"
+              >
+                <X size={10} />
+              </span>
+            )}
+          </button>
+        ))}
+        <div className="flex items-center gap-0 ml-1">
+          {newListName !== "" ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (newListName.trim()) {
+                  setWatchlists([...watchlists, newListName.trim()]);
+                  setActiveList(watchlists.length);
+                  setNewListName("");
+                }
+              }}
+              className="flex"
+            >
+              <input
+                autoFocus
+                value={newListName}
+                onChange={(e) => setNewListName(e.target.value)}
+                onBlur={() => setNewListName("")}
+                placeholder="Name..."
+                className="w-24 h-8 bg-transparent border border-white/15 px-2 text-[10px] tracking-[0.1em] text-white outline-none"
+              />
+            </form>
+          ) : (
+            <button
+              onClick={() => setNewListName(" ")}
+              className="w-8 h-8 border border-white/15 flex items-center justify-center text-white/30 hover:text-white hover:border-white transition-colors"
+            >
+              <Plus size={12} />
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Mobile: sort + card list */}
       <div className="md:hidden">
@@ -115,11 +186,14 @@ export default function WatchlistPage() {
               <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
               <div className="text-right shrink-0 min-w-[80px]">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  {showValues ? <>{"₹"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</> : "••••"}
                 </p>
                 <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                   {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
                 </p>
+                {showValues && stock.shares && (
+                  <p className="text-[9px] text-white/25">{stock.shares} shares</p>
+                )}
               </div>
             </Link>
           </motion.div>
@@ -165,7 +239,7 @@ export default function WatchlistPage() {
                     <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
                     <p className="text-[10px] text-white/40 mt-0.5">
                       {stock.name}
-                      {stock.shares && (
+                      {showValues && stock.shares && (
                         <span className="text-white/20 ml-1">{"\u00B7"} {stock.shares} shares</span>
                       )}
                     </p>
@@ -179,7 +253,7 @@ export default function WatchlistPage() {
 
               <div className="text-right">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  {showValues ? <>{"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</> : "\u2022\u2022\u2022\u2022"}
                 </p>
               </div>
 
@@ -188,12 +262,12 @@ export default function WatchlistPage() {
                   {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
                 </p>
                 <p className="text-[10px] text-white/20">
-                  {stock.dayChange >= 0 ? "+" : ""}{"\u20B9"}{stock.dayChange.toFixed(2)}
+                  {showValues ? <>{stock.dayChange >= 0 ? "+" : ""}{"\u20B9"}{stock.dayChange.toFixed(2)}</> : "\u2022\u2022\u2022"}
                 </p>
               </div>
 
               <div className="text-right">
-                <p className="text-[11px] text-white/40">{stock.volume}</p>
+                <p className="text-[11px] text-white/40">{showValues ? stock.volume : "\u2022\u2022\u2022"}</p>
               </div>
 
               {/* 52W Performance bar */}

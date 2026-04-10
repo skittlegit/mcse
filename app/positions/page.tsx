@@ -1,52 +1,18 @@
 ﻿"use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import Sparkline from "@/components/Sparkline";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
 import { useTrading } from "@/lib/TradingContext";
-import { topGainers, topLosers, type MoverStock } from "@/lib/mockData";
 
 type PageTab = "POSITIONS" | "ORDERS";
-type ListTab = "GAINERS" | "LOSERS";
-type SortKey = "ticker" | "price" | "dayChangePercent";
-type SortDir = "asc" | "desc";
 
 export default function PositionsPage() {
   const { isLoggedIn } = useAuth();
   const { orders, positions } = useTrading();
   const [pageTab, setPageTab] = useState<PageTab>("POSITIONS");
-  const [listTab, setListTab] = useState<ListTab>("GAINERS");
-  const [sortKey, setSortKey] = useState<SortKey>("dayChangePercent");
-  const [sortDir, setSortDir] = useState<SortDir>("desc");
-
-  const data: Record<ListTab, MoverStock[]> = { GAINERS: topGainers, LOSERS: topLosers };
-
-  const sorted = useMemo(() => {
-    const arr = [...data[listTab]];
-    arr.sort((a, b) => {
-      let av: string | number, bv: string | number;
-      if (sortKey === "ticker") { av = a.ticker; bv = b.ticker; }
-      else { av = a[sortKey]; bv = b[sortKey]; }
-      if (typeof av === "string") return sortDir === "asc" ? av.localeCompare(bv as string) : (bv as string).localeCompare(av);
-      return sortDir === "asc" ? (av as number) - (bv as number) : (bv as number) - (av as number);
-    });
-    return arr;
-  }, [listTab, sortKey, sortDir]);
-
-  function toggleSort(key: SortKey) {
-    if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc");
-    else { setSortKey(key); setSortDir("desc"); }
-  }
-
-  function sortIcon(col: SortKey) {
-    return sortKey === col
-      ? sortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
-      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />;
-  }
 
   return (
     <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
@@ -337,115 +303,7 @@ export default function PositionsPage() {
         <LoginPrompt message="Log in to view your open positions and intraday trades." />
       )}
 
-      {/* Suggestions: TOP GAINERS / TOP LOSERS */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
-        className="mt-6"
-      >
-        <div className="flex items-center gap-0 mb-5 overflow-x-auto scrollbar-hide">
-          {(["GAINERS", "LOSERS"] as ListTab[]).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setListTab(tab)}
-              className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border transition-all duration-150 whitespace-nowrap ${
-                listTab === tab
-                  ? "bg-white text-black border-white"
-                  : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
-              }`}
-            >
-              TOP {tab} TODAY
-            </button>
-          ))}
-        </div>
-
-        {/* Mobile: sort + card list */}
-        <div className="md:hidden">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
-            <select
-              value={sortKey}
-              onChange={(e) => { setSortKey(e.target.value as SortKey); setSortDir("desc"); }}
-              className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
-              style={{ fontSize: '16px' }}
-            >
-              <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
-              <option value="price" className="bg-[#0a0a0a]">PRICE</option>
-              <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
-            </select>
-          </div>
-          <div className="space-y-2">
-          {sorted.map((stock, i) => (
-            <motion.div
-              key={stock.ticker}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.04 * i, duration: 0.3 }}
-            >
-              <Link
-                href={`/stock/${stock.ticker}`}
-                className="flex items-center gap-4 bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
-              >
-                <div className="w-11 h-11 border border-white/20 flex items-center justify-center shrink-0">
-                  <span className="text-[9px] tracking-[0.1em] text-white/40">{stock.ticker.slice(0, 3)}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
-                  <p className="text-[11px] text-white/40 truncate mt-0.5">{stock.name}</p>
-                </div>
-                <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
-                <div className="text-right shrink-0 min-w-[80px]">
-                  <p className="font-[var(--font-anton)] text-[13px]">
-                    {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                    {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
-                  </p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-          </div>
-        </div>
-
-        {/* Desktop: table with sortable headers */}
-        <div className="hidden md:block">
-          <div className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-2 border-b border-white/12">
-            <button onClick={() => toggleSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
-              COMPANY {sortIcon("ticker")}
-            </button>
-            <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
-            <button onClick={() => toggleSort("price")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-              MKT PRICE {sortIcon("price")}
-            </button>
-          </div>
-
-          {sorted.map((stock) => (
-            <Link
-              key={stock.ticker}
-              href={`/stock/${stock.ticker}`}
-              className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
-            >
-              <div>
-                <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
-                <p className="text-[10px] text-white/40 mt-0.5">{stock.name}</p>
-              </div>
-              <div className="flex justify-end">
-                <Sparkline data={stock.sparkline} width={60} height={20} positive={stock.dayChangePercent >= 0} />
-              </div>
-              <div className="text-right">
-                <p className="font-[var(--font-anton)] text-[13px]">
-                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                </p>
-                <p className={`text-[10px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                  {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </motion.div>
+      {/* Suggestions: TOP GAINERS / TOP LOSERS — removed */}
         </>
       )}
     </div>

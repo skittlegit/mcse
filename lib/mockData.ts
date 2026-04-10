@@ -312,6 +312,19 @@ export const portfolioAnalysis = {
   benchmarkName: "AEON 50",
   benchmarkReturn: 2.40,
   outperformance: 10.89,
+  sectorAllocation: [
+    { sector: "Education", value: 33.0 },
+    { sector: "Technology", value: 15.7 },
+    { sector: "Automotive", value: 16.6 },
+    { sector: "Media & Entertainment", value: 13.3 },
+    { sector: "Analytics", value: 12.3 },
+    { sector: "Science & Research", value: 9.1 },
+  ],
+  marketCapAllocation: [
+    { cap: "Large Cap", value: 34.6 },
+    { cap: "Mid Cap", value: 49.3 },
+    { cap: "Small Cap", value: 16.1 },
+  ],
   performanceChart: [
     { month: "Apr", portfolio: 421500, benchmark: 421500 },
     { month: "May", portfolio: 428200, benchmark: 423800 },

@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState, useMemo } from "react";
-import { Eye, EyeOff, ChevronDown, ChevronUp, BarChart3, X } from "lucide-react";
+import { Eye, EyeOff, ChevronDown, ChevronUp, BarChart3, X, ArrowUpDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
 import Link from "next/link";
@@ -22,6 +22,9 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
 
 type SortKey = "ticker" | "currentPrice" | "dayChangePercent" | "returnsPercent" | "currentValue";
@@ -29,7 +32,7 @@ type SortDir = "asc" | "desc";
 
 export default function HoldingsPage() {
   const { isLoggedIn } = useAuth();
-  const { placeOrder, getOrdersForTicker, balance } = useTrading();
+  const { placeOrder, getOrdersForTicker, getBuyCount, getSellCount, balance } = useTrading();
   const [showValues, setShowValues] = useState(true);
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("currentValue");
@@ -39,6 +42,7 @@ export default function HoldingsPage() {
   const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
   const [qty, setQty] = useState(1);
   const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
+  const [sortOpen, setSortOpen] = useState(false);
 
   const selectedHolding = holdings.find((h) => h.ticker === selectedTicker);
   const selectedOrders = selectedTicker ? getOrdersForTicker(selectedTicker) : [];
@@ -145,7 +149,11 @@ export default function HoldingsPage() {
                 {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
               </p>
               <p className={`text-[12px] font-medium mt-1 ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                {investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)
+                {showValues ? (
+                  <>{investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)</>
+                ) : (
+                  <>{investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%</>
+                )}
               </p>
             </div>
             <div className="text-left md:text-right">
@@ -157,11 +165,6 @@ export default function HoldingsPage() {
           </div>
         </motion.div>
 
-        {!showValues ? (
-          <div className="py-8 text-center">
-            <p className="text-[11px] tracking-[0.15em] text-white/20 uppercase">VALUES HIDDEN</p>
-          </div>
-        ) : (<>
         {/* Holdings list header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase">YOUR STOCKS</h2>
@@ -169,20 +172,30 @@ export default function HoldingsPage() {
 
         {/* Mobile: Card list */}
         <div className="md:hidden">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
-            <select
-              value={sortKey}
-              onChange={(e) => { setSortKey(e.target.value as SortKey); setSortDir("desc"); }}
-              className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
-              style={{ fontSize: '16px' }}
+          <div className="flex items-center gap-3 mb-3 relative">
+            <button
+              onClick={() => setSortOpen(!sortOpen)}
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-white/15 text-[10px] tracking-[0.1em] text-white/60 hover:text-white hover:border-white transition-colors"
             >
-              <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
-              <option value="currentPrice" className="bg-[#0a0a0a]">PRICE</option>
-              <option value="returnsPercent" className="bg-[#0a0a0a]">RETURNS</option>
-              <option value="currentValue" className="bg-[#0a0a0a]">VALUE</option>
-              <option value="dayChangePercent" className="bg-[#0a0a0a]">1D CHANGE</option>
-            </select>
+              <ArrowUpDown size={11} />
+              SORT
+            </button>
+            {sortOpen && (
+              <div className="absolute top-full left-0 mt-1 z-20 border border-white/15 bg-[#0a0a0a] min-w-[140px]">
+                {(["ticker", "currentPrice", "returnsPercent", "currentValue", "dayChangePercent"] as SortKey[]).map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => { setSortKey(key); setSortDir("desc"); setSortOpen(false); }}
+                    className={`block w-full text-left px-4 py-2.5 text-[10px] tracking-[0.1em] transition-colors ${sortKey === key ? "text-white bg-white/[0.06]" : "text-white/50 hover:text-white hover:bg-white/[0.03]"}`}
+                  >
+                    {{ ticker: "NAME", currentPrice: "PRICE", returnsPercent: "RETURNS", currentValue: "VALUE", dayChangePercent: "1D CHANGE" }[key]}
+                  </button>
+                ))}
+              </div>
+            )}
+            <span className="text-[9px] tracking-[0.1em] text-white/25 ml-auto">
+              {{ ticker: "NAME", currentPrice: "PRICE", returnsPercent: "RETURNS", currentValue: "VALUE", dayChangePercent: "1D CHANGE" }[sortKey]}
+            </span>
           </div>
           <div className="space-y-2">
           {sorted.map((h, i) => (
@@ -194,25 +207,29 @@ export default function HoldingsPage() {
             >
               <Link
                 href={`/stock/${h.ticker}`}
-                className="flex items-center gap-4 bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
+                className="flex items-center justify-between bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
               >
-                <div className="w-11 h-11 border border-white/20 flex items-center justify-center shrink-0">
-                  <span className="text-[9px] tracking-[0.1em] text-white/40">{h.ticker.slice(0, 3)}</span>
-                </div>
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0">
                   <div className="flex items-baseline gap-2">
                     <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{h.ticker}</p>
-                    <p className="text-[10px] text-white/30">{h.qty} shares</p>
+                    <p className="text-[10px] text-white/30 truncate">{h.name}</p>
                   </div>
-                  <p className="text-[11px] text-white/40 truncate mt-0.5">{h.name}</p>
+                  <p className="text-[10px] text-white/40 mt-1">
+                    {showValues ? <>{h.qty} shares · Avg {"\u20B9"}{h.avgPrice.toFixed(2)}</> : <>{h.qty > 0 ? "\u2022\u2022\u2022" : ""}</>}
+                  </p>
                 </div>
-                <div className="text-right shrink-0 min-w-[80px]">
+                <div className="text-right shrink-0 ml-4">
                   <p className="font-[var(--font-anton)] text-[13px]">
-                    {showValues ? `\u20B9${h.currentPrice.toLocaleString("en-IN")}` : "\u2022\u2022\u2022"}
+                    {"\u20B9"}{h.currentPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                   </p>
-                  <p className={`text-[11px] font-medium ${h.returnsPercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                    {h.returnsPercent >= 0 ? "+" : ""}{h.returnsPercent.toFixed(2)}%
+                  <p className={`text-[11px] font-medium ${h.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                    {h.dayChangePercent >= 0 ? "+" : ""}{h.dayChangePercent.toFixed(2)}%
                   </p>
+                  {showValues && (
+                    <p className={`text-[10px] ${h.returnsPercent >= 0 ? "text-[#00D26A]/60" : "text-[#FF5252]/60"}`}>
+                      {h.returnsPercent >= 0 ? "+" : ""}{h.returnsPercent.toFixed(2)}%
+                    </p>
+                  )}
                 </div>
               </Link>
             </motion.div>
@@ -239,8 +256,9 @@ export default function HoldingsPage() {
           </div>
 
           {sorted.map((h) => (
-            <div
+            <Link
               key={h.ticker}
+              href={`/stock/${h.ticker}`}
               className={`grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center cursor-pointer ${
                 selectedTicker === h.ticker ? "bg-white/[0.04]" : ""
               }`}
@@ -278,10 +296,9 @@ export default function HoldingsPage() {
                   {showValues ? `\u20B9${h.investedValue.toLocaleString("en-IN")}` : "\u2022\u2022\u2022\u2022"}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
-        </>)}
       </div>
 
       {/* Right panel (desktop) — Buy/Sell */}
@@ -408,6 +425,14 @@ export default function HoldingsPage() {
                       {selectedHolding.returns >= 0 ? "+" : ""}{"\u20B9"}{selectedHolding.returns.toLocaleString("en-IN")}
                     </span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-[10px] text-white/40">BUY ORDERS</span>
+                    <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">{getBuyCount(selectedHolding.ticker)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-[10px] text-white/40">SELL ORDERS</span>
+                    <span className="text-[12px] font-[var(--font-anton)] text-[#FF5252]">{getSellCount(selectedHolding.ticker)}</span>
+                  </div>
                 </div>
               </div>
 
@@ -461,7 +486,7 @@ export default function HoldingsPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.96 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[80vh] bg-[#0a0a0a] border border-white/15 z-50 overflow-y-auto"
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[80vh] bg-[#0a0a0a] border border-white/15 z-50 overflow-y-auto"
             >
               <div className="flex items-center justify-between p-5 border-b border-white/10">
                 <h3 className="font-[var(--font-anton)] text-lg tracking-[0.1em]">PORTFOLIO ANALYSIS</h3>
@@ -523,6 +548,67 @@ export default function HoldingsPage() {
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-[2px] bg-white/30" style={{ borderTop: "1px dashed" }} />
                     <span className="text-[9px] tracking-[0.1em] text-white/40">{portfolioAnalysis.benchmarkName}</span>
+                  </div>
+                </div>
+
+                {/* Sector Allocation */}
+                <div className="mt-8">
+                  <h4 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">SECTOR ALLOCATION</h4>
+                  <div className="flex flex-col md:flex-row items-center gap-4">
+                    <div className="w-48 h-48">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={portfolioAnalysis.sectorAllocation}
+                            dataKey="value"
+                            nameKey="sector"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={70}
+                            innerRadius={35}
+                            strokeWidth={1}
+                            stroke="#0a0a0a"
+                          >
+                            {portfolioAnalysis.sectorAllocation.map((_: { sector: string; value: number }, idx: number) => (
+                              <Cell key={idx} fill={["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][idx % 6]} />
+                            ))}
+                          </Pie>
+                          <Tooltip
+                            contentStyle={{ background: "#111", border: "1px solid rgba(255,255,255,0.15)", fontSize: 11, color: "#fff" }}
+                            formatter={(value) => [`${value}%`, ""]}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      {portfolioAnalysis.sectorAllocation.map((s: { sector: string; value: number }, i: number) => (
+                        <div key={s.sector} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5" style={{ backgroundColor: ["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][i % 6] }} />
+                            <span className="text-[10px] text-white/50">{s.sector}</span>
+                          </div>
+                          <span className="text-[11px] font-[var(--font-anton)]">{s.value}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Market Cap Allocation */}
+                <div className="mt-8">
+                  <h4 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">MARKET CAP ALLOCATION</h4>
+                  <div className="space-y-3">
+                    {portfolioAnalysis.marketCapAllocation.map((m: { cap: string; value: number }) => (
+                      <div key={m.cap}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-[10px] tracking-[0.1em] text-white/50">{m.cap.toUpperCase()}</span>
+                          <span className="text-[11px] font-[var(--font-anton)]">{m.value}%</span>
+                        </div>
+                        <div className="h-1.5 bg-white/8 w-full">
+                          <div className="h-full bg-white/60" style={{ width: `${m.value}%` }} />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
