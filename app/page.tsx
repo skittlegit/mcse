@@ -94,14 +94,14 @@ export default function ExplorePage() {
             </Link>
           </div>
           <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-3">
-            {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+            {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
           </p>
           <div className="flex items-center gap-5">
             <span className="text-[11px] text-white/50">
-              1D: <span className="text-[#00D26A]">+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN")} (+{investments.dayReturnsPercent.toFixed(2)}%)</span>
+              1D: <span className="text-[#00D26A]">+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} (+{investments.dayReturnsPercent.toFixed(2)}%)</span>
             </span>
             <span className="text-[11px] text-white/50">
-              Total: <span className="text-[#00D26A]">+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN")} (+{investments.totalReturnsPercent.toFixed(2)}%)</span>
+              Total: <span className="text-[#00D26A]">+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} (+{investments.totalReturnsPercent.toFixed(2)}%)</span>
             </span>
           </div>
         </motion.div>
@@ -174,8 +174,23 @@ export default function ExplorePage() {
             ))}
           </div>
 
-          {/* Mobile: card list */}
-          <div className="md:hidden space-y-2">
+          {/* Mobile: sort + card list */}
+          <div className="md:hidden">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
+              <select
+                value={moverSort}
+                onChange={(e) => { setMoverSort(e.target.value as MoverSortKey); setMoverSortDir("desc"); }}
+                className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
+                style={{ fontSize: '16px' }}
+              >
+                <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
+                <option value="price" className="bg-[#0a0a0a]">PRICE</option>
+                <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
+                <option value="volume" className="bg-[#0a0a0a]">VOLUME</option>
+              </select>
+            </div>
+            <div className="space-y-2">
             {currentMovers.map((stock) => (
               <Link
                 key={stock.ticker}
@@ -200,6 +215,7 @@ export default function ExplorePage() {
                 </div>
               </Link>
             ))}
+            </div>
           </div>
 
           {/* Desktop table with sortable headers */}
@@ -283,27 +299,27 @@ export default function ExplorePage() {
           <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-3">YOUR INVESTMENTS</p>
           <p className="text-[9px] tracking-[0.2em] text-white/40 mb-1">CURRENT VALUE</p>
           <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-4">
-            {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+            {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
           </p>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] tracking-[0.1em] text-white/40">1D RETURNS</span>
               <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">
-                +{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                +{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                 <span className="text-[#00D26A]/60 ml-1 text-[10px]">(+{investments.dayReturnsPercent.toFixed(2)}%)</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[10px] tracking-[0.1em] text-white/40">TOTAL RETURNS</span>
               <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">
-                +{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                +{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                 <span className="text-[#00D26A]/60 ml-1 text-[10px]">(+{investments.totalReturnsPercent.toFixed(2)}%)</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[10px] tracking-[0.1em] text-white/40">INVESTED</span>
               <span className="text-[12px] font-[var(--font-anton)] text-white">
-                {"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                {"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
               </span>
             </div>
           </div>

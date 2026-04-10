@@ -106,16 +106,16 @@ export default function HoldingsPage() {
             <div>
               <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">CURRENT VALUE</p>
               <p className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-tight">
-                {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+                {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
               </p>
               <p className={`text-[12px] font-medium mt-1 ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                {investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { minimumFractionDigits: 2 })} ({investments.totalReturnsPercent.toFixed(2)}%)
+                {investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)
               </p>
             </div>
             <div className="text-left md:text-right">
               <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">INVESTED</p>
               <p className="font-[var(--font-anton)] text-xl md:text-2xl tracking-tight text-white/60">
-                {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+                {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
               </p>
             </div>
           </div>
@@ -127,7 +127,23 @@ export default function HoldingsPage() {
         </div>
 
         {/* Mobile: Card list */}
-        <div className="md:hidden space-y-2">
+        <div className="md:hidden">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
+            <select
+              value={sortKey}
+              onChange={(e) => { setSortKey(e.target.value as SortKey); setSortDir("desc"); }}
+              className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
+              style={{ fontSize: '16px' }}
+            >
+              <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
+              <option value="currentPrice" className="bg-[#0a0a0a]">PRICE</option>
+              <option value="returnsPercent" className="bg-[#0a0a0a]">RETURNS</option>
+              <option value="currentValue" className="bg-[#0a0a0a]">VALUE</option>
+              <option value="dayChangePercent" className="bg-[#0a0a0a]">1D CHANGE</option>
+            </select>
+          </div>
+          <div className="space-y-2">
           {sorted.map((h, i) => (
             <motion.div
               key={h.ticker}
@@ -160,6 +176,7 @@ export default function HoldingsPage() {
               </Link>
             </motion.div>
           ))}
+          </div>
         </div>
 
         {/* Desktop: Table with sortable headers */}

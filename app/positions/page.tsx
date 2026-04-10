@@ -9,12 +9,14 @@ import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
 import { topGainers, topLosers, type MoverStock } from "@/lib/mockData";
 
+type PageTab = "POSITIONS" | "ORDERS";
 type ListTab = "GAINERS" | "LOSERS";
 type SortKey = "ticker" | "price" | "dayChangePercent";
 type SortDir = "asc" | "desc";
 
 export default function PositionsPage() {
   const { isLoggedIn } = useAuth();
+  const [pageTab, setPageTab] = useState<PageTab>("POSITIONS");
   const [listTab, setListTab] = useState<ListTab>("GAINERS");
   const [sortKey, setSortKey] = useState<SortKey>("dayChangePercent");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -46,6 +48,69 @@ export default function PositionsPage() {
 
   return (
     <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
+      {/* Page tabs: POSITIONS | ORDERS */}
+      <div className="flex items-center gap-0 mb-6">
+        {(["POSITIONS", "ORDERS"] as PageTab[]).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setPageTab(tab)}
+            className={`px-5 py-2.5 text-[11px] tracking-[0.15em] border transition-all duration-150 ${
+              pageTab === tab
+                ? "bg-white text-black border-white"
+                : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {pageTab === "ORDERS" ? (
+        /* Orders empty state */
+        isLoggedIn ? (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center justify-center py-16 md:py-24"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-18 h-18 md:w-20 md:h-20 border border-white/15 flex items-center justify-center mb-6 relative"
+            >
+              <div className="w-8 md:w-10 h-[1px] bg-white" />
+              <div className="absolute w-[1px] h-8 md:h-10 bg-white" />
+              <div className="absolute w-3 md:w-4 h-3 md:h-4 border border-white bottom-1.5 md:bottom-2 left-1.5 md:left-2" />
+            </motion.div>
+            <h1 className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-[0.1em] uppercase mb-3">
+              NO OPEN ORDERS
+            </h1>
+            <p className="text-[11px] tracking-[0.1em] text-white/40 text-center max-w-xs mb-6">
+              You have no pending or open orders. Place a buy or sell order to see it here.
+            </p>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/"
+                className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+              >
+                EXPLORE STOCKS
+              </Link>
+              <Link
+                href="/holdings"
+                className="px-6 py-3 text-[10px] tracking-[0.15em] text-white/50 hover:text-white border border-white/20 hover:border-white transition-all duration-150"
+              >
+                VIEW HOLDINGS
+              </Link>
+            </div>
+          </motion.div>
+        ) : (
+          <LoginPrompt message="Log in to view your order history and pending orders." />
+        )
+      ) : (
+        /* Positions content */
+        <>
       {/* Empty state - positions */}
       {isLoggedIn ? (
         <motion.div
@@ -103,8 +168,22 @@ export default function PositionsPage() {
           ))}
         </div>
 
-        {/* Mobile: card list */}
-        <div className="md:hidden space-y-2">
+        {/* Mobile: sort + card list */}
+        <div className="md:hidden">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
+            <select
+              value={sortKey}
+              onChange={(e) => { setSortKey(e.target.value as SortKey); setSortDir("desc"); }}
+              className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
+              style={{ fontSize: '16px' }}
+            >
+              <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
+              <option value="price" className="bg-[#0a0a0a]">PRICE</option>
+              <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
+            </select>
+          </div>
+          <div className="space-y-2">
           {sorted.map((stock, i) => (
             <motion.div
               key={stock.ticker}
@@ -135,6 +214,7 @@ export default function PositionsPage() {
               </Link>
             </motion.div>
           ))}
+          </div>
         </div>
 
         {/* Desktop: table with sortable headers */}
@@ -174,6 +254,8 @@ export default function PositionsPage() {
           ))}
         </div>
       </motion.div>
+        </>
+      )}
     </div>
   );
 }

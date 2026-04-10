@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, ClipboardList, Eye, Menu, X } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
@@ -14,7 +14,6 @@ const tabs = [
   { href: "/", label: "EXPLORE", icon: BarChart3 },
   { href: "/holdings", label: "HOLDINGS", icon: Briefcase },
   { href: "/positions", label: "POSITIONS", icon: LineChart },
-  { href: "/orders", label: "ORDERS", icon: ClipboardList },
   { href: "/watchlist", label: "WATCHLIST", icon: Eye },
 ];
 
@@ -153,7 +152,7 @@ export default function TopNav() {
       </nav>
 
       {/* Mobile bottom tab bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-center justify-around h-14 px-2">
           {tabs.map((tab) => {
             const active =
@@ -243,7 +242,6 @@ export default function TopNav() {
                   { label: "EXPLORE", href: "/" },
                   ...(isLoggedIn ? [
                     { label: "MY PROFILE", href: "/profile" },
-                    { label: "ALL ORDERS", href: "/orders" },
                   ] : []),
                   { label: "HOLDINGS", href: "/holdings" },
                   { label: "WATCHLIST", href: "/watchlist" },

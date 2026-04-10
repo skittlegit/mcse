@@ -317,7 +317,7 @@ export default function StockDetailPage({
       </div>
 
       {/* Mobile fixed bottom buy/sell bar */}
-      <div className="fixed bottom-14 left-0 right-0 z-40 lg:hidden border-t border-white/12 bg-[#0a0a0a]/95 backdrop-blur-md">
+      <div className="fixed bottom-14 left-0 right-0 z-40 lg:hidden border-t border-white/12 bg-[#0a0a0a]/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
         <div className="flex">
           <button className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#00D26A] text-black active:bg-[#00D26A]/80 transition-all">
             BUY {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 0 })}

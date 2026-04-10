@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import LoadingScreen from "./LoadingScreen";
 import TopNav from "./TopNav";
-import IndexBar from "./IndexBar";
 import TickerTape from "./TickerTape";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
@@ -53,11 +52,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <TopNav />
-        <IndexBar />
+        <TickerTape />
         <main className="flex-1 relative z-10 pb-10 md:pb-0">
           {children}
         </main>
-        <TickerTape />
       </motion.div>
     </>
   );

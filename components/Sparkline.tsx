@@ -48,7 +48,7 @@ export default function Sparkline({
   const gradId = `spark-grad-${Math.random().toString(36).slice(2, 8)}`;
 
   return (
-    <svg width={width} height={height} className="block overflow-visible">
+    <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} className="block overflow-visible" style={{ maxWidth: '100%', height: 'auto' }}>
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={fillColor} />

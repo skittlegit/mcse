@@ -74,11 +74,26 @@ export default function WatchlistPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="SEARCH STOCKS..."
-        className="w-full h-11 bg-transparent border border-white/15 px-4 text-[12px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-150 mb-6"
+        className="w-full h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-150 mb-6"
       />
 
-      {/* Mobile: Card list */}
-      <div className="md:hidden space-y-2">
+      {/* Mobile: sort + card list */}
+      <div className="md:hidden">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
+          <select
+            value={sortKey}
+            onChange={(e) => { setSortKey(e.target.value as SortKey); setSortDir("desc"); }}
+            className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
+            style={{ fontSize: '16px' }}
+          >
+            <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
+            <option value="price" className="bg-[#0a0a0a]">PRICE</option>
+            <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
+            <option value="volume" className="bg-[#0a0a0a]">VOLUME</option>
+          </select>
+        </div>
+        <div className="space-y-2">
         {sorted.map((stock, i) => (
           <motion.div
             key={stock.ticker}
@@ -109,6 +124,7 @@ export default function WatchlistPage() {
             </Link>
           </motion.div>
         ))}
+        </div>
       </div>
 
       {/* Desktop: Table with sortable headers */}
