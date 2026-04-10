@@ -13,6 +13,7 @@ import {
   Settings,
   LogOut,
   History,
+  Shield,
 } from "lucide-react";
 import { userProfile, investments } from "@/lib/mockData";
 import LoginPrompt from "@/components/LoginPrompt";
@@ -37,9 +38,11 @@ const sections = [
 ];
 
 export default function ProfilePage() {
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, role, userName, userEmail } = useAuth();
   const { balance } = useTrading();
   const router = useRouter();
+
+  const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "?";
 
   if (!isLoggedIn) {
     return (
@@ -64,13 +67,18 @@ export default function ProfilePage() {
         className="flex items-start gap-5 mb-8"
       >
         <div className="w-16 h-16 md:w-20 md:h-20 border-2 border-white flex items-center justify-center shrink-0">
-          <span className="font-monument text-xl md:text-2xl font-extrabold tracking-wider">DA</span>
+          <span className="font-monument text-xl md:text-2xl font-extrabold tracking-wider">{initials}</span>
         </div>
         <div className="flex-1 min-w-0 pt-1">
           <h1 className="font-[var(--font-anton)] text-xl md:text-2xl tracking-[0.08em] uppercase mb-1">
-            {userProfile.name}
+            {userName}
           </h1>
-          <p className="text-[11px] md:text-[12px] text-white/40 tracking-[0.05em]">{userProfile.email}</p>
+          <p className="text-[11px] md:text-[12px] text-white/40 tracking-[0.05em]">{userEmail}</p>
+          {role && role !== "user" && (
+            <span className="inline-block mt-1 text-[9px] tracking-[0.15em] px-2 py-0.5 border border-white/20 text-white/60 uppercase">
+              {role === "companyAdmin" ? "COMPANY ADMIN" : "TOTAL ADMIN"}
+            </span>
+          )}
         </div>
       </motion.div>
 
@@ -86,7 +94,7 @@ export default function ProfilePage() {
             <Mail size={13} className="text-white/30" />
             <span className="text-[9px] tracking-[0.2em] text-white/30">EMAIL</span>
           </div>
-          <p className="text-[12px] md:text-[13px] text-white/70">{userProfile.email}</p>
+          <p className="text-[12px] md:text-[13px] text-white/70">{userEmail}</p>
         </div>
         <div className="bg-[#0a0a0a] p-4 md:p-5">
           <div className="flex items-center gap-2 mb-2">
@@ -145,6 +153,34 @@ export default function ProfilePage() {
           VIEW HOLDINGS
         </Link>
       </motion.div>
+
+      {/* Admin Panel Link */}
+      {role && role !== "user" && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.12 }}
+          className="mb-8"
+        >
+          <Link
+            href="/admin"
+            className="flex items-center justify-between p-5 border border-white/15 hover:bg-white/[0.03] transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <Shield size={16} strokeWidth={1.5} className="text-white/40" />
+              <div>
+                <p className="text-[11px] tracking-[0.1em] text-white/70 group-hover:text-white transition-colors">
+                  {role === "totalAdmin" ? "TOTAL ADMIN PANEL" : "COMPANY ADMIN PANEL"}
+                </p>
+                <p className="text-[9px] text-white/30 mt-0.5">
+                  {role === "totalAdmin" ? "Manage all users, stocks & platform" : "Manage company stocks & analytics"}
+                </p>
+              </div>
+            </div>
+            <ChevronRight size={14} className="text-white/20" />
+          </Link>
+        </motion.div>
+      )}
 
       {/* Menu sections */}
       {sections.map((section, si) => (

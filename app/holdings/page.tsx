@@ -43,6 +43,7 @@ export default function HoldingsPage() {
   const [qty, setQty] = useState(1);
   const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
   const [sortOpen, setSortOpen] = useState(false);
+  const [mobileDisplay, setMobileDisplay] = useState<"market" | "current" | "returns" | "dayChange">("market");
 
   const selectedHolding = holdings.find((h) => h.ticker === selectedTicker);
   const selectedOrders = selectedTicker ? getOrdersForTicker(selectedTicker) : [];
@@ -196,6 +197,18 @@ export default function HoldingsPage() {
             <span className="text-[9px] tracking-[0.1em] text-white/25 ml-auto">
               {{ ticker: "NAME", currentPrice: "PRICE", returnsPercent: "RETURNS", currentValue: "VALUE", dayChangePercent: "1D CHANGE" }[sortKey]}
             </span>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileDisplay((d) => {
+                  const order: typeof mobileDisplay[] = ["market", "current", "returns", "dayChange"];
+                  return order[(order.indexOf(d) + 1) % order.length];
+                });
+              }}
+              className="px-3 py-1.5 border border-white/15 text-[10px] tracking-[0.1em] text-white/60 hover:text-white hover:border-white transition-colors"
+            >
+              {{ market: "MKT PRICE", current: "CURRENT", returns: "RETURNS", dayChange: "1D CHG" }[mobileDisplay]}
+            </button>
           </div>
           <div className="space-y-2">
           {sorted.map((h, i) => (
@@ -219,16 +232,45 @@ export default function HoldingsPage() {
                   </p>
                 </div>
                 <div className="text-right shrink-0 ml-4">
-                  <p className="font-[var(--font-anton)] text-[13px]">
-                    {"\u20B9"}{h.currentPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className={`text-[11px] font-medium ${h.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                    {h.dayChangePercent >= 0 ? "+" : ""}{h.dayChangePercent.toFixed(2)}%
-                  </p>
-                  {showValues && (
-                    <p className={`text-[10px] ${h.returnsPercent >= 0 ? "text-[#00D26A]/60" : "text-[#FF5252]/60"}`}>
-                      {h.returnsPercent >= 0 ? "+" : ""}{h.returnsPercent.toFixed(2)}%
-                    </p>
+                  {mobileDisplay === "market" && (
+                    <>
+                      <p className="font-[var(--font-anton)] text-[13px]">
+                        {"\u20B9"}{h.currentPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                      </p>
+                      <p className={`text-[11px] font-medium ${h.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                        {h.dayChangePercent >= 0 ? "+" : ""}{h.dayChangePercent.toFixed(2)}%
+                      </p>
+                    </>
+                  )}
+                  {mobileDisplay === "current" && (
+                    <>
+                      <p className="font-[var(--font-anton)] text-[13px]">
+                        {showValues ? `\u20B9${h.currentValue.toLocaleString("en-IN")}` : "\u2022\u2022\u2022\u2022"}
+                      </p>
+                      <p className="text-[10px] text-white/30">
+                        {showValues ? `Inv \u20B9${h.investedValue.toLocaleString("en-IN")}` : "\u2022\u2022\u2022\u2022"}
+                      </p>
+                    </>
+                  )}
+                  {mobileDisplay === "returns" && (
+                    <>
+                      <p className={`font-[var(--font-anton)] text-[13px] ${h.returnsPercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                        {h.returnsPercent >= 0 ? "+" : ""}{h.returnsPercent.toFixed(2)}%
+                      </p>
+                      <p className={`text-[10px] ${h.returns >= 0 ? "text-[#00D26A]/60" : "text-[#FF5252]/60"}`}>
+                        {showValues ? `${h.returns >= 0 ? "+" : ""}\u20B9${h.returns.toLocaleString("en-IN")}` : "\u2022\u2022\u2022"}
+                      </p>
+                    </>
+                  )}
+                  {mobileDisplay === "dayChange" && (
+                    <>
+                      <p className={`font-[var(--font-anton)] text-[13px] ${h.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                        {h.dayChangePercent >= 0 ? "+" : ""}{h.dayChangePercent.toFixed(2)}%
+                      </p>
+                      <p className={`text-[10px] ${h.dayChange >= 0 ? "text-[#00D26A]/60" : "text-[#FF5252]/60"}`}>
+                        {h.dayChange >= 0 ? "+" : ""}{"\u20B9"}{h.dayChange.toFixed(2)}
+                      </p>
+                    </>
                   )}
                 </div>
               </Link>
@@ -267,7 +309,7 @@ export default function HoldingsPage() {
             >
               <div>
                 <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{h.ticker}</p>
-                <p className="text-[10px] text-white/40 mt-0.5">{h.name} · {h.qty} shares · Avg {"\u20B9"}{h.avgPrice.toFixed(2)}</p>
+                <p className="text-[10px] text-white/40 mt-0.5">{h.name}{showValues ? <> · {h.qty} shares · Avg {"\u20B9"}{h.avgPrice.toFixed(2)}</> : null}</p>
               </div>
               <div className="flex justify-end">
                 <Sparkline data={h.sparkline} width={60} height={20} positive={h.dayChangePercent >= 0} />

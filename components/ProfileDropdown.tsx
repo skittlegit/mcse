@@ -18,7 +18,7 @@ const menuItems = [
 
 export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { logout } = useAuth();
+  const { logout, userName, userEmail, role } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -51,10 +51,17 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
         onClick={onClose}
         className="block px-5 py-4 border-b border-white/10 hover:bg-white/[0.03] transition-colors"
       >
-        <p className="font-[var(--font-anton)] text-sm tracking-[0.1em]">
-          {userProfile.name}
-        </p>
-        <p className="text-[11px] text-white/50 mt-0.5">{userProfile.email}</p>
+        <div className="flex items-center justify-between">
+          <p className="font-[var(--font-anton)] text-sm tracking-[0.1em]">
+            {userName}
+          </p>
+          {role && role !== "user" && (
+            <span className="text-[8px] tracking-[0.1em] px-1.5 py-0.5 border border-white/20 text-white/50 uppercase">
+              {role === "companyAdmin" ? "CO. ADMIN" : "ADMIN"}
+            </span>
+          )}
+        </div>
+        <p className="text-[11px] text-white/50 mt-0.5">{userEmail}</p>
       </Link>
 
       <div>

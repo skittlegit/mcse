@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, Eye, EyeOff, Plus, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, X } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
@@ -17,7 +17,6 @@ export default function WatchlistPage() {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("ticker");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [showValues, setShowValues] = useState(true);
   const [watchlists, setWatchlists] = useState<string[]>(["My Watchlist"]);
   const [activeList, setActiveList] = useState(0);
   const [newListName, setNewListName] = useState("");
@@ -65,17 +64,11 @@ export default function WatchlistPage() {
   return (
     <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-5">
+      <div className="flex items-center justify-between mb-5">
         <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase">
           WATCHLIST
         </h1>
-        <button
-          onClick={() => setShowValues(!showValues)}
-          className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-150"
-        >
-          {showValues ? <Eye size={13} /> : <EyeOff size={13} />}
-        </button>
-        <span className="text-[10px] text-white/30 tracking-[0.1em] ml-auto">{sorted.length} STOCKS</span>
+        <span className="text-[10px] text-white/30 tracking-[0.1em]">{sorted.length} STOCKS</span>
       </div>
 
       {/* Search */}
@@ -186,12 +179,12 @@ export default function WatchlistPage() {
               <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
               <div className="text-right shrink-0 min-w-[80px]">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  {showValues ? <>{"₹"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</> : "••••"}
+                  {"₹"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </p>
                 <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                   {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
                 </p>
-                {showValues && stock.shares && (
+                {stock.shares && (
                   <p className="text-[9px] text-white/25">{stock.shares} shares</p>
                 )}
               </div>
@@ -239,7 +232,7 @@ export default function WatchlistPage() {
                     <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
                     <p className="text-[10px] text-white/40 mt-0.5">
                       {stock.name}
-                      {showValues && stock.shares && (
+                      {stock.shares && (
                         <span className="text-white/20 ml-1">{"\u00B7"} {stock.shares} shares</span>
                       )}
                     </p>
@@ -253,7 +246,7 @@ export default function WatchlistPage() {
 
               <div className="text-right">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  {showValues ? <>{"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</> : "\u2022\u2022\u2022\u2022"}
+                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </p>
               </div>
 
@@ -262,12 +255,12 @@ export default function WatchlistPage() {
                   {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
                 </p>
                 <p className="text-[10px] text-white/20">
-                  {showValues ? <>{stock.dayChange >= 0 ? "+" : ""}{"\u20B9"}{stock.dayChange.toFixed(2)}</> : "\u2022\u2022\u2022"}
+                  {stock.dayChange >= 0 ? "+" : ""}{"\u20B9"}{stock.dayChange.toFixed(2)}
                 </p>
               </div>
 
               <div className="text-right">
-                <p className="text-[11px] text-white/40">{showValues ? stock.volume : "\u2022\u2022\u2022"}</p>
+                <p className="text-[11px] text-white/40">{stock.volume}</p>
               </div>
 
               {/* 52W Performance bar */}

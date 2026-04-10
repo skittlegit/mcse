@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar } from "lucide-react";
+import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
@@ -39,6 +39,7 @@ const productRoutes: Record<string, string> = {
 
 export default function ExplorePage() {
   const { isLoggedIn } = useAuth();
+  const [showInvestments, setShowInvestments] = useState(true);
   const [activeTab, setActiveTab] = useState<MoverTab>("GAINERS");
   const [moverSort, setMoverSort] = useState<MoverSortKey>("dayChangePercent");
   const [moverSortDir, setMoverSortDir] = useState<SortDir>("desc");
@@ -88,20 +89,25 @@ export default function ExplorePage() {
           className="lg:hidden mb-7 border border-white/10 p-5"
         >
           <div className="flex items-center justify-between mb-3">
-            <p className="text-[10px] tracking-[0.2em] text-white/30 uppercase">YOUR INVESTMENTS</p>
+            <div className="flex items-center gap-2">
+              <p className="text-[10px] tracking-[0.2em] text-white/30 uppercase">YOUR INVESTMENTS</p>
+              <button onClick={() => setShowInvestments(v => !v)} className="text-white/30 hover:text-white/60 transition-colors">
+                {showInvestments ? <Eye size={13} /> : <EyeOff size={13} />}
+              </button>
+            </div>
             <Link href="/holdings" className="text-[10px] tracking-[0.15em] text-white/40 hover:text-white flex items-center gap-1">
               VIEW ALL <ChevronRight size={10} />
             </Link>
           </div>
           <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-3">
-            {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+            {showInvestments ? <>{"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••••"}
           </p>
           <div className="flex items-center gap-5">
             <span className="text-[11px] text-white/50">
-              1D: <span className="text-[#00D26A]">+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} (+{investments.dayReturnsPercent.toFixed(2)}%)</span>
+              1D: <span className="text-[#00D26A]">{showInvestments ? <>+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} </> : "•••• "}(+{investments.dayReturnsPercent.toFixed(2)}%)</span>
             </span>
             <span className="text-[11px] text-white/50">
-              Total: <span className="text-[#00D26A]">+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} (+{investments.totalReturnsPercent.toFixed(2)}%)</span>
+              Total: <span className="text-[#00D26A]">{showInvestments ? <>+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} </> : "•••• "}(+{investments.totalReturnsPercent.toFixed(2)}%)</span>
             </span>
           </div>
         </motion.div>
@@ -342,30 +348,35 @@ export default function ExplorePage() {
       <aside className="hidden lg:block w-80 border-l border-white/8 shrink-0">
         {isLoggedIn ? (
         <div className="p-6 border-b border-white/8">
-          <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-3">YOUR INVESTMENTS</p>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase">YOUR INVESTMENTS</p>
+            <button onClick={() => setShowInvestments(v => !v)} className="text-white/30 hover:text-white/60 transition-colors">
+              {showInvestments ? <Eye size={13} /> : <EyeOff size={13} />}
+            </button>
+          </div>
           <p className="text-[9px] tracking-[0.2em] text-white/40 mb-1">CURRENT VALUE</p>
           <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-4">
-            {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+            {showInvestments ? <>{"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••••"}
           </p>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] tracking-[0.1em] text-white/40">1D RETURNS</span>
               <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">
-                +{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                {showInvestments ? <>+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••"}
                 <span className="text-[#00D26A]/60 ml-1 text-[10px]">(+{investments.dayReturnsPercent.toFixed(2)}%)</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[10px] tracking-[0.1em] text-white/40">TOTAL RETURNS</span>
               <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">
-                +{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                {showInvestments ? <>+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••"}
                 <span className="text-[#00D26A]/60 ml-1 text-[10px]">(+{investments.totalReturnsPercent.toFixed(2)}%)</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[10px] tracking-[0.1em] text-white/40">INVESTED</span>
               <span className="text-[12px] font-[var(--font-anton)] text-white">
-                {"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                {showInvestments ? <>{"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••••"}
               </span>
             </div>
           </div>
