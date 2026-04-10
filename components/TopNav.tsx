@@ -187,7 +187,7 @@ export default function TopNav() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 z-40 md:hidden"
+              className="fixed inset-0 bg-black/60 z-[60] md:hidden"
               onClick={() => setMobileMenuOpen(false)}
             />
             <motion.div
@@ -195,34 +195,60 @@ export default function TopNav() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 w-72 bg-[#0a0a0a] border-l border-white/10 z-50 md:hidden flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-72 bg-[#0a0a0a] border-l border-white/10 z-[60] md:hidden flex flex-col overflow-y-auto"
             >
-              <div className="p-6 border-b border-white/10">
-                <div className="flex items-center gap-3 mb-1">
-                  <div className="w-10 h-10 border border-white flex items-center justify-center">
-                    <span className="font-monument text-xs font-extrabold">DA</span>
+              {isLoggedIn ? (
+                <>
+                  <div className="p-6 border-b border-white/10 shrink-0">
+                    <div className="flex items-center gap-3 mb-1">
+                      <div className="w-10 h-10 border border-white flex items-center justify-center shrink-0">
+                        <span className="font-monument text-xs font-extrabold">DA</span>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-[var(--font-anton)] text-sm tracking-[0.08em] truncate">DEEPAK AELENI</p>
+                        <p className="text-[10px] text-white/40 truncate">aeleni@mcse.in</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-[var(--font-anton)] text-sm tracking-[0.08em]">DEEPAK AELENI</p>
-                    <p className="text-[10px] text-white/40">aeleni@mcse.in</p>
+
+                  <div className="px-6 py-4 border-b border-white/10 shrink-0">
+                    <p className="text-[9px] tracking-[0.2em] text-white/30 mb-1">PORTFOLIO VALUE</p>
+                    <p className="font-[var(--font-anton)] text-xl tracking-tight">{"\u20B9"}4,87,693.69</p>
+                    <p className="text-[10px] text-[#00D26A] mt-0.5">+{"\u20B9"}2,847.30 (+0.59%) today</p>
                   </div>
+                </>
+              ) : (
+                <div className="p-6 border-b border-white/10 shrink-0">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 border border-white/30 flex items-center justify-center shrink-0">
+                      <span className="font-monument text-[10px] font-extrabold text-white/40">M</span>
+                    </div>
+                    <div>
+                      <p className="font-[var(--font-anton)] text-sm tracking-[0.08em]">MCSE</p>
+                      <p className="text-[10px] text-white/30">Math Club Stock Exchange</p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full py-3 text-center text-[10px] tracking-[0.15em] font-semibold bg-white text-black border border-white hover:bg-transparent hover:text-white transition-all duration-200"
+                  >
+                    LOG IN
+                  </Link>
                 </div>
-              </div>
+              )}
 
-              {/* Portfolio summary */}
-              <div className="px-6 py-4 border-b border-white/10">
-                <p className="text-[9px] tracking-[0.2em] text-white/30 mb-1">PORTFOLIO VALUE</p>
-                <p className="font-[var(--font-anton)] text-xl tracking-tight">{"\u20B9"}4,87,693.69</p>
-                <p className="text-[10px] text-[#00D26A] mt-0.5">+{"\u20B9"}2,847.30 (+0.59%) today</p>
-              </div>
-
-              <div className="flex-1 p-4 space-y-1">
+              <div className="flex-1 p-4 space-y-1 overflow-y-auto">
                 {[
-                  { label: "MY PROFILE", href: "/profile" },
-                  { label: "ALL ORDERS", href: "/orders" },
+                  { label: "EXPLORE", href: "/" },
+                  ...(isLoggedIn ? [
+                    { label: "MY PROFILE", href: "/profile" },
+                    { label: "ALL ORDERS", href: "/orders" },
+                  ] : []),
                   { label: "HOLDINGS", href: "/holdings" },
                   { label: "WATCHLIST", href: "/watchlist" },
                   { label: "POSITIONS", href: "/positions" },
+                  { label: "MARKETS", href: "/markets" },
                 ].map((item) => (
                   <Link
                     key={item.label}
@@ -234,11 +260,13 @@ export default function TopNav() {
                   </Link>
                 ))}
               </div>
-              <div className="p-4 border-t border-white/10">
-                <div className="flex items-center justify-between px-3 py-2 mb-2">
-                  <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
-                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}693.69</span>
-                </div>
+              <div className="p-4 border-t border-white/10 shrink-0">
+                {isLoggedIn && (
+                  <div className="flex items-center justify-between px-3 py-2 mb-2">
+                    <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
+                    <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}693.69</span>
+                  </div>
+                )}
                 {isLoggedIn ? (
                   <button
                     onClick={() => { logout(); setMobileMenuOpen(false); }}

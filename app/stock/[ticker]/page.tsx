@@ -50,7 +50,7 @@ export default function StockDetailPage({
   const chartValues = chartData.map((d) => d.price);
 
   return (
-    <div className="pb-24 md:pb-12">
+    <div className="pb-32 md:pb-12">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}

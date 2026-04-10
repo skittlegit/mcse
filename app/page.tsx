@@ -5,6 +5,7 @@ import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calenda
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
+import { useAuth } from "@/lib/AuthContext";
 import {
   investments,
   mostTraded,
@@ -36,6 +37,7 @@ const productRoutes: Record<string, string> = {
 };
 
 export default function ExplorePage() {
+  const { isLoggedIn } = useAuth();
   const [activeTab, setActiveTab] = useState<MoverTab>("GAINERS");
   const [moverSort, setMoverSort] = useState<MoverSortKey>("dayChangePercent");
   const [moverSortDir, setMoverSortDir] = useState<SortDir>("desc");
@@ -77,7 +79,8 @@ export default function ExplorePage() {
       {/* Main content */}
       <div className="flex-1 min-w-0 px-5 md:px-6 py-6 md:py-6">
 
-        {/* Mobile: Investment Summary */}
+        {/* Mobile: Investment Summary (only when logged in) */}
+        {isLoggedIn && (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -102,6 +105,7 @@ export default function ExplorePage() {
             </span>
           </div>
         </motion.div>
+        )}
 
         {/* MOST TRADED */}
         <motion.div
@@ -274,6 +278,7 @@ export default function ExplorePage() {
 
       {/* Right sidebar (desktop) */}
       <aside className="hidden lg:block w-80 border-l border-white/8 shrink-0">
+        {isLoggedIn ? (
         <div className="p-6 border-b border-white/8">
           <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-3">YOUR INVESTMENTS</p>
           <p className="text-[9px] tracking-[0.2em] text-white/40 mb-1">CURRENT VALUE</p>
@@ -303,6 +308,20 @@ export default function ExplorePage() {
             </div>
           </div>
         </div>
+        ) : (
+        <div className="p-6 border-b border-white/8">
+          <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">ACCOUNT</p>
+          <p className="text-[11px] text-white/40 leading-relaxed mb-4">
+            Log in to view your investments, holdings, and portfolio performance.
+          </p>
+          <Link
+            href="/login"
+            className="block w-full py-3 text-center text-[10px] tracking-[0.15em] font-semibold bg-white text-black border border-white hover:bg-transparent hover:text-white transition-all duration-200"
+          >
+            LOG IN
+          </Link>
+        </div>
+        )}
 
         <div className="p-6">
           <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">PRODUCTS & TOOLS</p>

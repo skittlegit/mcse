@@ -10,11 +10,17 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    login();
-    router.push("/");
+    setError("");
+    const success = login(email, password);
+    if (success) {
+      router.push("/");
+    } else {
+      setError("Invalid email or password");
+    }
   }
 
   return (
@@ -67,6 +73,10 @@ export default function LoginPage() {
             />
           </div>
 
+          {error && (
+            <p className="text-[11px] tracking-[0.08em] text-[#FF5252] mt-1">{error}</p>
+          )}
+
           <button
             type="submit"
             className="w-full h-12 bg-white text-black text-[11px] tracking-[0.2em] font-semibold uppercase mt-2 hover:bg-transparent hover:text-white border border-white transition-all duration-200"
@@ -76,7 +86,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-[10px] tracking-[0.1em] text-white/20 text-center mt-6">
-          MCSE DEMO {"\u00B7"} NO REAL AUTHENTICATION
+          MATH CLUB STOCK EXCHANGE
         </p>
       </motion.div>
     </div>
