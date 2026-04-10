@@ -43,13 +43,12 @@ export default function ExplorePage() {
   const [moverSort, setMoverSort] = useState<MoverSortKey>("dayChangePercent");
   const [moverSortDir, setMoverSortDir] = useState<SortDir>("desc");
 
-  const moverData: Record<MoverTab, MoverStock[]> = {
-    GAINERS: topGainers,
-    LOSERS: topLosers,
-    VOLUME: volumeShockers,
-  };
-
   const currentMovers = useMemo(() => {
+    const moverData: Record<MoverTab, MoverStock[]> = {
+      GAINERS: topGainers,
+      LOSERS: topLosers,
+      VOLUME: volumeShockers,
+    };
     const arr = [...moverData[activeTab]];
     arr.sort((a, b) => {
       let av: string | number, bv: string | number;
@@ -69,11 +68,11 @@ export default function ExplorePage() {
     else { setMoverSort(key); setMoverSortDir("desc"); }
   }
 
-  const SortIcon = ({ col }: { col: MoverSortKey }) => (
-    moverSort === col
+  function sortIcon(col: MoverSortKey) {
+    return moverSort === col
       ? moverSortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
-      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />
-  );
+      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />;
+  }
 
   return (
     <div className="flex gap-0 pb-20 md:pb-12">
@@ -223,14 +222,14 @@ export default function ExplorePage() {
           <div className="hidden md:block">
             <div className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-2 border-b border-white/12">
               <button onClick={() => toggleMoverSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
-                COMPANY <SortIcon col="ticker" />
+                COMPANY {sortIcon("ticker")}
               </button>
               <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
               <button onClick={() => toggleMoverSort("price")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-                MKT PRICE <SortIcon col="price" />
+                MKT PRICE {sortIcon("price")}
               </button>
               <button onClick={() => toggleMoverSort("volume")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-                VOLUME <SortIcon col="volume" />
+                VOLUME {sortIcon("volume")}
               </button>
             </div>
             {currentMovers.map((stock) => (

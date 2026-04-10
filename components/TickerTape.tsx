@@ -6,7 +6,7 @@ export default function TickerTape() {
   const items = [...tickerTapeItems, ...tickerTapeItems];
 
   return (
-    <div className="w-full h-8 bg-[#0a0a0a]/95 backdrop-blur-sm border-b border-white/8 overflow-hidden">
+    <div className="w-full h-8 bg-[#0a0a0a]/95 backdrop-blur-sm border-b border-white/8 overflow-hidden select-none cursor-default">
       <div className="flex items-center h-full animate-ticker whitespace-nowrap">
         {items.map((item, i) => (
           <div key={`${item.ticker}-${i}`} className="flex items-center gap-2 px-3 md:px-6">

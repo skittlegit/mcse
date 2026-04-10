@@ -1,11 +1,12 @@
-﻿"use client";
+"use client";
 
-import { useState, use } from "react";
+import { useState, use, useCallback } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { stockDirectory, watchlist, holdings } from "@/lib/mockData";
+import { motion, AnimatePresence } from "framer-motion";
+import { stockDirectory, watchlist, holdings, newsItems } from "@/lib/mockData";
+import { useTrading } from "@/lib/TradingContext";
 import Sparkline from "@/components/Sparkline";
 
 const timeRanges = ["1D", "1W", "1M", "1Y", "ALL"] as const;
@@ -18,12 +19,34 @@ export default function StockDetailPage({
   const { ticker } = use(params);
   const router = useRouter();
   const stock = stockDirectory[ticker.toUpperCase()];
+  const { placeOrder, getOrdersForTicker, positions, balance } = useTrading();
   const [range, setRange] = useState<string>("1D");
   const [qty, setQty] = useState(1);
+  const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
+  const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
+  const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
 
   const isHeld = holdings.some((h) => h.ticker === ticker.toUpperCase());
   const isWatched = watchlist.some((w) => w.ticker === ticker.toUpperCase());
   const holdingData = holdings.find((h) => h.ticker === ticker.toUpperCase());
+  const tickerOrders = getOrdersForTicker(ticker.toUpperCase());
+  const position = positions.find((p) => p.ticker === ticker.toUpperCase());
+  const stockNews = newsItems.filter((n) => n.ticker === ticker.toUpperCase());
+
+  const handleOrder = useCallback(() => {
+    if (!stock) return;
+    const result = placeOrder({
+      ticker: stock.ticker,
+      name: stock.name,
+      type: buySellTab,
+      orderType,
+      qty,
+      price: stock.price,
+    });
+    setOrderMsg({ text: result.message, success: result.success });
+    if (result.success) setQty(1);
+    setTimeout(() => setOrderMsg(null), 3000);
+  }, [stock, placeOrder, buySellTab, orderType, qty]);
 
   if (!stock) {
     return (
@@ -51,6 +74,24 @@ export default function StockDetailPage({
 
   return (
     <div className="pb-32 md:pb-12">
+      {/* Order feedback toast */}
+      <AnimatePresence>
+        {orderMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className={`fixed top-20 left-1/2 -translate-x-1/2 z-[70] px-6 py-3 border text-[11px] tracking-[0.1em] ${
+              orderMsg.success
+                ? "bg-[#00D26A]/10 border-[#00D26A]/30 text-[#00D26A]"
+                : "bg-[#FF5252]/10 border-[#FF5252]/30 text-[#FF5252]"
+            }`}
+          >
+            {orderMsg.text}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
@@ -99,9 +140,16 @@ export default function StockDetailPage({
             <p className="font-[var(--font-anton)] text-3xl md:text-4xl tracking-tight mb-1.5">
               {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </p>
-            <p className={`text-[12px] font-medium ${stock.changePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-              {stock.changePercent >= 0 ? "+" : ""}{stock.changePercent.toFixed(2)}% {"\u00B7"} {range}
-            </p>
+            <div className="flex items-center gap-3">
+              <p className={`text-[12px] font-medium ${stock.changePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                {stock.changePercent >= 0 ? "+" : ""}{stock.changePercent.toFixed(2)}% {"\u00B7"} {range}
+              </p>
+              {position && (
+                <span className="text-[10px] text-white/40 border border-white/10 px-2 py-0.5">
+                  {position.qty} shares held
+                </span>
+              )}
+            </div>
           </motion.div>
 
           {/* Chart */}
@@ -258,17 +306,114 @@ export default function StockDetailPage({
               <p className="text-[9px] tracking-[0.1em] text-white/20">SECTOR: <span className="text-white/40">{stock.fundamentals.sector}</span></p>
             </div>
           </motion.div>
+
+          {/* Stock News */}
+          {stockNews.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.3 }}
+              className="mt-7 md:mt-8"
+            >
+              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">NEWS</h3>
+              <div className="space-y-2">
+                {stockNews.map((news, i) => (
+                  <div key={i} className="border border-white/8 p-4 hover:bg-white/[0.02] transition-colors">
+                    <p className="text-[12px] text-white/70 leading-relaxed mb-2">{news.headline}</p>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[9px] tracking-[0.1em] text-white/25">{news.time}</span>
+                      <span className={`text-[10px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                        {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Order History for this stock */}
+          {tickerOrders.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+              className="mt-7 md:mt-8"
+            >
+              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">
+                YOUR ORDERS ({tickerOrders.length})
+              </h3>
+              <div className="space-y-2">
+                {tickerOrders.map((order) => (
+                  <div key={order.id} className="border border-white/8 p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className={`text-[9px] tracking-[0.15em] font-semibold px-2 py-0.5 border ${
+                        order.type === "BUY"
+                          ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5"
+                          : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/5"
+                      }`}>
+                        {order.type}
+                      </span>
+                      <div>
+                        <p className="text-[11px] text-white/50">{order.qty} shares @ {"\u20B9"}{order.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                        <p className="text-[9px] text-white/25 mt-0.5">{order.orderType} {"\u00B7"} {new Date(order.timestamp).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</p>
+                      </div>
+                    </div>
+                    <p className="font-[var(--font-anton)] text-[14px]">{"\u20B9"}{order.total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Desktop sidebar order panel */}
-        <aside className="hidden lg:block w-80 border-l border-white/8 shrink-0 p-6">
+        <aside className="hidden lg:flex flex-col w-80 border-l border-white/8 shrink-0">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
+            className="flex-1 flex flex-col"
           >
-            <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-4">PLACE ORDER</p>
-            <div className="mb-4">
+            <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase px-6 pt-6 mb-3">PLACE ORDER</p>
+
+            {/* BUY / SELL tabs */}
+            <div className="flex border-b border-white/8">
+              <button
+                onClick={() => setBuySellTab("BUY")}
+                className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
+                  buySellTab === "BUY" ? "bg-[#00D26A]/10 text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/40 hover:text-white"
+                }`}
+              >
+                BUY
+              </button>
+              <button
+                onClick={() => setBuySellTab("SELL")}
+                className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
+                  buySellTab === "SELL" ? "bg-[#FF5252]/10 text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/40 hover:text-white"
+                }`}
+              >
+                SELL
+              </button>
+            </div>
+
+            {/* Order type */}
+            <div className="flex gap-0 px-6 pt-4">
+              {(["DELIVERY", "INTRADAY"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setOrderType(t)}
+                  className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
+                    orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            {/* Quantity */}
+            <div className="px-6 pt-5 flex-1">
               <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">QTY</label>
               <div className="flex items-center border border-white/20">
                 <button
@@ -290,22 +435,32 @@ export default function StockDetailPage({
                   {"+"}
                 </button>
               </div>
-            </div>
-            <div className="flex justify-between items-center mb-6 py-3 border-t border-b border-white/8">
-              <span className="text-[10px] tracking-[0.1em] text-white/40">ESTIMATED TOTAL</span>
-              <span className="font-[var(--font-anton)] text-xl">
-                {"\u20B9"}{(stock.price * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <button className="flex-1 h-11 bg-[#00D26A] text-black text-[10px] tracking-[0.15em] font-semibold border border-[#00D26A] hover:bg-transparent hover:text-[#00D26A] transition-all duration-150">
-                BUY
+
+              <div className="flex justify-between items-center mt-4 py-3 border-t border-b border-white/8">
+                <span className="text-[10px] tracking-[0.1em] text-white/40">EST. TOTAL</span>
+                <span className="font-[var(--font-anton)] text-xl">
+                  {"\u20B9"}{(stock.price * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+
+              <div className="mt-4 flex items-center justify-between">
+                <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
+                <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
+              </div>
+
+              <button
+                onClick={handleOrder}
+                className={`w-full h-11 mt-5 text-[10px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
+                  buySellTab === "BUY"
+                    ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
+                    : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
+                }`}
+              >
+                {buySellTab} {stock.ticker}
               </button>
-              <button className="flex-1 h-11 bg-[#FF5252] text-white text-[10px] tracking-[0.15em] font-semibold border border-[#FF5252] hover:bg-transparent hover:text-[#FF5252] transition-all duration-150">
-                SELL
-              </button>
             </div>
-            <div className="mt-6 pt-4 border-t border-white/8">
+
+            <div className="p-6 border-t border-white/8">
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 bg-[#00D26A]" />
                 <span className="text-[10px] tracking-[0.1em] text-white/40">MARKET OPEN</span>
@@ -319,10 +474,31 @@ export default function StockDetailPage({
       {/* Mobile fixed bottom buy/sell bar */}
       <div className="fixed bottom-14 left-0 right-0 z-40 lg:hidden border-t border-white/12 bg-[#0a0a0a]/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
         <div className="flex">
-          <button className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#00D26A] text-black active:bg-[#00D26A]/80 transition-all">
+          <button
+            onClick={() => {
+              setBuySellTab("BUY");
+              handleOrder();
+            }}
+            className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#00D26A] text-black active:bg-[#00D26A]/80 transition-all"
+          >
             BUY {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 0 })}
           </button>
-          <button className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#FF5252] text-white active:bg-[#FF5252]/80 transition-all">
+          <button
+            onClick={() => {
+              setBuySellTab("SELL");
+              const result = placeOrder({
+                ticker: stock.ticker,
+                name: stock.name,
+                type: "SELL",
+                orderType,
+                qty,
+                price: stock.price,
+              });
+              setOrderMsg({ text: result.message, success: result.success });
+              setTimeout(() => setOrderMsg(null), 3000);
+            }}
+            className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#FF5252] text-white active:bg-[#FF5252]/80 transition-all"
+          >
             SELL
           </button>
         </div>

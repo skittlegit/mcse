@@ -75,11 +75,11 @@ export default function HoldingsPage() {
     setTimeout(() => setOrderMsg(null), 3000);
   }
 
-  const SortIcon = ({ col }: { col: SortKey }) => (
-    sortKey === col
+  function sortIcon(col: SortKey) {
+    return sortKey === col
       ? sortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
-      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />
-  );
+      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />;
+  }
 
   if (!isLoggedIn) {
     return (
@@ -157,6 +157,11 @@ export default function HoldingsPage() {
           </div>
         </motion.div>
 
+        {!showValues ? (
+          <div className="py-8 text-center">
+            <p className="text-[11px] tracking-[0.15em] text-white/20 uppercase">VALUES HIDDEN</p>
+          </div>
+        ) : (<>
         {/* Holdings list header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase">YOUR STOCKS</h2>
@@ -219,17 +224,17 @@ export default function HoldingsPage() {
         <div className="hidden md:block">
           <div className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-2 border-b border-white/12">
             <button onClick={() => toggleSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
-              COMPANY <SortIcon col="ticker" />
+              COMPANY {sortIcon("ticker")}
             </button>
             <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
             <button onClick={() => toggleSort("currentPrice")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-              MKT PRICE <SortIcon col="currentPrice" />
+              MKT PRICE {sortIcon("currentPrice")}
             </button>
             <button onClick={() => toggleSort("returnsPercent")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-              RETURNS <SortIcon col="returnsPercent" />
+              RETURNS {sortIcon("returnsPercent")}
             </button>
             <button onClick={() => toggleSort("currentValue")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-              CURRENT <SortIcon col="currentValue" />
+              CURRENT {sortIcon("currentValue")}
             </button>
           </div>
 
@@ -276,6 +281,7 @@ export default function HoldingsPage() {
             </div>
           ))}
         </div>
+        </>)}
       </div>
 
       {/* Right panel (desktop) — Buy/Sell */}

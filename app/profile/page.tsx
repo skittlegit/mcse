@@ -6,39 +6,39 @@ import { useRouter } from "next/navigation";
 import {
   Mail,
   Phone,
-  Shield,
   Calendar,
   Wallet,
   ChevronRight,
   HelpCircle,
-  FileText,
   Settings,
   LogOut,
+  History,
 } from "lucide-react";
 import { userProfile, investments } from "@/lib/mockData";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
+import { useTrading } from "@/lib/TradingContext";
 
 const sections = [
   {
     title: "ACCOUNT",
     items: [
-      { icon: Wallet, label: "AVAILABLE BALANCE", value: `\u20B9${userProfile.balance.toFixed(2)}`, href: "" },
-      { icon: FileText, label: "TRANSACTION HISTORY", href: "/orders" },
-      { icon: Settings, label: "PREFERENCES", href: "" },
+      { icon: Wallet, label: "AVAILABLE BALANCE", value: "__BALANCE__", href: "" },
+      { icon: History, label: "TRANSACTION HISTORY", href: "/transactions" },
+      { icon: Settings, label: "PREFERENCES", href: "/preferences" },
     ],
   },
   {
     title: "SUPPORT",
     items: [
-      { icon: HelpCircle, label: "CUSTOMER SUPPORT", href: "" },
-      { icon: FileText, label: "REPORTS & STATEMENTS", href: "/holdings" },
+      { icon: HelpCircle, label: "CUSTOMER SUPPORT", href: "/support" },
     ],
   },
 ];
 
 export default function ProfilePage() {
   const { isLoggedIn, logout } = useAuth();
+  const { balance } = useTrading();
   const router = useRouter();
 
   if (!isLoggedIn) {
@@ -97,13 +97,6 @@ export default function ProfilePage() {
         </div>
         <div className="bg-[#0a0a0a] p-4 md:p-5">
           <div className="flex items-center gap-2 mb-2">
-            <Shield size={13} className="text-white/30" />
-            <span className="text-[9px] tracking-[0.2em] text-white/30">KYC STATUS</span>
-          </div>
-          <span className="text-[11px] tracking-[0.1em] text-[#00D26A]">{userProfile.kycStatus}</span>
-        </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
-          <div className="flex items-center gap-2 mb-2">
             <Calendar size={13} className="text-white/30" />
             <span className="text-[9px] tracking-[0.2em] text-white/30">MEMBER SINCE</span>
           </div>
@@ -122,27 +115,27 @@ export default function ProfilePage() {
         <div className="flex items-baseline justify-between mb-4">
           <div>
             <p className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-tight">
-              {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
             </p>
             <p className="text-[10px] text-[#00D26A] mt-1">
-              +{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN")} (+{investments.totalReturnsPercent.toFixed(2)}%)
+              +{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} (+{investments.totalReturnsPercent.toFixed(2)}%)
             </p>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div>
             <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1">INVESTED</p>
-            <p className="font-[var(--font-anton)] text-sm">{"\u20B9"}{investments.investedValue.toLocaleString("en-IN")}</p>
+            <p className="font-[var(--font-anton)] text-sm">{"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</p>
           </div>
           <div>
             <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1">1D RETURNS</p>
             <p className="font-[var(--font-anton)] text-sm text-[#00D26A]">
-              +{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN")}
+              +{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}
             </p>
           </div>
           <div>
             <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1">BALANCE</p>
-            <p className="font-[var(--font-anton)] text-sm">{"\u20B9"}{userProfile.balance.toFixed(2)}</p>
+            <p className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</p>
           </div>
         </div>
         <Link
@@ -177,7 +170,9 @@ export default function ProfilePage() {
                     <span className="text-[11px] tracking-[0.1em] text-white/60">{item.label}</span>
                   </div>
                   {item.value ? (
-                    <span className="font-[var(--font-anton)] text-sm">{item.value}</span>
+                    <span className="font-[var(--font-anton)] text-sm">
+                      {item.value === "__BALANCE__" ? `\u20B9${Math.round(balance).toLocaleString("en-IN")}` : item.value}
+                    </span>
                   ) : (
                     <ChevronRight size={14} className="text-white/20" />
                   )}

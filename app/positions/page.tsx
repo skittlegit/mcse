@@ -17,7 +17,7 @@ type SortDir = "asc" | "desc";
 
 export default function PositionsPage() {
   const { isLoggedIn } = useAuth();
-  const { orders } = useTrading();
+  const { orders, positions } = useTrading();
   const [pageTab, setPageTab] = useState<PageTab>("POSITIONS");
   const [listTab, setListTab] = useState<ListTab>("GAINERS");
   const [sortKey, setSortKey] = useState<SortKey>("dayChangePercent");
@@ -42,11 +42,11 @@ export default function PositionsPage() {
     else { setSortKey(key); setSortDir("desc"); }
   }
 
-  const SortIcon = ({ col }: { col: SortKey }) => (
-    sortKey === col
+  function sortIcon(col: SortKey) {
+    return sortKey === col
       ? sortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
-      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />
-  );
+      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />;
+  }
 
   return (
     <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
@@ -209,36 +209,130 @@ export default function PositionsPage() {
       ) : (
         /* Positions content */
         <>
-      {/* Empty state - positions */}
       {isLoggedIn ? (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-col items-center justify-center py-16 md:py-24"
-        >
+        positions.length > 0 ? (
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-18 h-18 md:w-20 md:h-20 border border-white/15 flex items-center justify-center mb-6 relative"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            <div className="w-8 h-8 border border-white rotate-45" />
-            <div className="absolute w-3 h-3 bg-white top-2 right-2" />
+            <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase mb-5">
+              OPEN POSITIONS ({positions.length})
+            </h2>
+
+            {/* Total P&L summary */}
+            <div className="border border-white/10 p-4 mb-5">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] tracking-[0.15em] text-white/30">TOTAL P&L</span>
+                <span className={`font-[var(--font-anton)] text-lg ${
+                  positions.reduce((s, p) => s + p.pnl, 0) >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"
+                }`}>
+                  {positions.reduce((s, p) => s + p.pnl, 0) >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(Math.round(positions.reduce((s, p) => s + p.pnl, 0))).toLocaleString("en-IN")}
+                </span>
+              </div>
+            </div>
+
+            {/* Mobile: card list */}
+            <div className="md:hidden space-y-2">
+              {positions.map((pos, i) => (
+                <motion.div
+                  key={pos.ticker}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.04 * i, duration: 0.3 }}
+                >
+                  <Link
+                    href={`/stock/${pos.ticker}`}
+                    className="block border border-white/8 p-4 hover:bg-white/[0.03] active:bg-white/[0.06] transition-colors"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <span className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{pos.ticker}</span>
+                        <p className="text-[10px] text-white/40 mt-0.5">{pos.name}</p>
+                      </div>
+                      <span className={`font-[var(--font-anton)] text-[14px] ${pos.pnl >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                        {pos.pnl >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(Math.round(pos.pnl)).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[11px] text-white/50">{pos.qty} shares @ {"\u20B9"}{Math.round(pos.avgPrice).toLocaleString("en-IN")}</p>
+                      <p className={`text-[11px] font-medium ${pos.pnlPercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                        {pos.pnlPercent >= 0 ? "+" : ""}{pos.pnlPercent.toFixed(2)}%
+                      </p>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Desktop: table */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-2 border-b border-white/12">
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">STOCK</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">QTY</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">AVG PRICE</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">LTP</span>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">P&L</span>
+              </div>
+              {positions.map((pos) => (
+                <Link
+                  key={pos.ticker}
+                  href={`/stock/${pos.ticker}`}
+                  className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+                >
+                  <div>
+                    <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{pos.ticker}</p>
+                    <p className="text-[10px] text-white/40 mt-0.5">{pos.name}</p>
+                  </div>
+                  <p className="text-right font-[var(--font-anton)] text-[13px]">{pos.qty}</p>
+                  <p className="text-right font-[var(--font-anton)] text-[13px]">
+                    {"\u20B9"}{Math.round(pos.avgPrice).toLocaleString("en-IN")}
+                  </p>
+                  <p className="text-right font-[var(--font-anton)] text-[13px]">
+                    {"\u20B9"}{pos.currentPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </p>
+                  <div className="text-right">
+                    <p className={`font-[var(--font-anton)] text-[13px] ${pos.pnl >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {pos.pnl >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(Math.round(pos.pnl)).toLocaleString("en-IN")}
+                    </p>
+                    <p className={`text-[10px] font-medium ${pos.pnlPercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {pos.pnlPercent >= 0 ? "+" : ""}{pos.pnlPercent.toFixed(2)}%
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </motion.div>
-          <h1 className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-[0.1em] uppercase mb-3">
-            NO OPEN POSITIONS
-          </h1>
-          <p className="text-[11px] tracking-[0.1em] text-white/40 text-center max-w-xs mb-6">
-            You have no intraday or F&O positions currently open. Explore stocks below to start trading.
-          </p>
-          <Link
-            href="/"
-            className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center justify-center py-16 md:py-24"
           >
-            EXPLORE STOCKS
-          </Link>
-        </motion.div>
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-18 h-18 md:w-20 md:h-20 border border-white/15 flex items-center justify-center mb-6 relative"
+            >
+              <div className="w-8 h-8 border border-white rotate-45" />
+              <div className="absolute w-3 h-3 bg-white top-2 right-2" />
+            </motion.div>
+            <h1 className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-[0.1em] uppercase mb-3">
+              NO OPEN POSITIONS
+            </h1>
+            <p className="text-[11px] tracking-[0.1em] text-white/40 text-center max-w-xs mb-6">
+              You have no open positions. Place a buy order to start trading.
+            </p>
+            <Link
+              href="/"
+              className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+            >
+              EXPLORE STOCKS
+            </Link>
+          </motion.div>
+        )
       ) : (
         <LoginPrompt message="Log in to view your open positions and intraday trades." />
       )}
@@ -319,11 +413,11 @@ export default function PositionsPage() {
         <div className="hidden md:block">
           <div className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-2 border-b border-white/12">
             <button onClick={() => toggleSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
-              COMPANY <SortIcon col="ticker" />
+              COMPANY {sortIcon("ticker")}
             </button>
             <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
             <button onClick={() => toggleSort("price")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-              MKT PRICE <SortIcon col="price" />
+              MKT PRICE {sortIcon("price")}
             </button>
           </div>
 
