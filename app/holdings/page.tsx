@@ -1,19 +1,18 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
-import { Eye, EyeOff, ChevronRight, ChevronDown, ChevronUp, BarChart3, X } from "lucide-react";
+import { Eye, EyeOff, ChevronDown, ChevronUp, BarChart3, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
 import Link from "next/link";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
+import { useTrading } from "@/lib/TradingContext";
 import {
   holdings,
   investments,
   userProfile,
   portfolioAnalysis,
-  newsItems,
-  tradingScreens,
 } from "@/lib/mockData";
 import {
   ResponsiveContainer,
@@ -30,15 +29,19 @@ type SortDir = "asc" | "desc";
 
 export default function HoldingsPage() {
   const { isLoggedIn } = useAuth();
+  const { placeOrder, getOrdersForTicker, balance } = useTrading();
   const [showValues, setShowValues] = useState(true);
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("currentValue");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [analyseOpen, setAnalyseOpen] = useState(false);
   const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
+  const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
   const [qty, setQty] = useState(1);
+  const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
 
   const selectedHolding = holdings.find((h) => h.ticker === selectedTicker);
+  const selectedOrders = selectedTicker ? getOrdersForTicker(selectedTicker) : [];
 
   const sorted = useMemo(() => {
     const arr = [...holdings];
@@ -57,6 +60,21 @@ export default function HoldingsPage() {
     else { setSortKey(key); setSortDir("desc"); }
   }
 
+  function handleOrder() {
+    if (!selectedHolding) return;
+    const result = placeOrder({
+      ticker: selectedHolding.ticker,
+      name: selectedHolding.name,
+      type: buySellTab,
+      orderType,
+      qty,
+      price: selectedHolding.currentPrice,
+    });
+    setOrderMsg({ text: result.message, success: result.success });
+    if (result.success) setQty(1);
+    setTimeout(() => setOrderMsg(null), 3000);
+  }
+
   const SortIcon = ({ col }: { col: SortKey }) => (
     sortKey === col
       ? sortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
@@ -73,6 +91,24 @@ export default function HoldingsPage() {
 
   return (
     <div className="flex gap-0 pb-20 md:pb-12 min-h-[calc(100vh-6rem)]">
+      {/* Order feedback toast */}
+      <AnimatePresence>
+        {orderMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className={`fixed top-20 left-1/2 -translate-x-1/2 z-[70] px-6 py-3 border text-[11px] tracking-[0.1em] ${
+              orderMsg.success
+                ? "bg-[#00D26A]/10 border-[#00D26A]/30 text-[#00D26A]"
+                : "bg-[#FF5252]/10 border-[#FF5252]/30 text-[#FF5252]"
+            }`}
+          >
+            {orderMsg.text}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main */}
       <div className="flex-1 min-w-0 px-5 md:px-6 py-6 md:py-6">
         {/* Header */}
@@ -240,52 +276,6 @@ export default function HoldingsPage() {
             </div>
           ))}
         </div>
-
-        {/* News section */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="mt-9 md:mt-10"
-        >
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase">
-              STOCKS IN NEWS TODAY
-            </h2>
-            <ChevronRight size={16} className="text-white/30" />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {newsItems.map((news, i) => (
-              <motion.div
-                key={`${news.ticker}-${i}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 + 0.05 * i, duration: 0.3 }}
-              >
-                <Link
-                  href={`/stock/${news.ticker}`}
-                  className="block border border-white/8 p-5 hover:bg-white/[0.03] transition-colors"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 border border-white/20 flex items-center justify-center shrink-0">
-                        <span className="text-[8px] tracking-[0.1em] text-white/40">{news.ticker.slice(0, 3)}</span>
-                      </div>
-                      <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em]">{news.name}</p>
-                    </div>
-                    <p className={`text-[11px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                      {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
-                    </p>
-                  </div>
-                  <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-2">
-                    {news.headline}
-                  </p>
-                  <p className="text-[9px] text-white/20">{news.time}</p>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
 
       {/* Right panel (desktop) — Buy/Sell */}
@@ -331,15 +321,18 @@ export default function HoldingsPage() {
                 </button>
               </div>
 
-              {/* Order type tabs */}
+              {/* Order type tabs — now clickable */}
               <div className="flex gap-0 px-6 pt-4">
-                {["DELIVERY", "INTRADAY"].map((t) => (
-                  <span
+                {(["DELIVERY", "INTRADAY"] as const).map((t) => (
+                  <button
                     key={t}
-                    className="px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 text-white/30 first:bg-white/5 first:text-white/60"
+                    onClick={() => setOrderType(t)}
+                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
+                      orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
+                    }`}
                   >
                     {t}
-                  </span>
+                  </button>
                 ))}
               </div>
 
@@ -376,10 +369,11 @@ export default function HoldingsPage() {
 
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
-                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{userProfile.balance.toFixed(2)}</span>
+                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{balance.toFixed(2)}</span>
                 </div>
 
                 <button
+                  onClick={handleOrder}
                   className={`w-full h-11 mt-5 text-[10px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
                     buySellTab === "BUY"
                       ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
@@ -410,6 +404,30 @@ export default function HoldingsPage() {
                   </div>
                 </div>
               </div>
+
+              {/* Recent orders for this stock */}
+              {selectedOrders.length > 0 && (
+                <div className="p-6 border-t border-white/8">
+                  <p className="text-[9px] tracking-[0.15em] text-white/25 mb-3">ORDERS ({selectedOrders.length})</p>
+                  <div className="space-y-2 max-h-36 overflow-y-auto">
+                    {selectedOrders.slice(0, 5).map((order) => (
+                      <div key={order.id} className="flex items-center justify-between py-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[8px] tracking-[0.1em] font-semibold px-1.5 py-0.5 border ${
+                            order.type === "BUY"
+                              ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5"
+                              : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/5"
+                          }`}>
+                            {order.type}
+                          </span>
+                          <span className="text-[10px] text-white/40">{order.qty} @ {"\u20B9"}{order.price.toFixed(2)}</span>
+                        </div>
+                        <span className="text-[10px] font-[var(--font-anton)]">{"\u20B9"}{order.total.toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
           ) : (
             <div className="flex-1 flex items-center justify-center p-6">

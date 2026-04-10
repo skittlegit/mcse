@@ -3,6 +3,7 @@ import { Anton, Inter } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
 import { AuthProvider } from "@/lib/AuthContext";
+import { TradingProvider } from "@/lib/TradingContext";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -39,7 +40,9 @@ export default function RootLayout({
     <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased overflow-x-hidden`} style={{ background: "#0a0a0a" }} suppressHydrationWarning>
       <body className="min-h-full bg-[#0a0a0a] text-white overflow-x-hidden">
         <AuthProvider>
-          <AppShell>{children}</AppShell>
+          <TradingProvider>
+            <AppShell>{children}</AppShell>
+          </TradingProvider>
         </AuthProvider>
       </body>
     </html>

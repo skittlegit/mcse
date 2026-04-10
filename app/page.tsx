@@ -13,6 +13,7 @@ import {
   topLosers,
   volumeShockers,
   productsAndTools,
+  newsItems,
   type MoverStock,
 } from "@/lib/mockData";
 
@@ -288,6 +289,52 @@ export default function ExplorePage() {
                 </Link>
               );
             })}
+          </div>
+        </motion.div>
+
+        {/* STOCKS IN NEWS TODAY */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-9 md:mt-10"
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase">
+              STOCKS IN NEWS TODAY
+            </h2>
+            <ChevronRight size={16} className="text-white/30" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {newsItems.map((news, i) => (
+              <motion.div
+                key={`${news.ticker}-${i}`}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 + 0.05 * i, duration: 0.3 }}
+              >
+                <Link
+                  href={`/stock/${news.ticker}`}
+                  className="block border border-white/8 p-5 hover:bg-white/[0.03] transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 border border-white/20 flex items-center justify-center shrink-0">
+                        <span className="text-[8px] tracking-[0.1em] text-white/40">{news.ticker.slice(0, 3)}</span>
+                      </div>
+                      <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em]">{news.name}</p>
+                    </div>
+                    <p className={`text-[11px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-2">
+                    {news.headline}
+                  </p>
+                  <p className="text-[9px] text-white/20">{news.time}</p>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </div>
