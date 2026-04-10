@@ -129,11 +129,18 @@ export default function HoldingsPage() {
           </button>
           <button
             onClick={() => setAnalyseOpen(true)}
-            className="ml-auto flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
+            className="ml-auto hidden md:flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
           >
             <BarChart3 size={13} />
             ANALYSE
           </button>
+          <Link
+            href="/analyse"
+            className="ml-auto flex md:hidden items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
+          >
+            <BarChart3 size={13} />
+            ANALYSE
+          </Link>
         </div>
 
         {/* Portfolio summary */}

@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, Eye } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
@@ -15,6 +15,7 @@ const tabs = [
   { href: "/holdings", label: "HOLDINGS", icon: Briefcase },
   { href: "/positions", label: "POSITIONS", icon: LineChart },
   { href: "/watchlist", label: "WATCHLIST", icon: Eye },
+  { href: "/admin", label: "ADMIN", icon: Shield },
 ];
 
 export default function TopNav() {
@@ -22,9 +23,14 @@ export default function TopNav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const { isLoggedIn, userName } = useAuth();
+  const { isLoggedIn, userName, role } = useAuth();
 
-  const visibleTabs = tabs.filter(t => t.href !== "/positions" || isLoggedIn);
+  const isAdmin = role === "companyAdmin" || role === "totalAdmin";
+  const visibleTabs = tabs.filter(t => {
+    if (t.href === "/positions") return isLoggedIn;
+    if (t.href === "/admin") return isAdmin;
+    return true;
+  });
 
   const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "M";
 

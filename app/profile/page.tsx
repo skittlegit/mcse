@@ -13,7 +13,6 @@ import {
   Settings,
   LogOut,
   History,
-  Shield,
 } from "lucide-react";
 import { userProfile, investments } from "@/lib/mockData";
 import LoginPrompt from "@/components/LoginPrompt";
@@ -153,34 +152,6 @@ export default function ProfilePage() {
           VIEW HOLDINGS
         </Link>
       </motion.div>
-
-      {/* Admin Panel Link */}
-      {role && role !== "user" && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.12 }}
-          className="mb-8"
-        >
-          <Link
-            href="/admin"
-            className="flex items-center justify-between p-5 border border-white/15 hover:bg-white/[0.03] transition-colors group"
-          >
-            <div className="flex items-center gap-3">
-              <Shield size={16} strokeWidth={1.5} className="text-white/40" />
-              <div>
-                <p className="text-[11px] tracking-[0.1em] text-white/70 group-hover:text-white transition-colors">
-                  {role === "totalAdmin" ? "TOTAL ADMIN PANEL" : "COMPANY ADMIN PANEL"}
-                </p>
-                <p className="text-[9px] text-white/30 mt-0.5">
-                  {role === "totalAdmin" ? "Manage all users, stocks & platform" : "Manage company stocks & analytics"}
-                </p>
-              </div>
-            </div>
-            <ChevronRight size={14} className="text-white/20" />
-          </Link>
-        </motion.div>
-      )}
 
       {/* Menu sections */}
       {sections.map((section, si) => (

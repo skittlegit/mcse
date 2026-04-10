@@ -39,15 +39,16 @@ export default function NotificationDropdown({ onClose }: { onClose: () => void 
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.96 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute right-0 top-10 w-80 bg-[#0a0a0a] border border-white/15 z-50 max-h-96 overflow-y-auto scrollbar-hide"
+      className="absolute right-0 top-10 w-80 bg-[#0a0a0a] border border-white/15 z-50 max-h-96 flex flex-col"
     >
-      <div className="px-5 py-3 border-b border-white/10">
+      <div className="px-5 py-3 border-b border-white/10 shrink-0">
         <div className="flex items-center justify-between">
           <span className="text-[10px] tracking-[0.2em] text-white/40 uppercase">NOTIFICATIONS</span>
           <span className="text-[9px] tracking-[0.1em] text-white/20">{notifications.length}</span>
         </div>
       </div>
 
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
       {notifications.map((n, i) => {
         const inner = (
           <motion.div
@@ -72,8 +73,9 @@ export default function NotificationDropdown({ onClose }: { onClose: () => void 
           <div key={i}>{inner}</div>
         );
       })}
+      </div>
 
-      <div className="px-5 py-3 border-t border-white/10">
+      <div className="px-5 py-3 border-t border-white/10 shrink-0">
         <button
           onClick={onClose}
           className="text-[9px] tracking-[0.15em] text-white/30 hover:text-white transition-colors"

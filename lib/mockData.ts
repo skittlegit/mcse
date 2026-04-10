@@ -426,6 +426,7 @@ export interface StockInfo {
   name: string;
   price: number;
   changePercent: number;
+  about: string;
   chartData: Record<string, { day: string; price: number }[]>;
   overview: { open: number; dayLow: number; dayHigh: number };
   fundamentals: StockFundamentals;
@@ -477,13 +478,13 @@ function generateChartData(basePrice: number): Record<string, { day: string; pri
 }
 
 const allStocksRaw = [
-  { ticker: "MATHSOC", name: "Math Society", price: 2892.45, changePercent: 1.20 },
-  { ticker: "ENIGMA", name: "Enigma Computer Science", price: 3987.60, changePercent: -0.56 },
-  { ticker: "GASMONKEYS", name: "Gas Monkeys", price: 1578.90, changePercent: 1.20 },
-  { ticker: "MASTERSHOT", name: "MasterShot", price: 1689.25, changePercent: 0.73 },
-  { ticker: "ERUDITE", name: "Erudite", price: 1087.40, changePercent: -0.78 },
-  { ticker: "INSIGHT", name: "Insight", price: 468.55, changePercent: 1.18 },
-  { ticker: "CELESTE", name: "Celeste", price: 1645.30, changePercent: 1.79 },
+  { ticker: "MATHSOC", name: "Math Society", price: 2892.45, changePercent: 1.20, about: "Math Society is the flagship mathematics club of the institution, dedicated to fostering mathematical thinking, competitive problem-solving, and academic excellence. Founded in 2018, it organises national-level olympiads, workshops, and inter-college quiz competitions. The society has over 500 active members and has produced multiple national math olympiad finalists." },
+  { ticker: "ENIGMA", name: "Enigma Computer Science", price: 3987.60, changePercent: -0.56, about: "Enigma is the premier computer science and coding club, focused on software development, competitive programming, and emerging technologies. It hosts annual hackathons, CTF cybersecurity contests, and open-source contribution drives. Enigma alumni have gone on to roles at leading tech companies and research institutions worldwide." },
+  { ticker: "GASMONKEYS", name: "Gas Monkeys", price: 1578.90, changePercent: 1.20, about: "Gas Monkeys is the automotive and mechanical engineering club, known for building custom vehicles, go-karts, and participating in national-level design challenges. The club maintains a dedicated workshop and has won multiple podium finishes at collegiate racing events. Members gain hands-on experience in fabrication, engine tuning, and aerodynamics." },
+  { ticker: "MASTERSHOT", name: "MasterShot", price: 1689.25, changePercent: 0.73, about: "MasterShot is the media and entertainment society specialising in filmmaking, photography, and visual storytelling. The club produces short films, documentaries, and covers all major campus events. Their annual film festival attracts entries from colleges across the country and has been featured in regional media outlets." },
+  { ticker: "ERUDITE", name: "Erudite", price: 1087.40, changePercent: -0.78, about: "Erudite is the literary and general knowledge society, promoting reading culture, debating, and quizzing. The club publishes a quarterly magazine, hosts Model United Nations sessions, and runs the campus book exchange programme. Erudite members consistently rank among the top debaters at national parliamentary debate circuits." },
+  { ticker: "INSIGHT", name: "Insight", price: 468.55, changePercent: 1.18, about: "Insight is the data analytics and business intelligence club, bridging the gap between data science and real-world decision making. Members work on live datasets, build dashboards, and compete in analytics case competitions. The club partners with startups and NGOs to provide pro-bono data consulting services." },
+  { ticker: "CELESTE", name: "Celeste", price: 1645.30, changePercent: 1.79, about: "Celeste is the astronomy and space science research club, operating the campus observatory and organising stargazing nights, astrophotography workshops, and guest lectures from ISRO scientists. The club has contributed to citizen science projects and published observational data in international astronomy journals." },
 ];
 
 const stockFundamentals: Record<string, StockFundamentals> = {

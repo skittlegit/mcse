@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ChevronRight, LogOut } from "lucide-react";
+import { ChevronRight, LogOut, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -63,6 +63,20 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
         </div>
         <p className="text-[11px] text-white/50 mt-0.5">{userEmail}</p>
       </Link>
+
+      {(role === "companyAdmin" || role === "totalAdmin") && (
+        <Link
+          href="/admin"
+          onClick={onClose}
+          className="flex items-center gap-3 px-5 py-3 border-b border-white/10 hover:bg-white/5 transition-colors"
+        >
+          <Shield size={12} className="text-white/40" />
+          <span className="text-[11px] tracking-[0.1em] text-white/50">
+            {role === "totalAdmin" ? "ADMIN DASHBOARD" : "COMPANY DASHBOARD"}
+          </span>
+          <ChevronRight size={12} className="text-white/20 ml-auto" />
+        </Link>
+      )}
 
       <div>
         {menuItems.map((item, i) => {

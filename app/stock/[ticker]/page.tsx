@@ -244,6 +244,25 @@ export default function StockDetailPage({
             </div>
           </motion.div>
 
+          {/* About the Company */}
+          {stock.about && (
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.32, duration: 0.3 }}
+              className="mt-7 md:mt-8"
+            >
+              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">ABOUT {stock.ticker}</h3>
+              <div className="border border-white/8 p-5">
+                <p className="text-[12px] md:text-[13px] text-white/50 leading-relaxed">{stock.about}</p>
+                <div className="flex items-center gap-4 mt-4 pt-3 border-t border-white/6">
+                  <span className="text-[9px] tracking-[0.15em] text-white/25">SECTOR</span>
+                  <span className="text-[10px] text-white/50">{stock.fundamentals.sector}</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
           {/* 52-Week Range */}
           <motion.div
             initial={{ opacity: 0, y: 6 }}
