@@ -1,107 +1,207 @@
-import { Search, Bell } from "lucide-react";
-import PortfolioCard from "@/components/PortfolioCard";
-import WatchlistCard from "@/components/WatchlistCard";
-import StockRow from "@/components/StockRow";
-import { watchlist, stocksActivity, marketIndices } from "@/lib/mockData";
-import MarketIndexCard from "@/components/MarketIndexCard";
+﻿"use client";
+
+import { useState } from "react";
+import { ChevronRight, Target, Landmark, Layers, ScanLine, Repeat, TrendingUp, Calendar } from "lucide-react";
 import Link from "next/link";
+import Sparkline from "@/components/Sparkline";
+import {
+  investments,
+  mostTraded,
+  topGainers,
+  topLosers,
+  volumeShockers,
+  productsAndTools,
+  type MoverStock,
+} from "@/lib/mockData";
 
-export default function DashboardPage() {
+const iconMap: Record<string, React.ElementType> = {
+  target: Target,
+  landmark: Landmark,
+  layers: Layers,
+  scan: ScanLine,
+  repeat: Repeat,
+  "trending-up": TrendingUp,
+  calendar: Calendar,
+};
+
+type MoverTab = "GAINERS" | "LOSERS" | "VOLUME SHOCKERS";
+
+export default function ExplorePage() {
+  const [activeTab, setActiveTab] = useState<MoverTab>("GAINERS");
+
+  const moverData: Record<MoverTab, MoverStock[]> = {
+    GAINERS: topGainers,
+    LOSERS: topLosers,
+    "VOLUME SHOCKERS": volumeShockers,
+  };
+
+  const currentMovers = moverData[activeTab];
+
   return (
-    <div className="max-w-7xl mx-auto">
-      {/* ── Mobile Header ── */}
-      <header className="flex items-center justify-between px-5 py-4 md:hidden">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center text-white text-sm font-bold">
-            AJ
+    <div className="flex gap-0 pb-12">
+      {/* Main content */}
+      <div className="flex-1 min-w-0 px-6 py-6">
+        {/* MOST TRADED */}
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-[var(--font-anton)] text-lg tracking-[0.1em] uppercase">
+              MOST TRADED
+            </h2>
+            <Link
+              href="#"
+              className="text-[10px] tracking-[0.15em] text-[#aaaaaa] hover:text-white transition-colors duration-150 flex items-center gap-1"
+            >
+              SEE MORE <ChevronRight size={10} />
+            </Link>
           </div>
-          <span className="font-bold text-base">Alex Julia</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Search size={20} className="text-text-secondary" />
-          <div className="relative">
-            <Bell size={20} className="text-text-secondary" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-negative rounded-full" />
-          </div>
-        </div>
-      </header>
 
-      {/* ── Desktop Header ── */}
-      <header className="hidden md:flex items-center justify-between px-8 py-6">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Good morning, Alex</h1>
-          <p className="text-sm text-text-secondary mt-0.5">
-            Here&apos;s your portfolio overview
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-surface rounded-full px-4 py-2 border border-border">
-            <Search size={16} className="text-text-secondary" />
-            <input
-              type="text"
-              placeholder="Search stocks..."
-              className="bg-transparent text-sm outline-none w-48 placeholder:text-text-secondary"
-              readOnly
-            />
-          </div>
-          <div className="relative">
-            <Bell size={20} className="text-text-secondary" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-negative rounded-full" />
-          </div>
-        </div>
-      </header>
-
-      {/* ── Content grid ── */}
-      <div className="px-5 md:px-8 space-y-6 lg:grid lg:grid-cols-12 lg:gap-6 lg:space-y-0">
-        {/* Column 1 — Portfolio + Activity */}
-        <div className="lg:col-span-7 xl:col-span-8 space-y-6">
-          <PortfolioCard />
-
-          {/* Stocks Activity */}
-          <section>
-            <h2 className="font-bold text-base mb-3">Stocks Activity</h2>
-            <div className="bg-surface rounded-2xl border border-border divide-y divide-border">
-              {stocksActivity.map((s) => (
-                <div key={s.ticker} className="px-4">
-                  <StockRow stock={s} />
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-[rgba(255,255,255,0.08)]">
+            {mostTraded.map((stock) => (
+              <Link
+                key={stock.ticker}
+                href={`/stock/${stock.ticker}`}
+                className="bg-[#0a0a0a] p-5 hover:bg-[rgba(255,255,255,0.03)] transition-colors duration-150"
+              >
+                <div className="w-10 h-10 border border-[rgba(255,255,255,0.3)] flex items-center justify-center mb-3">
+                  <span className="text-[9px] tracking-[0.1em] text-[#aaaaaa]">
+                    {stock.ticker.slice(0, 3)}
+                  </span>
                 </div>
-              ))}
-            </div>
-          </section>
+                <p className="font-[var(--font-anton)] text-[11px] tracking-[0.1em] mb-1">
+                  {stock.name.toUpperCase()}
+                </p>
+                <p className="font-[var(--font-anton)] text-2xl tracking-tight">
+                  â‚¹{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </p>
+                <p className="text-[11px] text-[#aaaaaa] mt-1">
+                  {stock.dayChangePercent >= 0 ? "+" : ""}
+                  {stock.dayChangePercent.toFixed(2)}% Â· 1D
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
 
-        {/* Column 2 — Watchlist (mobile: horizontal scroll, desktop: grid) */}
-        <div className="lg:col-span-5 xl:col-span-4 space-y-6">
-          <section>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-bold text-base">Watchlist</h2>
-              <Link href="/markets" className="text-sm font-semibold text-accent">See All</Link>
-            </div>
-            {/* Mobile scroll */}
-            <div className="flex gap-3 overflow-x-auto scrollbar-hide lg:hidden">
-              {watchlist.map((s) => (
-                <WatchlistCard key={s.ticker} stock={s} />
-              ))}
-            </div>
-            {/* Desktop grid */}
-            <div className="hidden lg:grid grid-cols-2 gap-3">
-              {watchlist.map((s) => (
-                <WatchlistCard key={s.ticker} stock={s} />
-              ))}
-            </div>
-          </section>
+        {/* TOP MOVERS TODAY */}
+        <div>
+          <h2 className="font-[var(--font-anton)] text-lg tracking-[0.1em] uppercase mb-5">
+            TOP MOVERS TODAY
+          </h2>
 
-          {/* Mini markets overview — desktop only */}
-          <section className="hidden lg:block">
-            <h2 className="font-bold text-base mb-3">Markets Overview</h2>
-            <div className="grid grid-cols-2 gap-3">
-              {marketIndices.slice(0, 2).map((idx) => (
-                <MarketIndexCard key={idx.name} index={idx} />
-              ))}
+          <div className="flex items-center gap-0 mb-5">
+            {(["GAINERS", "LOSERS", "VOLUME SHOCKERS"] as MoverTab[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 text-[10px] tracking-[0.15em] border transition-all duration-150 ${
+                  activeTab === tab
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-[#aaaaaa] border-[rgba(255,255,255,0.2)] hover:text-white hover:border-white"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Movers table */}
+          <div>
+            <div className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-2 border-b border-[rgba(255,255,255,0.12)]">
+              <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">COMPANY</span>
+              <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hidden sm:block">TREND</span>
+              <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">MKT PRICE (1D)</span>
+              <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">VOLUME</span>
             </div>
-          </section>
+
+            {currentMovers.map((stock) => (
+              <Link
+                key={stock.ticker}
+                href={`/stock/${stock.ticker}`}
+                className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-3 border-b border-[rgba(255,255,255,0.06)] hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-150 items-center"
+              >
+                <div>
+                  <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">
+                    {stock.ticker}
+                  </p>
+                  <p className="text-[10px] text-[#aaaaaa] mt-0.5">{stock.name}</p>
+                </div>
+                <div className="hidden sm:flex justify-end">
+                  <Sparkline data={stock.sparkline} width={80} height={24} />
+                </div>
+                <div className="text-right">
+                  <p className="font-[var(--font-anton)] text-[13px]">
+                    â‚¹{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </p>
+                  <p className="text-[10px] text-[#aaaaaa]">
+                    {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[11px] text-[#aaaaaa]">{stock.volume}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* Right sidebar */}
+      <aside className="hidden lg:block w-80 border-l border-[rgba(255,255,255,0.08)] shrink-0">
+        <div className="p-6 border-b border-[rgba(255,255,255,0.08)]">
+          <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-3">YOUR INVESTMENTS</p>
+          <p className="text-[9px] tracking-[0.2em] text-[#aaaaaa] mb-1">CURRENT VALUE</p>
+          <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-4">
+            â‚¹{investments.currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+          </p>
+
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] tracking-[0.1em] text-[#aaaaaa]">1D RETURNS</span>
+              <span className="text-[12px] font-[var(--font-anton)] text-white">
+                +â‚¹{investments.dayReturns.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                <span className="text-[#aaaaaa] ml-1 text-[10px]">(+{investments.dayReturnsPercent.toFixed(2)}%)</span>
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] tracking-[0.1em] text-[#aaaaaa]">TOTAL RETURNS</span>
+              <span className="text-[12px] font-[var(--font-anton)] text-white">
+                +â‚¹{investments.totalReturns.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                <span className="text-[#aaaaaa] ml-1 text-[10px]">(+{investments.totalReturnsPercent.toFixed(2)}%)</span>
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] tracking-[0.1em] text-[#aaaaaa]">INVESTED</span>
+              <span className="text-[12px] font-[var(--font-anton)] text-white">
+                â‚¹{investments.investedValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">PRODUCTS & TOOLS</p>
+          <div className="space-y-0">
+            {productsAndTools.map((item) => {
+              const Icon = iconMap[item.icon] || Target;
+              return (
+                <button
+                  key={item.label}
+                  className="w-full flex items-center justify-between py-3 border-b border-[rgba(255,255,255,0.06)] hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-150 group"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon size={14} strokeWidth={1.5} className="text-[#666] group-hover:text-white transition-colors" />
+                    <span className="text-[11px] tracking-[0.1em] text-[#aaaaaa] group-hover:text-white transition-colors">
+                      {item.label}
+                    </span>
+                  </div>
+                  <ChevronRight size={10} className="text-[#444]" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </aside>
     </div>
   );
 }
+

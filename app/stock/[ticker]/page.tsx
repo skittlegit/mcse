@@ -1,142 +1,270 @@
-"use client";
+﻿"use client";
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Share2, Info } from "lucide-react";
-import StockChart from "@/components/StockChart";
-import TimeRangeTabs from "@/components/TimeRangeTabs";
-import StatBadge from "@/components/StatBadge";
-import BuyModal from "@/components/BuyModal";
-import { stockDirectory, tslaChartData, tslaOverview } from "@/lib/mockData";
+import { useState, use } from "react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { stockDirectory } from "@/lib/mockData";
+import Sparkline from "@/components/Sparkline";
+import { PageWrap, FadeIn } from "@/components/Motion";
 
-const ranges = ["1D", "1W", "1M", "1Y", "ALL"];
+const timeRanges = ["1D", "1W", "1M", "1Y", "ALL"] as const;
 
-export default function StockDetailPage() {
-  const params = useParams();
-  const router = useRouter();
-  const ticker = (params.ticker as string) ?? "TSLA";
+export default function StockDetailPage({
+  params,
+}: {
+  params: Promise<{ ticker: string }>;
+}) {
+  const { ticker } = use(params);
+  const stock = stockDirectory[ticker.toUpperCase()];
+  const [range, setRange] = useState<string>("1D");
+  const [qty, setQty] = useState(1);
+  const [tab, setTab] = useState<"buy" | "sell">("buy");
 
-  const [activeRange, setActiveRange] = useState("1W");
-  const [showBuy, setShowBuy] = useState(false);
+  if (!stock) {
+    return (
+      <PageWrap>
+        <div className="flex flex-col items-center justify-center py-32 px-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="font-[var(--font-anton)] text-2xl tracking-[0.1em] uppercase mb-2"
+          >
+            STOCK NOT FOUND
+          </motion.h1>
+          <p className="text-[11px] text-[#aaaaaa] mb-4">
+            {ticker.toUpperCase()}
+          </p>
+          <Link
+            href="/"
+            className="text-[10px] tracking-[0.15em] text-[#aaaaaa] hover:text-white border-b border-[rgba(255,255,255,0.3)] pb-0.5"
+          >
+            BACK TO EXPLORE
+          </Link>
+        </div>
+      </PageWrap>
+    );
+  }
 
-  const info = stockDirectory[ticker];
-  const stock = info ?? {
-    ticker,
-    name: ticker,
-    price: 0,
-    changePercent: 0,
-    color: "#7A8A99",
-    chartData: tslaChartData,
-    overview: tslaOverview,
-  };
-
-  const chartData = stock.chartData[activeRange] ?? stock.chartData["1W"];
+  const chartData = stock.chartData[range] || stock.chartData["1D"];
+  const chartValues = chartData.map((d) => d.price);
 
   return (
-    <div className="max-w-7xl mx-auto">
-      {/* Header */}
-      <header className="flex items-center justify-between px-5 md:px-8 py-4">
-        <button
-          onClick={() => router.back()}
-          className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface transition-colors"
+    <PageWrap>
+      <div className="pb-24 md:pb-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex items-center gap-4 px-4 md:px-6 py-4 border-b border-[rgba(255,255,255,0.08)]"
         >
-          <ArrowLeft size={20} />
-        </button>
-        <h1 className="font-bold text-base">Stock Details</h1>
-        <button className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface transition-colors">
-          <Share2 size={18} />
-        </button>
-      </header>
-
-      <div className="px-5 md:px-8 lg:grid lg:grid-cols-5 lg:gap-8">
-        {/* ── Left Column (chart) ── */}
-        <div className="lg:col-span-3 space-y-5">
-          {/* Stock identity */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold"
-                style={{ backgroundColor: stock.color }}
-              >
-                {stock.ticker.slice(0, 1)}
-              </div>
-              <div>
-                <h2 className="text-xl font-bold">{stock.ticker}</h2>
-                <p className="text-sm text-text-secondary">{stock.name}</p>
-              </div>
+          <Link
+            href="/"
+            className="w-8 h-8 border border-[rgba(255,255,255,0.2)] flex items-center justify-center hover:border-white transition-colors duration-150"
+          >
+            <ArrowLeft size={14} />
+          </Link>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 border border-[rgba(255,255,255,0.3)] flex items-center justify-center">
+              <span className="text-[9px] tracking-[0.1em] text-[#aaaaaa]">
+                {stock.ticker.slice(0, 3)}
+              </span>
             </div>
-            <div className="text-right">
-              <p className="text-xl font-bold">
-                ${stock.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+            <div>
+              <p className="font-[var(--font-anton)] text-lg tracking-[0.05em]">
+                {stock.ticker}
               </p>
-              <StatBadge value={stock.changePercent} />
+              <p className="text-[10px] text-[#aaaaaa]">{stock.name}</p>
             </div>
           </div>
+        </motion.div>
 
-          {/* Time tabs */}
-          <TimeRangeTabs
-            ranges={ranges}
-            active={activeRange}
-            onChange={setActiveRange}
-          />
+        <div className="flex gap-0">
+          {/* Main content */}
+          <div className="flex-1 min-w-0 px-4 md:px-6 py-6">
+            {/* Price */}
+            <FadeIn delay={0.1}>
+              <div className="mb-8">
+                <p className="font-[var(--font-anton)] text-3xl md:text-4xl tracking-tight mb-1">
+                  {"₹"}
+                  {stock.price.toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                  })}
+                </p>
+                <p
+                  className={`text-[11px] ${stock.changePercent >= 0 ? "text-green-400" : "text-red-400"}`}
+                >
+                  {stock.changePercent >= 0 ? "+" : ""}
+                  {stock.changePercent.toFixed(2)}% {"·"} {range}
+                </p>
+              </div>
+            </FadeIn>
 
-          {/* Chart */}
-          <div className="bg-surface rounded-2xl border border-border p-4 h-[280px] lg:h-[380px]">
-            <StockChart data={chartData} />
+            {/* Chart */}
+            <FadeIn delay={0.2}>
+              <div className="mb-6 border border-[rgba(255,255,255,0.08)] p-3 md:p-6">
+                <Sparkline
+                  data={chartValues}
+                  width={600}
+                  height={180}
+                  strokeWidth={1.5}
+                />
+                <div className="flex justify-between mt-3">
+                  {chartData.map((d) => (
+                    <span key={d.day} className="text-[8px] text-[#666]">
+                      {d.day}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* Time range selector */}
+            <FadeIn delay={0.3}>
+              <div className="flex items-center gap-0 mb-8 overflow-x-auto">
+                {timeRanges.map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => setRange(r)}
+                    className={`relative px-3 md:px-4 py-2 text-[10px] tracking-[0.15em] border transition-all duration-150 ${
+                      range === r
+                        ? "bg-white text-black border-white"
+                        : "bg-transparent text-[#aaaaaa] border-[rgba(255,255,255,0.2)] hover:text-white hover:border-white"
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </FadeIn>
+
+            {/* Overview */}
+            <FadeIn delay={0.4}>
+              <div>
+                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">
+                  OVERVIEW
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+                  {[
+                    { label: "OPEN", value: stock.overview.open },
+                    { label: "DAY LOW", value: stock.overview.dayLow },
+                    { label: "DAY HIGH", value: stock.overview.dayHigh },
+                  ].map((item) => (
+                    <div
+                      key={item.label}
+                      className="border border-[rgba(255,255,255,0.08)] p-3 md:p-4"
+                    >
+                      <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-1">
+                        {item.label}
+                      </p>
+                      <p className="font-[var(--font-anton)] text-base md:text-lg">
+                        {"₹"}
+                        {item.value.toLocaleString("en-IN", {
+                          minimumFractionDigits: 2,
+                        })}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
           </div>
+
+          {/* Desktop sidebar order panel */}
+          <aside className="hidden lg:block w-80 border-l border-[rgba(255,255,255,0.08)] shrink-0 p-6">
+            <FadeIn delay={0.3}>
+              <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">
+                PLACE ORDER
+              </p>
+              <div className="mb-4">
+                <label className="text-[10px] tracking-[0.1em] text-[#aaaaaa] mb-2 block">
+                  QTY
+                </label>
+                <div className="flex items-center border border-[rgba(255,255,255,0.2)]">
+                  <button
+                    onClick={() => setQty(Math.max(1, qty - 1))}
+                    className="w-10 h-10 flex items-center justify-center text-[#aaaaaa] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  >
+                    {"−"}
+                  </button>
+                  <input
+                    type="number"
+                    value={qty}
+                    onChange={(e) =>
+                      setQty(Math.max(1, parseInt(e.target.value) || 1))
+                    }
+                    className="flex-1 h-10 bg-transparent text-center font-[var(--font-anton)] text-lg text-white outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <button
+                    onClick={() => setQty(qty + 1)}
+                    className="w-10 h-10 flex items-center justify-center text-[#aaaaaa] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors"
+                  >
+                    {"+"}
+                  </button>
+                </div>
+              </div>
+              <div className="flex justify-between items-center mb-6 py-3 border-t border-b border-[rgba(255,255,255,0.08)]">
+                <span className="text-[10px] tracking-[0.1em] text-[#aaaaaa]">
+                  ESTIMATED TOTAL
+                </span>
+                <span className="font-[var(--font-anton)] text-xl">
+                  {"₹"}
+                  {(stock.price * qty).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                  })}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <button className="flex-1 h-11 bg-white text-black text-[10px] tracking-[0.15em] font-semibold border border-white hover:bg-transparent hover:text-white transition-all duration-150">
+                  BUY
+                </button>
+                <button className="flex-1 h-11 border border-white text-white text-[10px] tracking-[0.15em] font-semibold hover:bg-white hover:text-black transition-all duration-150">
+                  SELL
+                </button>
+              </div>
+              <div className="mt-6 pt-4 border-t border-[rgba(255,255,255,0.08)]">
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 bg-white" />
+                  <span className="text-[10px] tracking-[0.1em] text-[#aaaaaa]">
+                    MARKET OPEN
+                  </span>
+                </div>
+                <p className="text-[10px] text-[#666] mt-1">NSE {"·"} BSE</p>
+              </div>
+            </FadeIn>
+          </aside>
         </div>
 
-        {/* ── Right Column (overview + actions) ── */}
-        <div className="lg:col-span-2 mt-6 lg:mt-0 space-y-6">
-          {/* Overview */}
-          <div className="bg-surface rounded-2xl border border-border p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold">Overview</h3>
-              <Info size={16} className="text-text-secondary" />
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              {[
-                { label: "Open", value: stock.overview.open },
-                { label: "Day Low", value: stock.overview.dayLow },
-                { label: "Day High", value: stock.overview.dayHigh },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="text-xs text-text-secondary mb-1">{s.label}</p>
-                  <p className="font-bold text-sm">${s.value.toFixed(2)}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* About — desktop */}
-          <div className="hidden lg:block bg-surface rounded-2xl border border-border p-5">
-            <h3 className="font-bold mb-2">About {stock.ticker}</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">
-              {stock.name} is a leading company in its sector, known for
-              innovation and strong market performance. The company continues to
-              expand globally with a focus on sustainable growth and
-              technological advancement.
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3 sticky bottom-20 md:bottom-4 lg:static">
+        {/* Mobile fixed bottom buy/sell bar */}
+        <div className="fixed bottom-16 left-0 right-0 z-40 lg:hidden border-t border-[rgba(255,255,255,0.12)] bg-[#0a0a0a]/95 backdrop-blur-md">
+          <div className="flex">
             <button
-              onClick={() => setShowBuy(true)}
-              className="flex-1 py-3 rounded-full bg-accent text-white font-semibold hover:bg-accent/90 transition-colors"
+              onClick={() => setTab("buy")}
+              className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
+                tab === "buy"
+                  ? "bg-white text-black"
+                  : "text-[#aaaaaa] hover:text-white"
+              }`}
             >
-              Buy
+              BUY {"₹"}
+              {(stock.price * qty).toLocaleString("en-IN", {
+                minimumFractionDigits: 0,
+              })}
             </button>
-            <button className="flex-1 py-3 rounded-full bg-dark-card text-white font-semibold hover:bg-dark-card/90 transition-colors">
-              Follow
+            <button
+              onClick={() => setTab("sell")}
+              className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all border-l border-[rgba(255,255,255,0.12)] ${
+                tab === "sell"
+                  ? "bg-white text-black"
+                  : "text-[#aaaaaa] hover:text-white"
+              }`}
+            >
+              SELL
             </button>
           </div>
         </div>
       </div>
-
-      {showBuy && (
-        <BuyModal ticker={stock.ticker} onClose={() => setShowBuy(false)} />
-      )}
-    </div>
+    </PageWrap>
   );
 }

@@ -1,19 +1,27 @@
-import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Anton, Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import BottomNav from "@/components/BottomNav";
-import { ThemeProvider } from "@/lib/ThemeProvider";
+import AppShell from "@/components/AppShell";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const anton = Anton({
+  variable: "--font-anton",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "400",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "StockFlow — Trading App",
-  description: "A modern stock trading application",
+  title: "MCSE — Math Club Stock Exchange",
+  description: "Mock Capital Stock Exchange trading dashboard",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a0a0a",
 };
 
 export default function RootLayout({
@@ -22,15 +30,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} h-full antialiased`} suppressHydrationWarning>
-      <body className="min-h-full font-sans bg-bg text-text-primary">
-        <ThemeProvider>
-          <Sidebar />
-          <main className="md:ml-60 pb-20 md:pb-0 min-h-screen transition-[margin] duration-200">
-            {children}
-          </main>
-          <BottomNav />
-        </ThemeProvider>
+    <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased`} style={{ background: "#0a0a0a" }} suppressHydrationWarning>
+      <body className="min-h-full bg-[#0a0a0a] text-white">
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

@@ -1,68 +1,178 @@
 @import "tailwindcss";
 
-:root {
-  --color-bg: #F0F2F8;
-  --color-surface: #FFFFFF;
-  --color-dark-card: #1A2B3C;
-  --color-accent: #00C896;
-  --color-accent-light: #E8FBF5;
-  --color-text-primary: #0D1B2A;
-  --color-text-secondary: #7A8A99;
-  --color-negative: #FF4D6A;
-  --color-border: #EAEEF3;
-}
-
-.dark {
-  --color-bg: #0D1117;
-  --color-surface: #161B22;
-  --color-dark-card: #1C2533;
-  --color-accent: #00C896;
-  --color-accent-light: #0D2E24;
-  --color-text-primary: #E6EDF3;
-  --color-text-secondary: #7D8590;
-  --color-negative: #FF6B81;
-  --color-border: #30363D;
-}
-
 @theme inline {
-  --color-bg: var(--color-bg);
-  --color-surface: var(--color-surface);
-  --color-dark-card: var(--color-dark-card);
-  --color-accent: var(--color-accent);
-  --color-accent-light: var(--color-accent-light);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-negative: var(--color-negative);
-  --color-border: var(--color-border);
-  --font-sans: var(--font-dm-sans);
+  --color-bg: #0a0a0a;
+  --color-surface: #111111;
+  --color-muted: #aaaaaa;
+  --color-divider: rgba(255, 255, 255, 0.12);
+  --color-hover: rgba(255, 255, 255, 0.05);
+  --font-display: var(--font-anton);
+  --font-body: var(--font-inter);
 }
+
+:root { color-scheme: dark; }
+
+* { border-radius: 0 !important; }
 
 body {
-  background: var(--color-bg);
-  color: var(--color-text-primary);
-  font-family: var(--font-dm-sans), sans-serif;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-inter), sans-serif;
 }
 
-/* Hide scrollbar for horizontal scroll containers */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+/* Fonts */
+@font-face {
+  font-family: "MonumentExtended";
+  src: url("/fonts/MonumentExtended-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
 }
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+@font-face {
+  font-family: "MonumentExtended";
+  src: url("/fonts/MonumentExtended-Ultrabold.otf") format("opentype");
+  font-weight: 800;
+  font-display: swap;
+}
+.font-monument { font-family: "MonumentExtended", sans-serif; }
+
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Ticker tape scroll */
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker { animation: ticker-scroll 36s linear infinite; }
+
+/* Selection */
+::selection { background: rgba(255, 255, 255, 0.2); color: #fff; }
+
+/* ================================================================ */
+/* Loading Screen — Bloomberg Terminal Boot                          */
+/* ================================================================ */
+
+@keyframes ld-fade-exit {
+  0%   { opacity: 1; filter: brightness(1); }
+  40%  { opacity: 1; filter: brightness(1.8); }
+  100% { opacity: 0; filter: brightness(2); }
+}
+@keyframes ld-scanline-move {
+  0%   { top: -10%; }
+  100% { top: 110%; }
+}
+@keyframes ld-dataline-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes ld-ok-flash {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; color: rgba(130,255,130,0.9); }
+  100% { opacity: 1; color: rgba(130,255,130,0.5); }
+}
+@keyframes ld-chart-draw {
+  from { stroke-dashoffset: 2000; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes ld-chart-area-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ld-title-in {
+  from { opacity: 0; transform: translateY(6px); letter-spacing: 0.35em; }
+  to   { opacity: 1; transform: translateY(0); letter-spacing: 0.12em; }
+}
+@keyframes ld-subtitle-in {
+  from { opacity: 0; letter-spacing: 0.5em; }
+  to   { opacity: 0.45; letter-spacing: 0.32em; }
+}
+@keyframes ld-grid-pulse {
+  0%, 100% { opacity: 0.03; }
+  50%      { opacity: 0.06; }
 }
 
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.ld-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #050504;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.ld-exit { animation: ld-fade-exit 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+.ld-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: ld-grid-pulse 3s ease-in-out infinite;
+}
+.ld-scanline {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent);
+  box-shadow: 0 0 20px 8px rgba(255,255,255,0.02);
+  pointer-events: none;
+  animation: ld-scanline-move 2.5s linear infinite; z-index: 2;
+}
+.ld-grain {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.04; mix-blend-mode: overlay;
+}
+.ld-inner {
+  position: relative; z-index: 3;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 24px; width: min(480px, 85vw);
 }
 
-.animate-slide-up {
-  animation: slide-up 0.25s ease-out;
+.ld-dataflash {
+  display: flex; flex-direction: column; gap: 4px; width: 100%;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.ld-dataflash-done {
+  opacity: 0; transform: translateY(-6px);
+  position: absolute; pointer-events: none;
+}
+.ld-dataline {
+  font-family: "MonumentExtended", monospace;
+  font-size: 10px; letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.35);
+  opacity: 0; animation: ld-dataline-in 0.15s ease forwards;
+}
+.ld-dataline-prefix { color: rgba(255,255,255,0.2); margin-right: 6px; }
+.ld-dataline-ok {
+  margin-left: 10px; font-size: 9px; letter-spacing: 0.2em;
+  opacity: 0; animation: ld-ok-flash 0.2s ease forwards;
+}
+
+.ld-chart { width: 100%; height: 100px; opacity: 0; transition: opacity 0.4s ease; }
+.ld-chart-visible { opacity: 1; }
+.ld-chart-line {
+  stroke-dasharray: 2000; stroke-dashoffset: 2000;
+  animation: ld-chart-draw 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+}
+.ld-chart-area { opacity: 0; animation: ld-chart-area-in 0.6s ease 0.8s forwards; }
+
+.ld-title-row { text-align: center; opacity: 0; transition: opacity 0.3s ease; }
+.ld-title-visible { opacity: 1; }
+.ld-mcse {
+  font-family: "MonumentExtended", sans-serif; font-weight: 800;
+  font-size: clamp(2.5rem, 12vw, 5rem);
+  color: rgba(255, 255, 255, 0.95); letter-spacing: 0.12em; line-height: 1;
+}
+.ld-subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 11px; letter-spacing: 0.32em;
+  color: rgba(255, 255, 255, 0.45); margin-top: 8px;
+  animation: ld-subtitle-in 0.5s ease 0.15s both;
+}
+
+.ld-progress-wrap { width: 100%; display: flex; align-items: center; gap: 12px; }
+.ld-progress-track { flex: 1; height: 1px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.ld-progress-bar { height: 100%; background: rgba(255,255,255,0.55); transition: width 0.1s linear; }
+.ld-progress-pct {
+  font-family: "MonumentExtended", monospace;
+  font-size: 10px; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.35); min-width: 32px; text-align: right;
 }
