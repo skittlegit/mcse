@@ -26,7 +26,7 @@ export default function IndexBar() {
             <span className="text-[10px] md:text-[11px] font-[var(--font-anton)] text-white">
               {idx.value.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </span>
-            <span className={`text-[9px] md:text-[10px] ${idx.changePercent >= 0 ? "text-white/50" : "text-white/30"}`}>
+            <span className={`text-[9px] md:text-[10px] font-medium ${idx.changePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
               {idx.changePercent >= 0 ? "+" : ""}{idx.changePercent.toFixed(2)}%
             </span>
           </motion.div>

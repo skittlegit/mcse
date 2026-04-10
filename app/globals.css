@@ -6,6 +6,8 @@
   --color-muted: #aaaaaa;
   --color-divider: rgba(255, 255, 255, 0.12);
   --color-hover: rgba(255, 255, 255, 0.05);
+  --color-up: #00D26A;
+  --color-down: #FF5252;
   --font-display: var(--font-anton);
   --font-body: var(--font-inter);
 }
@@ -16,6 +18,10 @@
 
 body {
   background: #0a0a0a;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
   color: #ffffff;
   font-family: var(--font-inter), sans-serif;
 }

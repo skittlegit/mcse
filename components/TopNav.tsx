@@ -1,11 +1,14 @@
-"use client";
+﻿"use client";
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Search, Bell, BarChart3, Briefcase, LineChart, ClipboardList, Eye, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
+import NotificationDropdown from "./NotificationDropdown";
+import SearchModal from "./SearchModal";
+import { useAuth } from "@/lib/AuthContext";
 
 const tabs = [
   { href: "/", label: "EXPLORE", icon: BarChart3 },
@@ -18,9 +21,22 @@ const tabs = [
 export default function TopNav() {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [profileOpen, setProfileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
+
+  // Ctrl+K global shortcut
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <>
@@ -68,61 +84,60 @@ export default function TopNav() {
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
             {/* Search */}
-            <AnimatePresence>
-              {searchOpen ? (
-                <motion.input
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: 220, opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onBlur={() => {
-                    setSearchOpen(false);
-                    setSearchQuery("");
-                  }}
-                  placeholder="Search stocks..."
-                  autoFocus
-                  className="h-8 bg-transparent border border-white/40 px-3 text-[11px] tracking-[0.08em] text-white placeholder:text-white/30 outline-none focus:border-white transition-colors"
-                />
-              ) : (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSearchOpen(true)}
-                  className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white/60 transition-colors duration-200"
-                >
-                  <Search size={14} strokeWidth={1.5} />
-                </motion.button>
-              )}
-            </AnimatePresence>
-
-            {/* Notification bell */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white/60 transition-colors duration-200 relative"
+              onClick={() => setSearchOpen(true)}
+              className="flex items-center gap-2 h-8 px-3 border border-white/20 hover:border-white/60 transition-colors duration-200"
             >
-              <Bell size={14} strokeWidth={1.5} />
-              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-white" />
+              <Search size={14} strokeWidth={1.5} />
+              <span className="hidden sm:block text-[10px] tracking-[0.1em] text-white/30">Ctrl+K</span>
             </motion.button>
 
-            {/* Avatar / Profile */}
-            <div className="relative hidden md:block">
+            {/* Notification bell */}
+            <div className="relative">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setProfileOpen(!profileOpen)}
-                className="w-8 h-8 border border-white flex items-center justify-center text-[10px] font-monument tracking-wider hover:bg-white hover:text-black transition-all duration-200"
+                onClick={() => { setNotifOpen(!notifOpen); setProfileOpen(false); }}
+                className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white/60 transition-colors duration-200 relative"
               >
-                AJ
+                <Bell size={14} strokeWidth={1.5} />
+                <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-white" />
               </motion.button>
               <AnimatePresence>
-                {profileOpen && (
-                  <ProfileDropdown onClose={() => setProfileOpen(false)} />
+                {notifOpen && (
+                  <NotificationDropdown onClose={() => setNotifOpen(false)} />
                 )}
               </AnimatePresence>
+            </div>
+
+            {/* Avatar / Profile */}
+            <div className="relative hidden md:block">
+              {isLoggedIn ? (
+                <>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => { setProfileOpen(!profileOpen); setNotifOpen(false); }}
+                    className="w-8 h-8 border border-white flex items-center justify-center text-[10px] font-monument tracking-wider hover:bg-white hover:text-black transition-all duration-200"
+                  >
+                    DA
+                  </motion.button>
+                  <AnimatePresence>
+                    {profileOpen && (
+                      <ProfileDropdown onClose={() => setProfileOpen(false)} />
+                    )}
+                  </AnimatePresence>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className="h-8 px-3 border border-white/40 flex items-center justify-center text-[10px] tracking-[0.12em] text-white/60 hover:text-white hover:border-white transition-all duration-200"
+                >
+                  LOG IN
+                </Link>
+              )}
             </div>
 
             {/* Mobile hamburger */}
@@ -150,21 +165,14 @@ export default function TopNav() {
               <Link
                 key={tab.label}
                 href={tab.href}
-                className={`flex flex-col items-center gap-1 py-1 px-2 transition-all duration-200 ${
+                className={`relative flex flex-col items-center gap-0.5 py-1.5 px-3 transition-all duration-200 ${
                   active ? "text-white" : "text-white/35"
                 }`}
               >
-                <Icon size={18} strokeWidth={active ? 2 : 1.5} />
-                <span className="text-[8px] tracking-[0.12em] uppercase">
+                <Icon size={20} strokeWidth={active ? 2 : 1.5} />
+                <span className="text-[8px] tracking-[0.1em] uppercase">
                   {tab.label}
                 </span>
-                {active && (
-                  <motion.div
-                    layoutId="mobile-tab-dot"
-                    className="w-1 h-1 bg-white absolute -top-0.5"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
               </Link>
             );
           })}
@@ -190,37 +198,71 @@ export default function TopNav() {
               className="fixed top-0 right-0 bottom-0 w-72 bg-[#0a0a0a] border-l border-white/10 z-50 md:hidden flex flex-col"
             >
               <div className="p-6 border-b border-white/10">
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3 mb-1">
                   <div className="w-10 h-10 border border-white flex items-center justify-center">
-                    <span className="font-monument text-xs font-extrabold">AJ</span>
+                    <span className="font-monument text-xs font-extrabold">DA</span>
                   </div>
                   <div>
-                    <p className="font-[var(--font-anton)] text-sm tracking-[0.08em]">AELENI JAMES</p>
+                    <p className="font-[var(--font-anton)] text-sm tracking-[0.08em]">DEEPAK AELENI</p>
                     <p className="text-[10px] text-white/40">aeleni@mcse.in</p>
                   </div>
                 </div>
               </div>
+
+              {/* Portfolio summary */}
+              <div className="px-6 py-4 border-b border-white/10">
+                <p className="text-[9px] tracking-[0.2em] text-white/30 mb-1">PORTFOLIO VALUE</p>
+                <p className="font-[var(--font-anton)] text-xl tracking-tight">{"\u20B9"}4,87,693.69</p>
+                <p className="text-[10px] text-[#00D26A] mt-0.5">+{"\u20B9"}2,847.30 (+0.59%) today</p>
+              </div>
+
               <div className="flex-1 p-4 space-y-1">
-                {["ALL ORDERS", "BANK DETAILS", "REPORTS", "CUSTOMER SUPPORT"].map(
-                  (item) => (
-                    <button
-                      key={item}
-                      className="w-full text-left px-3 py-3 text-[11px] tracking-[0.12em] text-white/50 hover:text-white hover:bg-white/5 transition-all"
-                    >
-                      {item}
-                    </button>
-                  )
-                )}
+                {[
+                  { label: "MY PROFILE", href: "/profile" },
+                  { label: "ALL ORDERS", href: "/orders" },
+                  { label: "HOLDINGS", href: "/holdings" },
+                  { label: "WATCHLIST", href: "/watchlist" },
+                  { label: "POSITIONS", href: "/positions" },
+                ].map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full block text-left px-3 py-3 text-[11px] tracking-[0.12em] text-white/50 hover:text-white hover:bg-white/5 transition-all"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
               <div className="p-4 border-t border-white/10">
-                <button className="w-full text-left px-3 py-3 text-[10px] tracking-[0.15em] text-white/40 hover:text-white transition-colors">
-                  LOG OUT
-                </button>
+                <div className="flex items-center justify-between px-3 py-2 mb-2">
+                  <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
+                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}693.69</span>
+                </div>
+                {isLoggedIn ? (
+                  <button
+                    onClick={() => { logout(); setMobileMenuOpen(false); }}
+                    className="w-full text-left px-3 py-3 text-[10px] tracking-[0.15em] text-white/40 hover:text-white transition-colors"
+                  >
+                    LOG OUT
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full block text-left px-3 py-3 text-[10px] tracking-[0.15em] text-white/60 hover:text-white transition-colors"
+                  >
+                    LOG IN
+                  </Link>
+                )}
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      {/* Global Search Modal */}
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

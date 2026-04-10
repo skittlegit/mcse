@@ -1,87 +1,179 @@
-﻿"use client";
+"use client";
 
-import { useState } from "react";
-import Sparkline from "@/components/Sparkline";
-import { topGainers } from "@/lib/mockData";
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import Sparkline from "@/components/Sparkline";
+import LoginPrompt from "@/components/LoginPrompt";
+import { useAuth } from "@/lib/AuthContext";
+import { topGainers, topLosers, type MoverStock } from "@/lib/mockData";
 
-type CapTab = "LARGE" | "MID" | "SMALL";
+type ListTab = "GAINERS" | "LOSERS";
+type SortKey = "ticker" | "price" | "dayChangePercent";
+type SortDir = "asc" | "desc";
 
 export default function PositionsPage() {
-  const [capTab, setCapTab] = useState<CapTab>("LARGE");
+  const { isLoggedIn } = useAuth();
+  const [listTab, setListTab] = useState<ListTab>("GAINERS");
+  const [sortKey, setSortKey] = useState<SortKey>("dayChangePercent");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const data: Record<ListTab, MoverStock[]> = { GAINERS: topGainers, LOSERS: topLosers };
+
+  const sorted = useMemo(() => {
+    const arr = [...data[listTab]];
+    arr.sort((a, b) => {
+      let av: string | number, bv: string | number;
+      if (sortKey === "ticker") { av = a.ticker; bv = b.ticker; }
+      else { av = a[sortKey]; bv = b[sortKey]; }
+      if (typeof av === "string") return sortDir === "asc" ? av.localeCompare(bv as string) : (bv as string).localeCompare(av);
+      return sortDir === "asc" ? (av as number) - (bv as number) : (bv as number) - (av as number);
+    });
+    return arr;
+  }, [listTab, sortKey, sortDir]);
+
+  function toggleSort(key: SortKey) {
+    if (sortKey === key) setSortDir(d => d === "asc" ? "desc" : "asc");
+    else { setSortKey(key); setSortDir("desc"); }
+  }
+
+  const SortIcon = ({ col }: { col: SortKey }) => (
+    sortKey === col
+      ? sortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
+      : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />
+  );
 
   return (
-    <div className="pb-12">
-      {/* Empty state */}
-      <div className="flex flex-col items-center justify-center py-24 px-6">
-        {/* Geometric line art icon */}
-        <div className="w-20 h-20 border border-[rgba(255,255,255,0.2)] flex items-center justify-center mb-6 relative">
-          <div className="w-8 h-8 border border-white rotate-45" />
-          <div className="absolute w-3 h-3 bg-white top-2 right-2" />
-        </div>
+    <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
+      {/* Empty state - positions */}
+      {isLoggedIn ? (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center justify-center py-16 md:py-24"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="w-18 h-18 md:w-20 md:h-20 border border-white/15 flex items-center justify-center mb-6 relative"
+          >
+            <div className="w-8 h-8 border border-white rotate-45" />
+            <div className="absolute w-3 h-3 bg-white top-2 right-2" />
+          </motion.div>
+          <h1 className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-[0.1em] uppercase mb-3">
+            NO OPEN POSITIONS
+          </h1>
+          <p className="text-[11px] tracking-[0.1em] text-white/40 text-center max-w-xs mb-6">
+            You have no intraday or F&O positions currently open. Explore stocks below to start trading.
+          </p>
+          <Link
+            href="/"
+            className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+          >
+            EXPLORE STOCKS
+          </Link>
+        </motion.div>
+      ) : (
+        <LoginPrompt message="Log in to view your open positions and intraday trades." />
+      )}
 
-        <h1 className="font-[var(--font-anton)] text-3xl tracking-[0.1em] uppercase mb-2">
-          NO OPEN POSITIONS
-        </h1>
-        <p className="text-[11px] tracking-[0.1em] text-[#aaaaaa] text-center max-w-xs">
-          You have no intraday or F&O positions currently open. Place a trade to see them here.
-        </p>
-      </div>
-
-      {/* TOP GAINERS section */}
-      <div className="px-6 mt-4">
-        <h2 className="font-[var(--font-anton)] text-lg tracking-[0.1em] uppercase mb-5">
-          TOP GAINERS
-        </h2>
-
-        <div className="flex items-center gap-0 mb-5">
-          {(["LARGE", "MID", "SMALL"] as CapTab[]).map((tab) => (
+      {/* Suggestions: TOP GAINERS / TOP LOSERS */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.15 }}
+        className="mt-6"
+      >
+        <div className="flex items-center gap-0 mb-5 overflow-x-auto scrollbar-hide">
+          {(["GAINERS", "LOSERS"] as ListTab[]).map((tab) => (
             <button
               key={tab}
-              onClick={() => setCapTab(tab)}
-              className={`px-4 py-2 text-[10px] tracking-[0.15em] border transition-all duration-150 ${
-                capTab === tab
+              onClick={() => setListTab(tab)}
+              className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border transition-all duration-150 whitespace-nowrap ${
+                listTab === tab
                   ? "bg-white text-black border-white"
-                  : "bg-transparent text-[#aaaaaa] border-[rgba(255,255,255,0.2)] hover:text-white hover:border-white"
+                  : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
               }`}
             >
-              {tab} CAP
+              TOP {tab} TODAY
             </button>
           ))}
         </div>
 
-        <div>
-          <div className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-2 border-b border-[rgba(255,255,255,0.12)]">
-            <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase">COMPANY</span>
+        {/* Mobile: card list */}
+        <div className="md:hidden space-y-2">
+          {sorted.map((stock, i) => (
+            <motion.div
+              key={stock.ticker}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.04 * i, duration: 0.3 }}
+            >
+              <Link
+                href={`/stock/${stock.ticker}`}
+                className="flex items-center gap-4 bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
+              >
+                <div className="w-11 h-11 border border-white/20 flex items-center justify-center shrink-0">
+                  <span className="text-[9px] tracking-[0.1em] text-white/40">{stock.ticker.slice(0, 3)}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
+                  <p className="text-[11px] text-white/40 truncate mt-0.5">{stock.name}</p>
+                </div>
+                <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
+                <div className="text-right shrink-0 min-w-[80px]">
+                  <p className="font-[var(--font-anton)] text-[13px]">
+                    {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </p>
+                  <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                    {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
+                  </p>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Desktop: table with sortable headers */}
+        <div className="hidden md:block">
+          <div className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-2 border-b border-white/12">
+            <button onClick={() => toggleSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
+              COMPANY <SortIcon col="ticker" />
+            </button>
             <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
-            <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">MKT PRICE (1D)</span>
+            <button onClick={() => toggleSort("price")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
+              MKT PRICE <SortIcon col="price" />
+            </button>
           </div>
 
-          {topGainers.map((stock) => (
+          {sorted.map((stock) => (
             <Link
               key={stock.ticker}
               href={`/stock/${stock.ticker}`}
-              className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-3 border-b border-[rgba(255,255,255,0.06)] hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-150 items-center"
+              className="grid grid-cols-[1fr_80px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
             >
               <div>
                 <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
-                <p className="text-[10px] text-[#aaaaaa] mt-0.5">{stock.name}</p>
+                <p className="text-[10px] text-white/40 mt-0.5">{stock.name}</p>
               </div>
               <div className="flex justify-end">
-                <Sparkline data={stock.sparkline} width={60} height={20} />
+                <Sparkline data={stock.sparkline} width={60} height={20} positive={stock.dayChangePercent >= 0} />
               </div>
               <div className="text-right">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  â‚¹{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </p>
-                <p className="text-[10px] text-[#aaaaaa]">
-                  +{stock.dayChangePercent.toFixed(2)}%
+                <p className={`text-[10px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                  {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
                 </p>
               </div>
             </Link>
           ))}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

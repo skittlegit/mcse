@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Anton, Inter } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
+import { AuthProvider } from "@/lib/AuthContext";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -32,7 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased`} style={{ background: "#0a0a0a" }} suppressHydrationWarning>
       <body className="min-h-full bg-[#0a0a0a] text-white">
-        <AppShell>{children}</AppShell>
+        <AuthProvider>
+          <AppShell>{children}</AppShell>
+        </AuthProvider>
       </body>
     </html>
   );

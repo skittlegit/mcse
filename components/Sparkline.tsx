@@ -7,13 +7,15 @@ export default function Sparkline({
   width = 80,
   height = 28,
   strokeWidth = 1.5,
-  color = "rgba(255,255,255,0.7)",
+  color,
+  positive,
 }: {
   data: number[];
   width?: number;
   height?: number;
   strokeWidth?: number;
   color?: string;
+  positive?: boolean;
 }) {
   if (!data || data.length < 2) return null;
 
@@ -21,6 +23,11 @@ export default function Sparkline({
   const max = Math.max(...data);
   const range = max - min || 1;
   const padding = 2;
+
+  // Auto-detect trend if not explicitly set
+  const isPositive = positive ?? data[data.length - 1] >= data[0];
+  const strokeColor = color ?? (isPositive ? "#00D26A" : "#FF5252");
+  const fillColor = isPositive ? "rgba(0,210,106,0.08)" : "rgba(255,82,82,0.08)";
 
   // Build smooth cubic bezier path
   const pts = data.map((v, i) => ({
@@ -44,7 +51,7 @@ export default function Sparkline({
     <svg width={width} height={height} className="block overflow-visible">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
+          <stop offset="0%" stopColor={fillColor} />
           <stop offset="100%" stopColor="transparent" />
         </linearGradient>
       </defs>
@@ -58,7 +65,7 @@ export default function Sparkline({
       <motion.path
         d={d}
         fill="none"
-        stroke={color}
+        stroke={strokeColor}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
