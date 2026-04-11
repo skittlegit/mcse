@@ -11,7 +11,6 @@ import { useTrading } from "@/lib/TradingContext";
 import {
   holdings,
   investments,
-  userProfile,
   portfolioAnalysis,
 } from "@/lib/mockData";
 import {
@@ -32,21 +31,13 @@ type SortDir = "asc" | "desc";
 
 export default function HoldingsPage() {
   const { isLoggedIn } = useAuth();
-  const { placeOrder, getOrdersForTicker, getBuyCount, getSellCount, balance } = useTrading();
+  const { transactions } = useTrading();
   const [showValues, setShowValues] = useState(true);
-  const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("currentValue");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [analyseOpen, setAnalyseOpen] = useState(false);
-  const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
-  const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
-  const [qty, setQty] = useState(1);
-  const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
   const [sortOpen, setSortOpen] = useState(false);
   const [mobileDisplay, setMobileDisplay] = useState<"market" | "current" | "returns" | "dayChange">("market");
-
-  const selectedHolding = holdings.find((h) => h.ticker === selectedTicker);
-  const selectedOrders = selectedTicker ? getOrdersForTicker(selectedTicker) : [];
 
   const sorted = useMemo(() => {
     const arr = [...holdings];
@@ -65,118 +56,85 @@ export default function HoldingsPage() {
     else { setSortKey(key); setSortDir("desc"); }
   }
 
-  function handleOrder() {
-    if (!selectedHolding) return;
-    const result = placeOrder({
-      ticker: selectedHolding.ticker,
-      name: selectedHolding.name,
-      type: buySellTab,
-      orderType,
-      qty,
-      price: selectedHolding.currentPrice,
-    });
-    setOrderMsg({ text: result.message, success: result.success });
-    if (result.success) setQty(1);
-    setTimeout(() => setOrderMsg(null), 3000);
-  }
-
   function sortIcon(col: SortKey) {
     return sortKey === col
       ? sortDir === "asc" ? <ChevronUp size={10} className="inline ml-0.5" /> : <ChevronDown size={10} className="inline ml-0.5" />
       : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />;
   }
 
+  const recentTxns = transactions.filter(t => t.type === "BUY" || t.type === "SELL").slice(0, 5);
+
   if (!isLoggedIn) {
     return (
-      <div className="pb-20 md:pb-12 px-5 md:px-6 py-6">
+      <div className="py-6">
         <LoginPrompt message="Log in to view and manage your stock holdings." />
       </div>
     );
   }
 
   return (
-    <div className="flex gap-0 pb-20 md:pb-12 min-h-[calc(100vh-6rem)]">
-      {/* Order feedback toast */}
-      <AnimatePresence>
-        {orderMsg && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className={`fixed top-20 left-1/2 -translate-x-1/2 z-[70] px-6 py-3 border text-[11px] tracking-[0.1em] ${
-              orderMsg.success
-                ? "bg-[#00D26A]/10 border-[#00D26A]/30 text-[#00D26A]"
-                : "bg-[#FF5252]/10 border-[#FF5252]/30 text-[#FF5252]"
-            }`}
-          >
-            {orderMsg.text}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main */}
-      <div className="flex-1 min-w-0 px-5 md:px-6 py-6 md:py-6">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase">
-            HOLDINGS ({holdings.length})
-          </h1>
-          <button
-            onClick={() => setShowValues(!showValues)}
-            className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-150"
-          >
-            {showValues ? <Eye size={13} /> : <EyeOff size={13} />}
-          </button>
-          <button
-            onClick={() => setAnalyseOpen(true)}
-            className="ml-auto hidden md:flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
-          >
-            <BarChart3 size={13} />
-            ANALYSE
-          </button>
-          <Link
-            href="/analyse"
-            className="ml-auto flex md:hidden items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
-          >
-            <BarChart3 size={13} />
-            ANALYSE
-          </Link>
-        </div>
-
-        {/* Portfolio summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="border border-white/10 p-5 md:p-6 mb-7"
+    <div className="py-6">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase">
+          HOLDINGS ({holdings.length})
+        </h1>
+        <button
+          onClick={() => setShowValues(!showValues)}
+          className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-150"
         >
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">CURRENT VALUE</p>
-              <p className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-tight">
-                {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
-              </p>
-              <p className={`text-[12px] font-medium mt-1 ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                {showValues ? (
-                  <>{investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)</>
-                ) : (
-                  <>{investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%</>
-                )}
-              </p>
-            </div>
-            <div className="text-left md:text-right">
-              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">INVESTED</p>
-              <p className="font-[var(--font-anton)] text-xl md:text-2xl tracking-tight text-white/60">
-                {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
-              </p>
-            </div>
-          </div>
-        </motion.div>
+          {showValues ? <Eye size={13} /> : <EyeOff size={13} />}
+        </button>
+        <button
+          onClick={() => setAnalyseOpen(true)}
+          className="ml-auto hidden md:flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
+        >
+          <BarChart3 size={13} />
+          ANALYSE
+        </button>
+        <Link
+          href="/analyse"
+          className="ml-auto flex md:hidden items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
+        >
+          <BarChart3 size={13} />
+          ANALYSE
+        </Link>
+      </div>
 
-        {/* Holdings list header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase">YOUR STOCKS</h2>
+      {/* Mobile: Portfolio summary */}
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="md:hidden border border-white/10 p-5 mb-6"
+      >
+        <div className="flex flex-col gap-3">
+          <div>
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">CURRENT VALUE</p>
+            <p className="font-[var(--font-anton)] text-2xl tracking-tight">
+              {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+            </p>
+            <p className={`text-[12px] font-medium mt-1 ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+              {showValues ? (
+                <>{investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)</>
+              ) : (
+                <>{investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%</>
+              )}
+            </p>
+          </div>
+          <div>
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">INVESTED</p>
+            <p className="font-[var(--font-anton)] text-lg tracking-tight text-white/60">
+              {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+            </p>
+          </div>
         </div>
+      </motion.div>
+
+      {/* Desktop 2-column grid */}
+      <div className="md:grid md:grid-cols-[13fr_7fr] md:gap-8">
+        {/* Left column: Holdings list */}
+        <div>
 
         {/* Mobile: Card list */}
         <div className="md:hidden">
@@ -308,11 +266,7 @@ export default function HoldingsPage() {
             <Link
               key={h.ticker}
               href={`/stock/${h.ticker}`}
-              className={`grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center cursor-pointer ${
-                selectedTicker === h.ticker ? "bg-white/[0.04]" : ""
-              }`}
-              onMouseEnter={() => setSelectedTicker(h.ticker)}
-              onClick={() => setSelectedTicker(h.ticker)}
+              className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
             >
               <div>
                 <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{h.ticker}</p>
@@ -348,181 +302,103 @@ export default function HoldingsPage() {
             </Link>
           ))}
         </div>
-      </div>
+        </div>
 
-      {/* Right panel (desktop) — Buy/Sell */}
-      <aside className="hidden lg:flex flex-col w-80 border-l border-white/8 shrink-0">
-        <AnimatePresence mode="wait">
-          {selectedHolding ? (
-            <motion.div
-              key={selectedHolding.ticker}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex-1 flex flex-col"
-            >
-              {/* Stock info */}
-              <div className="p-6 border-b border-white/8">
-                <p className="font-[var(--font-anton)] text-xl tracking-[0.05em] mb-1">{selectedHolding.ticker}</p>
-                <p className="text-[11px] text-white/40 mb-4">{selectedHolding.name}</p>
-                <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-1">
-                  {"\u20B9"}{selectedHolding.currentPrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                </p>
-                <p className={`text-[11px] font-medium ${selectedHolding.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                  {selectedHolding.dayChangePercent >= 0 ? "+" : ""}{selectedHolding.dayChangePercent.toFixed(2)}%
-                </p>
-              </div>
-
-              {/* BUY / SELL tabs */}
-              <div className="flex border-b border-white/8">
-                <button
-                  onClick={() => setBuySellTab("BUY")}
-                  className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
-                    buySellTab === "BUY" ? "bg-[#00D26A]/10 text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/40 hover:text-white"
-                  }`}
-                >
-                  BUY
-                </button>
-                <button
-                  onClick={() => setBuySellTab("SELL")}
-                  className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
-                    buySellTab === "SELL" ? "bg-[#FF5252]/10 text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/40 hover:text-white"
-                  }`}
-                >
-                  SELL
-                </button>
-              </div>
-
-              {/* Order type tabs — now clickable */}
-              <div className="px-6 pt-4">
-                <div className="flex gap-0 mb-1.5">
-                  {(["DELIVERY", "INTRADAY"] as const).map((t) => (
-                    <button
-                      key={t}
-                      onClick={() => setOrderType(t)}
-                      className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
-                        orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
-                      }`}
-                    >
-                      {t}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-[8px] tracking-[0.05em] text-white/20">
-                  {orderType === "DELIVERY" ? "Shares held in your portfolio long-term" : "Buy & sell within the same trading day"}
-                </p>
-              </div>
-
-              {/* Quantity */}
-              <div className="px-6 pt-5 flex-1">
-                <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">QTY</label>
-                <div className="flex items-center border border-white/20">
-                  <button
-                    onClick={() => setQty(Math.max(1, qty - 1))}
-                    className="w-10 h-10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.04] transition-colors"
-                  >
-                    {"\u2212"}
-                  </button>
-                  <input
-                    type="number"
-                    value={qty}
-                    onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="flex-1 h-10 bg-transparent text-center font-[var(--font-anton)] text-lg text-white outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                  />
-                  <button
-                    onClick={() => setQty(qty + 1)}
-                    className="w-10 h-10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.04] transition-colors"
-                  >
-                    {"+"}
-                  </button>
-                </div>
-
-                <div className="flex justify-between items-center mt-4 py-3 border-t border-b border-white/8">
-                  <span className="text-[10px] tracking-[0.1em] text-white/40">EST. TOTAL</span>
-                  <span className="font-[var(--font-anton)] text-xl">
-                    {"\u20B9"}{(selectedHolding.currentPrice * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  </span>
-                </div>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
-                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{balance.toFixed(2)}</span>
-                </div>
-
-                <button
-                  onClick={handleOrder}
-                  className={`w-full h-11 mt-5 text-[10px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
-                    buySellTab === "BUY"
-                      ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
-                      : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
-                  }`}
-                >
-                  {buySellTab} {selectedHolding.ticker}
-                </button>
-              </div>
-
-              {/* Holding stats */}
-              <div className="p-6 border-t border-white/8">
-                <p className="text-[9px] tracking-[0.15em] text-white/25 mb-3">YOUR HOLDING</p>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-[10px] text-white/40">QTY</span>
-                    <span className="text-[12px] font-[var(--font-anton)]">{selectedHolding.qty}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[10px] text-white/40">AVG PRICE</span>
-                    <span className="text-[12px] font-[var(--font-anton)]">{"\u20B9"}{selectedHolding.avgPrice.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[10px] text-white/40">P&L</span>
-                    <span className={`text-[12px] font-[var(--font-anton)] ${selectedHolding.returns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                      {selectedHolding.returns >= 0 ? "+" : ""}{"\u20B9"}{selectedHolding.returns.toLocaleString("en-IN")}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[10px] text-white/40">BUY ORDERS</span>
-                    <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">{getBuyCount(selectedHolding.ticker)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[10px] text-white/40">SELL ORDERS</span>
-                    <span className="text-[12px] font-[var(--font-anton)] text-[#FF5252]">{getSellCount(selectedHolding.ticker)}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Recent orders for this stock */}
-              {selectedOrders.length > 0 && (
-                <div className="p-6 border-t border-white/8">
-                  <p className="text-[9px] tracking-[0.15em] text-white/25 mb-3">ORDERS ({selectedOrders.length})</p>
-                  <div className="space-y-2 max-h-36 overflow-y-auto">
-                    {selectedOrders.slice(0, 5).map((order) => (
-                      <div key={order.id} className="flex items-center justify-between py-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-[8px] tracking-[0.1em] font-semibold px-1.5 py-0.5 border ${
-                            order.type === "BUY"
-                              ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5"
-                              : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/5"
-                          }`}>
-                            {order.type}
-                          </span>
-                          <span className="text-[10px] text-white/40">{order.qty} @ {"\u20B9"}{order.price.toFixed(2)}</span>
-                        </div>
-                        <span className="text-[10px] font-[var(--font-anton)]">{"\u20B9"}{order.total.toFixed(2)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+        {/* Right sidebar (desktop): Portfolio summary + Donut + Transactions */}
+        <aside className="hidden md:block space-y-6">
+          {/* Portfolio summary card */}
+          <div className="border border-white/10 p-5">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-2">CURRENT VALUE</p>
+            <p className="font-[var(--font-anton)] text-2xl tracking-tight mb-1">
+              {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+            </p>
+            <p className={`text-[12px] font-medium ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+              {showValues ? (
+                <>{investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)</>
+              ) : (
+                <>{investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%</>
               )}
-            </motion.div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center p-6">
-              <p className="text-[11px] tracking-[0.15em] text-white/20 text-center uppercase">
-                SELECT A STOCK<br />TO BUY OR SELL
+            </p>
+            <div className="mt-4 pt-4 border-t border-white/8">
+              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">INVESTED</p>
+              <p className="font-[var(--font-anton)] text-lg tracking-tight text-white/60">
+                {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
               </p>
             </div>
+          </div>
+
+          {/* Sector allocation donut */}
+          <div className="border border-white/10 p-5">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">SECTOR ALLOCATION</p>
+            <div className="w-full h-40">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={portfolioAnalysis.sectorAllocation}
+                    dataKey="value"
+                    nameKey="sector"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={60}
+                    innerRadius={30}
+                    strokeWidth={1}
+                    stroke="#0a0a0a"
+                  >
+                    {portfolioAnalysis.sectorAllocation.map((_: { sector: string; value: number }, idx: number) => (
+                      <Cell key={idx} fill={["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][idx % 6]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ background: "#111", border: "1px solid rgba(255,255,255,0.15)", fontSize: 11, color: "#fff" }}
+                    formatter={(value) => [`${value}%`, ""]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="space-y-1.5 mt-3">
+              {portfolioAnalysis.sectorAllocation.map((s: { sector: string; value: number }, i: number) => (
+                <div key={s.sector} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2" style={{ backgroundColor: ["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][i % 6] }} />
+                    <span className="text-[10px] text-white/50">{s.sector}</span>
+                  </div>
+                  <span className="text-[11px] font-[var(--font-anton)]">{s.value}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent transactions */}
+          {recentTxns.length > 0 && (
+            <div className="border border-white/10 p-5">
+              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">RECENT TRANSACTIONS</p>
+              <div className="space-y-2">
+                {recentTxns.map((txn) => (
+                  <div key={txn.id} className="flex items-center justify-between py-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[8px] tracking-[0.1em] font-semibold px-1.5 py-0.5 border ${
+                        txn.type === "BUY"
+                          ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5"
+                          : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/5"
+                      }`}>
+                        {txn.type}
+                      </span>
+                      <span className="text-[10px] text-white/40">{txn.ticker}</span>
+                    </div>
+                    <span className="text-[10px] font-[var(--font-anton)]">{"\u20B9"}{Math.abs(txn.amount).toLocaleString("en-IN")}</span>
+                  </div>
+                ))}
+              </div>
+              <Link
+                href="/transactions"
+                className="block mt-3 pt-3 border-t border-white/6 text-[10px] tracking-[0.1em] text-white/30 hover:text-white transition-colors text-center"
+              >
+                VIEW ALL TRANSACTIONS
+              </Link>
+            </div>
           )}
-        </AnimatePresence>
-      </aside>
+        </aside>
+      </div>
 
       {/* Analyse Modal */}
       <AnimatePresence>

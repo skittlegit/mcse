@@ -15,7 +15,7 @@ export default function PositionsPage() {
   const [pageTab, setPageTab] = useState<PageTab>("POSITIONS");
 
   return (
-    <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
+    <div className="py-6">
       {/* Page tabs: POSITIONS | ORDERS */}
       <div className="flex items-center gap-0 mb-6">
         {(["POSITIONS", "ORDERS"] as PageTab[]).map((tab) => (
@@ -35,6 +35,9 @@ export default function PositionsPage() {
           </button>
         ))}
       </div>
+
+      <div className="md:grid md:grid-cols-[13fr_7fr] md:gap-8">
+      <div>
 
       {pageTab === "ORDERS" ? (
         /* Orders content */
@@ -303,9 +306,52 @@ export default function PositionsPage() {
         <LoginPrompt message="Log in to view your open positions and intraday trades." />
       )}
 
-      {/* Suggestions: TOP GAINERS / TOP LOSERS — removed */}
         </>
       )}
+      </div>{/* end left column */}
+
+      {/* Right sidebar (desktop): P&L Summary */}
+      {isLoggedIn && (
+        <aside className="hidden md:block space-y-6">
+          {/* P&L Summary card */}
+          <div className="border border-white/10 p-5">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">INTRADAY SUMMARY</p>
+            {positions.length > 0 ? (
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-[10px] text-white/40">TOTAL P&L</span>
+                  <span className={`font-[var(--font-anton)] text-lg ${
+                    positions.reduce((s, p) => s + p.pnl, 0) >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"
+                  }`}>
+                    {positions.reduce((s, p) => s + p.pnl, 0) >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(Math.round(positions.reduce((s, p) => s + p.pnl, 0))).toLocaleString("en-IN")}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[10px] text-white/40">OPEN POSITIONS</span>
+                  <span className="font-[var(--font-anton)] text-sm">{positions.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[10px] text-white/40">TOTAL ORDERS</span>
+                  <span className="font-[var(--font-anton)] text-sm">{orders.length}</span>
+                </div>
+              </div>
+            ) : (
+              <p className="text-[10px] text-white/20">No open positions today</p>
+            )}
+          </div>
+
+          {/* Quick links */}
+          <div className="border border-white/10 p-5">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">QUICK LINKS</p>
+            <div className="space-y-2">
+              <Link href="/holdings" className="block text-[10px] tracking-[0.1em] text-white/40 hover:text-white transition-colors py-1">VIEW HOLDINGS</Link>
+              <Link href="/transactions" className="block text-[10px] tracking-[0.1em] text-white/40 hover:text-white transition-colors py-1">TRANSACTION HISTORY</Link>
+              <Link href="/" className="block text-[10px] tracking-[0.1em] text-white/40 hover:text-white transition-colors py-1">EXPLORE STOCKS</Link>
+            </div>
+          </div>
+        </aside>
+      )}
+      </div>
     </div>
   );
 }

@@ -1,8 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { useTrading } from "@/lib/TradingContext";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
@@ -13,31 +11,18 @@ export default function TransactionsPage() {
 
   if (!isLoggedIn) {
     return (
-      <div className="pb-24 md:pb-12 px-5 md:px-8 py-6 md:py-8 max-w-2xl mx-auto">
+      <div className="py-6">
         <LoginPrompt message="Log in to view your transaction history." />
       </div>
     );
   }
 
   return (
-    <div className="pb-24 md:pb-12 px-5 md:px-8 py-6 md:py-8 max-w-2xl mx-auto">
+    <div className="py-6">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="flex items-center gap-4 mb-8"
-      >
-        <Link
-          href="/profile"
-          className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"
-        >
-          <ArrowLeft size={15} />
-        </Link>
-        <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase">
-          TRANSACTION HISTORY
-        </h1>
-      </motion.div>
+      <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase mb-8">
+        TRANSACTION HISTORY
+      </h1>
 
       {transactions.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16">

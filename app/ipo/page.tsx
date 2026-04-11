@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Target, ArrowLeft, Clock, TrendingUp, Users, CheckCircle } from "lucide-react";
+import { Clock, TrendingUp, Users, CheckCircle } from "lucide-react";
 
 interface IPO {
   name: string;
@@ -75,14 +75,25 @@ export default function IPOPage() {
   }
 
   return (
-    <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 max-w-3xl">
-      <div className="flex items-center gap-4 mb-8">
-        <Link href="/" className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors">
-          <ArrowLeft size={15} />
-        </Link>
-        <div className="flex items-center gap-3">
-          <Target size={18} className="text-white/40" />
-          <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">IPO</h1>
+    <div className="py-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">IPO</h1>
+        <span className="text-[9px] tracking-[0.15em] text-white/25">{ipoList.filter(i => i.status === "LIVE").length} LIVE · {ipoList.filter(i => i.status === "UPCOMING").length} UPCOMING</span>
+      </div>
+
+      {/* Summary strip */}
+      <div className="grid grid-cols-3 gap-[1px] bg-white/8 mb-6">
+        <div className="bg-[#0a0a0a] p-4">
+          <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">LIVE</p>
+          <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">{ipoList.filter(i => i.status === "LIVE").length}</p>
+        </div>
+        <div className="bg-[#0a0a0a] p-4">
+          <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">UPCOMING</p>
+          <p className="font-[var(--font-anton)] text-xl">{ipoList.filter(i => i.status === "UPCOMING").length}</p>
+        </div>
+        <div className="bg-[#0a0a0a] p-4">
+          <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">CLOSED</p>
+          <p className="font-[var(--font-anton)] text-xl text-white/30">{ipoList.filter(i => i.status === "CLOSED").length}</p>
         </div>
       </div>
 

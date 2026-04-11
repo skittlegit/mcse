@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ScanLine, ArrowLeft, ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
 import { allStocksEnriched } from "@/lib/mockData";
 
@@ -48,19 +48,11 @@ export default function ScreenerPage() {
     sortKey === k ? (sortDir === "asc" ? <ChevronUp size={10} /> : <ChevronDown size={10} />) : null;
 
   return (
-    <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 max-w-4xl">
-      <div className="flex items-center gap-4 mb-8">
-        <Link href="/" className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors">
-          <ArrowLeft size={15} />
-        </Link>
-        <div className="flex items-center gap-3">
-          <ScanLine size={18} className="text-white/40" />
-          <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">SCREENER</h1>
-        </div>
-      </div>
+    <div className="py-6">
+      <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase mb-6">SCREENER</h1>
 
-      {/* Filters */}
-      <div className="border border-white/8 p-4 mb-6 space-y-4">
+      {/* Mobile: Filters inline */}
+      <div className="md:hidden border border-white/8 p-4 mb-6 space-y-4">
         <p className="text-[9px] tracking-[0.2em] text-white/25 mb-2">FILTERS</p>
 
         <div className="flex flex-wrap gap-1.5">
@@ -108,7 +100,63 @@ export default function ScreenerPage() {
         </div>
       </div>
 
-      {/* Results */}
+      {/* Desktop 2-column grid: 30% filter sidebar + 70% results */}
+      <div className="md:grid md:grid-cols-[3fr_7fr] md:gap-8">
+        {/* Left: Filter sidebar (desktop) */}
+        <aside className="hidden md:block">
+          <div className="border border-white/8 p-5 space-y-5 sticky top-24">
+            <p className="text-[9px] tracking-[0.2em] text-white/25">FILTERS</p>
+
+            <div>
+              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-2">SECTOR</p>
+              <div className="flex flex-wrap gap-1.5">
+                {sectors.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSector(s)}
+                    className={`text-[9px] tracking-[0.1em] px-3 py-1.5 border transition-colors ${
+                      sector === s ? "border-white/50 text-white" : "border-white/8 text-white/30 hover:border-white/20"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1.5">CHANGE % RANGE</p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  value={minChange}
+                  onChange={(e) => setMinChange(Number(e.target.value))}
+                  className="w-16 bg-white/5 border border-white/10 text-[11px] text-white/60 px-2 py-1 focus:outline-none focus:border-white/30"
+                />
+                <span className="text-white/20 text-[10px]">to</span>
+                <input
+                  type="number"
+                  value={maxChange}
+                  onChange={(e) => setMaxChange(Number(e.target.value))}
+                  className="w-16 bg-white/5 border border-white/10 text-[11px] text-white/60 px-2 py-1 focus:outline-none focus:border-white/30"
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1.5">MIN PRICE</p>
+              <input
+                type="number"
+                value={minPrice}
+                onChange={(e) => setMinPrice(Number(e.target.value))}
+                className="w-20 bg-white/5 border border-white/10 text-[11px] text-white/60 px-2 py-1 focus:outline-none focus:border-white/30"
+              />
+            </div>
+          </div>
+        </aside>
+
+        {/* Right: Results */}
+        <div>
       <p className="text-[9px] tracking-[0.2em] text-white/25 mb-3">{filtered.length} RESULTS</p>
 
       {/* Desktop table */}
@@ -168,6 +216,8 @@ export default function ScreenerPage() {
           </Link>
         ))}
       </div>
+      </div>{/* end right column */}
+      </div>{/* end grid */}
     </div>
   );
 }

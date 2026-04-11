@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Shield, List } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, FolderOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
@@ -10,13 +10,22 @@ import NotificationDropdown from "./NotificationDropdown";
 import SearchModal from "./SearchModal";
 import { useAuth } from "@/lib/AuthContext";
 
-const tabs = [
-  { href: "/", label: "EXPLORE", icon: BarChart3, subtitle: "" },
-  { href: "/stocks", label: "STOCKS", icon: List, subtitle: "" },
-  { href: "/holdings", label: "HOLDINGS", icon: Briefcase, subtitle: "long-term" },
-  { href: "/positions", label: "POSITIONS", icon: LineChart, subtitle: "intraday" },
-  { href: "/watchlist", label: "WATCHLIST", icon: Eye, subtitle: "" },
-  { href: "/admin", label: "ADMIN", icon: Shield, subtitle: "" },
+/* Desktop tabs: 6 items */
+const desktopTabs = [
+  { href: "/", label: "EXPLORE", icon: BarChart3 },
+  { href: "/holdings", label: "HOLDINGS", icon: Briefcase },
+  { href: "/positions", label: "POSITIONS", icon: LineChart },
+  { href: "/markets", label: "MARKETS", icon: TrendingUp },
+  { href: "/news", label: "NEWS", icon: Newspaper },
+  { href: "/watchlist", label: "WATCHLIST", icon: Eye },
+];
+
+/* Mobile bottom tabs: 4 items */
+const mobileTabs = [
+  { href: "/", label: "EXPLORE", icon: BarChart3 },
+  { href: "/news", label: "NEWS", icon: Newspaper },
+  { href: "/portfolio", label: "PORTFOLIO", icon: FolderOpen },
+  { href: "/watchlist", label: "WATCHLIST", icon: Eye },
 ];
 
 export default function TopNav() {
@@ -24,18 +33,10 @@ export default function TopNav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const { isLoggedIn, userName, role } = useAuth();
-
-  const isAdmin = role === "companyAdmin" || role === "totalAdmin";
-  const visibleTabs = tabs.filter(t => {
-    if (t.href === "/positions") return isLoggedIn;
-    if (t.href === "/admin") return isAdmin;
-    return true;
-  });
+  const { isLoggedIn, userName } = useAuth();
 
   const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "M";
 
-  // Ctrl+K global shortcut
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -47,11 +48,17 @@ export default function TopNav() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  function isActive(href: string) {
+    if (href === "/") return pathname === "/";
+    if (href === "/portfolio") return pathname === "/portfolio" || pathname === "/holdings" || pathname === "/positions";
+    return pathname.startsWith(href);
+  }
+
   return (
     <>
       {/* Desktop + Mobile Top Nav */}
       <nav className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
-        <div className="flex items-center justify-between h-14 px-4 md:px-6">
+        <div className="max-w-[1280px] mx-auto flex items-center justify-between h-14 px-4 md:px-12">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <div className="w-8 h-8 border border-white/80 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-200">
@@ -64,16 +71,12 @@ export default function TopNav() {
 
           {/* Center: Desktop Tabs */}
           <div className="hidden md:flex items-center gap-8">
-            {visibleTabs.map((tab) => {
-              const active =
-                tab.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(tab.href);
+            {desktopTabs.map((tab) => {
+              const active = isActive(tab.href);
               return (
                 <Link
                   key={tab.label}
                   href={tab.href}
-                  title={tab.subtitle || undefined}
                   className={`relative text-[11px] tracking-[0.2em] font-light py-4 transition-all duration-200 ${
                     active ? "text-white" : "text-white/50 hover:text-white"
                   }`}
@@ -93,7 +96,6 @@ export default function TopNav() {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
-            {/* Search */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -101,10 +103,11 @@ export default function TopNav() {
               className="flex items-center gap-2 h-8 px-3 border border-white/20 hover:border-white/60 transition-colors duration-200"
             >
               <Search size={14} strokeWidth={1.5} />
-              <span className="hidden sm:block text-[10px] tracking-[0.1em] text-white/30">Search stocks... <span className="text-white/15">Ctrl+K</span></span>
+              <span className="hidden sm:block text-[10px] tracking-[0.1em] text-white/30">
+                Search stocks, news, events… <span className="text-white/15">⌘K</span>
+              </span>
             </motion.button>
 
-            {/* Notification bell */}
             <div className="relative">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -116,13 +119,10 @@ export default function TopNav() {
                 <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-white" />
               </motion.button>
               <AnimatePresence>
-                {notifOpen && (
-                  <NotificationDropdown onClose={() => setNotifOpen(false)} />
-                )}
+                {notifOpen && <NotificationDropdown onClose={() => setNotifOpen(false)} />}
               </AnimatePresence>
             </div>
 
-            {/* Avatar / Profile */}
             <div className="relative">
               {isLoggedIn ? (
                 <>
@@ -135,9 +135,7 @@ export default function TopNav() {
                     {initials}
                   </motion.button>
                   <AnimatePresence>
-                    {profileOpen && (
-                      <ProfileDropdown onClose={() => setProfileOpen(false)} />
-                    )}
+                    {profileOpen && <ProfileDropdown onClose={() => setProfileOpen(false)} />}
                   </AnimatePresence>
                 </>
               ) : (
@@ -153,14 +151,11 @@ export default function TopNav() {
         </div>
       </nav>
 
-      {/* Mobile bottom tab bar */}
+      {/* Mobile bottom tab bar — 4 tabs, 56px tall */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-center justify-around h-14 px-2">
-          {visibleTabs.map((tab) => {
-            const active =
-              tab.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(tab.href);
+          {mobileTabs.map((tab) => {
+            const active = isActive(tab.href);
             const Icon = tab.icon;
             return (
               <Link
@@ -171,16 +166,13 @@ export default function TopNav() {
                 }`}
               >
                 <Icon size={20} strokeWidth={active ? 2 : 1.5} />
-                <span className="text-[8px] tracking-[0.1em] uppercase">
-                  {tab.label}
-                </span>
+                <span className="text-[8px] tracking-[0.1em] uppercase">{tab.label}</span>
               </Link>
             );
           })}
         </div>
       </div>
 
-      {/* Global Search Modal */}
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );

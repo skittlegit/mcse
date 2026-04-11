@@ -53,16 +53,19 @@ export default function WatchlistPage() {
       : <ChevronDown size={10} className="inline ml-0.5 opacity-30" />
   );
 
+  const [hoveredTicker, setHoveredTicker] = useState<string | null>(null);
+  const hoveredStock = watchlist.find(s => s.ticker === hoveredTicker);
+
   if (!isLoggedIn) {
     return (
-      <div className="pb-20 md:pb-12 px-5 md:px-6 py-6">
+      <div className="py-6">
         <LoginPrompt message="Log in to view and manage your stock watchlist." />
       </div>
     );
   }
 
   return (
-    <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 md:py-6">
+    <div className="py-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <h1 className="font-[var(--font-anton)] text-lg md:text-xl tracking-[0.1em] uppercase">
@@ -140,6 +143,10 @@ export default function WatchlistPage() {
           )}
         </div>
       </div>
+
+      {/* Desktop 2-column grid */}
+      <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-8">
+      <div>
 
       {/* Mobile: sort + card list */}
       <div className="md:hidden">
@@ -222,6 +229,7 @@ export default function WatchlistPage() {
               key={stock.ticker}
               href={`/stock/${stock.ticker}`}
               className="grid grid-cols-[1fr_80px_100px_90px_80px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+              onMouseEnter={() => setHoveredTicker(stock.ticker)}
             >
               <div>
                 <div className="flex items-center gap-3">
@@ -304,13 +312,62 @@ export default function WatchlistPage() {
             Your watchlist is empty. Explore the market and add stocks you want to track.
           </p>
           <Link
-            href="/stocks"
+            href="/"
             className="px-8 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
           >
             EXPLORE STOCKS
           </Link>
         </motion.div>
       )}
+      </div>
+
+      {/* Right sidebar (desktop): Stock preview panel */}
+      <aside className="hidden md:block">
+        {hoveredStock ? (
+          <div className="border border-white/10 p-5 sticky top-24">
+            <p className="font-[var(--font-anton)] text-lg tracking-[0.05em] mb-1">{hoveredStock.ticker}</p>
+            <p className="text-[11px] text-white/40 mb-4">{hoveredStock.name}</p>
+            <p className="font-[var(--font-anton)] text-2xl tracking-tight mb-1">
+              {"\u20B9"}{hoveredStock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+            </p>
+            <p className={`text-[11px] font-medium mb-5 ${hoveredStock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+              {hoveredStock.dayChangePercent >= 0 ? "+" : ""}{hoveredStock.dayChangePercent.toFixed(2)}%
+            </p>
+            <Sparkline data={hoveredStock.sparkline} width={200} height={60} positive={hoveredStock.dayChangePercent >= 0} />
+            <div className="mt-5 pt-4 border-t border-white/8 space-y-2">
+              <div className="flex justify-between">
+                <span className="text-[10px] text-white/40">VOLUME</span>
+                <span className="text-[11px] font-[var(--font-anton)]">{hoveredStock.volume}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[10px] text-white/40">52W LOW</span>
+                <span className="text-[11px] font-[var(--font-anton)]">{"\u20B9"}{hoveredStock.w52Low}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[10px] text-white/40">52W HIGH</span>
+                <span className="text-[11px] font-[var(--font-anton)]">{"\u20B9"}{hoveredStock.w52High}</span>
+              </div>
+              {hoveredStock.shares && (
+                <div className="flex justify-between">
+                  <span className="text-[10px] text-white/40">HOLDING</span>
+                  <span className="text-[11px] font-[var(--font-anton)]">{hoveredStock.shares} shares</span>
+                </div>
+              )}
+            </div>
+            <Link
+              href={`/stock/${hoveredStock.ticker}`}
+              className="block mt-4 py-2.5 text-center text-[10px] tracking-[0.15em] border border-white/20 text-white/50 hover:text-white hover:border-white transition-all"
+            >
+              VIEW DETAILS
+            </Link>
+          </div>
+        ) : (
+          <div className="border border-white/8 p-8 flex items-center justify-center min-h-[200px]">
+            <p className="text-[11px] tracking-[0.15em] text-white/15 text-center uppercase">HOVER A STOCK<br/>TO PREVIEW</p>
+          </div>
+        )}
+      </aside>
+      </div>
     </div>
   );
 }

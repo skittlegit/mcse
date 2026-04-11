@@ -29,14 +29,14 @@ export default function AnalysePage() {
 
   if (!isLoggedIn) {
     return (
-      <div className="pb-24 md:pb-12 px-5 md:px-6 py-6">
+      <div className="py-6">
         <LoginPrompt message="Log in to view your portfolio analysis." />
       </div>
     );
   }
 
   return (
-    <div className="pb-24 md:pb-12 px-5 md:px-8 py-6 md:py-8 max-w-3xl mx-auto">
+    <div className="py-6 md:py-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}

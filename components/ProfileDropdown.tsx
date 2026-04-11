@@ -1,25 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { ChevronRight, LogOut, Shield } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ChevronRight, LogOut, Shield, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { userProfile } from "@/lib/mockData";
 import { useAuth } from "@/lib/AuthContext";
+import { useTrading } from "@/lib/TradingContext";
 
 const menuItems = [
-  { label: "BALANCE", value: `\u20B9${userProfile.balance.toFixed(2)}`, href: "" },
-  { label: "MY PROFILE", href: "/profile" },
-  { label: "ALL ORDERS", href: "/orders" },
-  { label: "CUSTOMER SUPPORT", href: "/profile" },
-  { label: "REPORTS", href: "/holdings" },
+  { label: "PROFILE", href: "/profile" },
+  { label: "TRANSACTION HISTORY", href: "/transactions" },
+  { label: "ADD FUNDS", href: "" },
 ];
 
 export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const { logout, userName, userEmail, role } = useAuth();
+  const { balance, addFunds } = useTrading();
   const router = useRouter();
+  const [showAddFunds, setShowAddFunds] = useState(false);
+  const [fundAmount, setFundAmount] = useState("");
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -78,6 +79,14 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
         </Link>
       )}
 
+      {/* Balance display */}
+      <div className="px-5 py-3 border-b border-white/10">
+        <span className="text-[9px] tracking-[0.15em] text-white/30">BALANCE</span>
+        <p className="font-[var(--font-anton)] text-sm tracking-[0.05em] mt-0.5">
+          {"\u20B9"}{balance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+        </p>
+      </div>
+
       <div>
         {menuItems.map((item, i) => {
           const inner = (
@@ -88,13 +97,46 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
               className="w-full flex items-center justify-between px-5 py-3 hover:bg-white/5 transition-colors duration-150"
             >
               <span className="text-[11px] tracking-[0.1em] text-white/50">{item.label}</span>
-              {item.value ? (
-                <span className="text-[12px] font-[var(--font-anton)] text-white">{item.value}</span>
+              {item.label === "ADD FUNDS" ? (
+                <Plus size={12} className="text-white/30" />
               ) : (
                 <ChevronRight size={12} className="text-white/20" />
               )}
             </motion.div>
           );
+
+          if (item.label === "ADD FUNDS") {
+            return (
+              <button key={item.label} className="w-full" onClick={() => setShowAddFunds(!showAddFunds)}>
+                {inner}
+                {showAddFunds && (
+                  <div className="px-5 pb-3 flex gap-2">
+                    <input
+                      type="number"
+                      value={fundAmount}
+                      onChange={(e) => setFundAmount(e.target.value)}
+                      placeholder="Amount"
+                      className="flex-1 bg-white/5 border border-white/10 px-3 py-1.5 text-xs text-white outline-none placeholder:text-white/20"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const amt = parseFloat(fundAmount);
+                        if (amt > 0) {
+                          addFunds(amt);
+                          setFundAmount("");
+                          setShowAddFunds(false);
+                        }
+                      }}
+                      className="px-3 py-1.5 bg-white text-black text-[10px] tracking-[0.1em] font-medium hover:bg-white/90 transition-colors"
+                    >
+                      ADD
+                    </button>
+                  </div>
+                )}
+              </button>
+            );
+          }
 
           return item.href ? (
             <Link key={item.label} href={item.href} onClick={onClose}>

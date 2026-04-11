@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Calendar, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CalendarEvent {
   day: number;
@@ -75,16 +75,13 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="pb-20 md:pb-12 px-5 md:px-6 py-6 max-w-3xl">
-      <div className="flex items-center gap-4 mb-8">
-        <Link href="/" className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors">
-          <ArrowLeft size={15} />
-        </Link>
-        <div className="flex items-center gap-3">
-          <Calendar size={18} className="text-white/40" />
-          <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">EVENTS CALENDAR</h1>
-        </div>
-      </div>
+    <div className="py-6">
+      <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase mb-6">EVENTS CALENDAR</h1>
+
+      {/* Desktop 2-column grid */}
+      <div className="md:grid md:grid-cols-[13fr_7fr] md:gap-8">
+        {/* Left: Calendar */}
+        <div>
 
       {/* Month nav */}
       <div className="flex items-center justify-between mb-6">
@@ -131,42 +128,106 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {/* Events list */}
-      <p className="text-[9px] tracking-[0.2em] text-white/25 mb-3">
-        {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS · ${MONTH_NAMES[viewMonth]}`}
-      </p>
+      {/* Mobile: Events list below calendar */}
+      <div className="md:hidden mt-4">
+        <p className="text-[9px] tracking-[0.2em] text-white/25 mb-3">
+          {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS · ${MONTH_NAMES[viewMonth]}`}
+        </p>
 
-      {selectedEvents.length === 0 && (
-        <p className="text-[11px] text-white/20 py-8 text-center">No events this month</p>
-      )}
+        {selectedEvents.length === 0 && (
+          <p className="text-[11px] text-white/20 py-8 text-center">No events this month</p>
+        )}
 
-      <div className="space-y-2">
-        {selectedEvents.map((ev, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.04 }}
-          >
-            <Link
-              href={`/stock/${ev.ticker}`}
-              className="flex items-center gap-4 border border-white/6 p-4 hover:bg-white/[0.03] transition-colors"
+        <div className="space-y-2">
+          {selectedEvents.map((ev, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.04 }}
             >
-              <div className="w-12 text-center shrink-0">
-                <p className="text-[9px] tracking-[0.12em] text-white/25">{MONTH_NAMES[ev.month]}</p>
-                <p className="font-[var(--font-anton)] text-lg">{ev.day}</p>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em] mb-0.5">{ev.title}</p>
-                <p className="text-[10px] text-white/30">{ev.ticker} · {ev.impact}</p>
-              </div>
-              <span className={`text-[8px] tracking-[0.15em] px-2 py-1 shrink-0 ${typeColors[ev.type]}`}>
-                {ev.type}
-              </span>
-            </Link>
-          </motion.div>
-        ))}
+              <Link
+                href={`/stock/${ev.ticker}`}
+                className="flex items-center gap-4 border border-white/6 p-4 hover:bg-white/[0.03] transition-colors"
+              >
+                <div className="w-12 text-center shrink-0">
+                  <p className="text-[9px] tracking-[0.12em] text-white/25">{MONTH_NAMES[ev.month]}</p>
+                  <p className="font-[var(--font-anton)] text-lg">{ev.day}</p>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em] mb-0.5">{ev.title}</p>
+                  <p className="text-[10px] text-white/30">{ev.ticker} · {ev.impact}</p>
+                </div>
+                <span className={`text-[8px] tracking-[0.15em] px-2 py-1 shrink-0 ${typeColors[ev.type]}`}>
+                  {ev.type}
+                </span>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
+      </div>{/* end left column */}
+
+      {/* Right sidebar (desktop): Events panel */}
+      <aside className="hidden md:block space-y-6">
+        <div className="border border-white/10 p-5">
+          <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">
+            {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS · ${MONTH_NAMES[viewMonth]}`}
+          </p>
+
+          {selectedEvents.length === 0 && (
+            <p className="text-[11px] text-white/20 py-6 text-center">No events this month</p>
+          )}
+
+          <div className="space-y-2">
+            {selectedEvents.map((ev, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04 }}
+              >
+                <Link
+                  href={`/stock/${ev.ticker}`}
+                  className="flex items-center gap-3 border border-white/6 p-3 hover:bg-white/[0.03] transition-colors"
+                >
+                  <div className="w-10 text-center shrink-0">
+                    <p className="text-[8px] tracking-[0.12em] text-white/25">{MONTH_NAMES[ev.month]}</p>
+                    <p className="font-[var(--font-anton)] text-base">{ev.day}</p>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em] mb-0.5">{ev.title}</p>
+                    <p className="text-[9px] text-white/30">{ev.ticker} · {ev.impact}</p>
+                  </div>
+                  <span className={`text-[8px] tracking-[0.15em] px-2 py-1 shrink-0 ${typeColors[ev.type]}`}>
+                    {ev.type}
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Event type legend */}
+        <div className="border border-white/10 p-5">
+          <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">EVENT TYPES</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-white/50" />
+              <span className="text-[10px] text-white/40">AGM — Annual General Meeting</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[#00D26A]" />
+              <span className="text-[10px] text-white/40">RESULTS — Quarterly/Annual Results</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-white/20" />
+              <span className="text-[10px] text-white/40">EVENT — Club Events &amp; Activities</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+      </div>{/* end grid */}
     </div>
   );
 }

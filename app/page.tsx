@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar, Eye, EyeOff } from "lucide-react";
+import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
-import { useAuth } from "@/lib/AuthContext";
 import {
-  investments,
   mostTraded,
   topGainers,
   topLosers,
@@ -39,8 +37,6 @@ const productRoutes: Record<string, string> = {
 };
 
 export default function ExplorePage() {
-  const { isLoggedIn } = useAuth();
-  const [showInvestments, setShowInvestments] = useState(true);
   const [activeTab, setActiveTab] = useState<MoverTab>("GAINERS");
   const [moverSort, setMoverSort] = useState<MoverSortKey>("dayChangePercent");
   const [moverSortDir, setMoverSortDir] = useState<SortDir>("desc");
@@ -77,311 +73,327 @@ export default function ExplorePage() {
   }
 
   return (
-    <div className="flex gap-0 pb-20 md:pb-12">
-      {/* Main content */}
-      <div className="flex-1 min-w-0 px-5 md:px-6 py-6 md:py-6">
-
-        {/* Mobile: Investment Summary (only when logged in) */}
-        {isLoggedIn && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="lg:hidden mb-7 border border-white/10 p-5"
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <p className="text-[10px] tracking-[0.2em] text-white/30 uppercase">YOUR INVESTMENTS</p>
-              <button onClick={() => setShowInvestments(v => !v)} className="text-white/30 hover:text-white/60 transition-colors">
-                {showInvestments ? <Eye size={13} /> : <EyeOff size={13} />}
-              </button>
-            </div>
-            <Link href="/holdings" className="text-[10px] tracking-[0.15em] text-white/40 hover:text-white flex items-center gap-1">
-              VIEW ALL <ChevronRight size={10} />
-            </Link>
-          </div>
-          <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-3">
-            {showInvestments ? <>{"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••••"}
-          </p>
-          <div className="flex items-center gap-5">
-            <span className="text-[11px] text-white/50">
-              1D: <span className="text-[#00D26A]">{showInvestments ? <>+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} </> : "•••• "}(+{investments.dayReturnsPercent.toFixed(2)}%)</span>
-            </span>
-            <span className="text-[11px] text-white/50">
-              Total: <span className="text-[#00D26A]">{showInvestments ? <>+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })} </> : "•••• "}(+{investments.totalReturnsPercent.toFixed(2)}%)</span>
-            </span>
-          </div>
-        </motion.div>
-        )}
-
-        {/* TOP MOVERS TODAY */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-9 md:mb-10"
-        >
-          <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase mb-5">
-            TOP MOVERS TODAY
-          </h2>
-
-          <div className="flex items-center gap-0 mb-5 overflow-x-auto scrollbar-hide">
-            {(["GAINERS", "LOSERS", "VOLUME"] as MoverTab[]).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border transition-all duration-150 whitespace-nowrap ${
-                  activeTab === tab
-                    ? "bg-white text-black border-white"
-                    : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
-                }`}
-              >
-                {tab === "VOLUME" ? "VOLUME SHOCKERS" : tab}
-              </button>
-            ))}
-          </div>
-
-          {/* Mobile: sort + card list */}
-          <div className="md:hidden">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
-              <select
-                value={moverSort}
-                onChange={(e) => { setMoverSort(e.target.value as MoverSortKey); setMoverSortDir("desc"); }}
-                className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
-                style={{ fontSize: '16px' }}
-              >
-                <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
-                <option value="price" className="bg-[#0a0a0a]">PRICE</option>
-                <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
-                <option value="volume" className="bg-[#0a0a0a]">VOLUME</option>
-              </select>
-            </div>
-            <div className="space-y-2">
-            {currentMovers.map((stock) => (
-              <Link
-                key={stock.ticker}
-                href={`/stock/${stock.ticker}`}
-                className="flex items-center gap-4 bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
-              >
-                <div className="w-11 h-11 border border-white/20 flex items-center justify-center shrink-0">
-                  <span className="text-[9px] tracking-[0.1em] text-white/40">{stock.ticker.slice(0, 3)}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
-                  <p className="text-[11px] text-white/40 truncate mt-0.5">{stock.name}</p>
-                </div>
-                <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
-                <div className="text-right shrink-0 min-w-[80px]">
-                  <p className="font-[var(--font-anton)] text-[13px]">
-                    {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                    {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
-                  </p>
-                </div>
-              </Link>
-            ))}
-            </div>
-          </div>
-
-          {/* Desktop table with sortable headers */}
-          <div className="hidden md:block">
-            <div className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-2 border-b border-white/12">
-              <button onClick={() => toggleMoverSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
-                COMPANY {sortIcon("ticker")}
-              </button>
-              <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
-              <button onClick={() => toggleMoverSort("price")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-                MKT PRICE {sortIcon("price")}
-              </button>
-              <button onClick={() => toggleMoverSort("volume")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
-                VOLUME {sortIcon("volume")}
-              </button>
-            </div>
-            {currentMovers.map((stock) => (
-              <Link
-                key={stock.ticker}
-                href={`/stock/${stock.ticker}`}
-                className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
-              >
-                <div>
-                  <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
-                  <p className="text-[10px] text-white/40 mt-0.5">{stock.name}</p>
-                </div>
-                <div className="flex justify-end">
-                  <Sparkline data={stock.sparkline} width={80} height={24} positive={stock.dayChangePercent >= 0} />
-                </div>
-                <div className="text-right">
-                  <p className="font-[var(--font-anton)] text-[13px]">
-                    {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                  </p>
-                  <p className={`text-[10px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                    {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[11px] text-white/40">{stock.volume}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* PRODUCTS & TOOLS (mobile) */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-          className="lg:hidden"
-        >
-          <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase mb-5">
-            PRODUCTS & TOOLS
-          </h2>
-          <div className="grid grid-cols-2 gap-[1px] bg-white/8">
-            {filteredProducts.map((item) => {
-              const Icon = iconMap[item.icon] || Target;
-              const route = productRoutes[item.label] || "/";
-              return (
-                <Link
-                  key={item.label}
-                  href={route}
-                  className="bg-[#0a0a0a] p-5 flex flex-col items-center gap-3 hover:bg-white/[0.03] active:bg-white/[0.06] transition-colors"
-                >
-                  <Icon size={20} strokeWidth={1.5} className="text-white/40" />
-                  <span className="text-[9px] tracking-[0.12em] text-white/50 text-center leading-tight">
-                    {item.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </motion.div>
-
-        {/* STOCKS IN NEWS TODAY */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="mt-9 md:mt-10"
-        >
-          <Link href="/news" className="flex items-center justify-between mb-5 group">
-            <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase">
-              STOCKS IN NEWS TODAY
+    <div className="py-6">
+      {/* Desktop: 2-column grid (60% / 40%) */}
+      <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-8">
+        {/* LEFT COLUMN */}
+        <div className="min-w-0">
+          {/* TOP MOVERS TODAY */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="mb-9 md:mb-10"
+          >
+            <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase mb-5">
+              TOP MOVERS TODAY
             </h2>
-            <ChevronRight size={16} className="text-white/30 group-hover:text-white/60 transition-colors" />
-          </Link>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {newsItems.map((news, i) => (
-              <motion.div
-                key={`${news.ticker}-${i}`}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 + 0.05 * i, duration: 0.3 }}
-              >
-                <Link
-                  href={`/stock/${news.ticker}`}
-                  className="block border border-white/8 p-5 hover:bg-white/[0.03] transition-colors"
+
+            <div className="flex items-center gap-0 mb-5 overflow-x-auto scrollbar-hide">
+              {(["GAINERS", "LOSERS", "VOLUME"] as MoverTab[]).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border transition-all duration-150 whitespace-nowrap ${
+                    activeTab === tab
+                      ? "bg-white text-black border-white"
+                      : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+                  }`}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 border border-white/20 flex items-center justify-center shrink-0">
-                        <span className="text-[8px] tracking-[0.1em] text-white/40">{news.ticker.slice(0, 3)}</span>
-                      </div>
-                      <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em]">{news.name}</p>
-                    </div>
+                  {tab === "VOLUME" ? "VOLUME SHOCKERS" : tab}
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile: sort + card list */}
+            <div className="md:hidden">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[9px] tracking-[0.15em] text-white/30 uppercase">SORT BY</span>
+                <select
+                  value={moverSort}
+                  onChange={(e) => { setMoverSort(e.target.value as MoverSortKey); setMoverSortDir("desc"); }}
+                  className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
+                  style={{ fontSize: '16px' }}
+                >
+                  <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
+                  <option value="price" className="bg-[#0a0a0a]">PRICE</option>
+                  <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
+                  <option value="volume" className="bg-[#0a0a0a]">VOLUME</option>
+                </select>
+              </div>
+              <div className="space-y-2">
+              {currentMovers.map((stock) => (
+                <Link
+                  key={stock.ticker}
+                  href={`/stock/${stock.ticker}`}
+                  className="flex items-center gap-4 bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
+                >
+                  <div className="w-11 h-11 border border-white/20 flex items-center justify-center shrink-0">
+                    <span className="text-[9px] tracking-[0.1em] text-white/40">{stock.ticker.slice(0, 3)}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
+                    <p className="text-[11px] text-white/40 truncate mt-0.5">{stock.name}</p>
+                  </div>
+                  <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
+                  <div className="text-right shrink-0 min-w-[80px]">
+                    <p className="font-[var(--font-anton)] text-[13px]">
+                      {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                    </p>
+                    <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
+                    </p>
+                  </div>
+                </Link>
+              ))}
+              </div>
+            </div>
+
+            {/* Desktop table with sortable headers */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-2 border-b border-white/12">
+                <button onClick={() => toggleMoverSort("ticker")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-left hover:text-white transition-colors">
+                  COMPANY {sortIcon("ticker")}
+                </button>
+                <span className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right">TREND</span>
+                <button onClick={() => toggleMoverSort("price")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
+                  MKT PRICE {sortIcon("price")}
+                </button>
+                <button onClick={() => toggleMoverSort("volume")} className="text-[9px] tracking-[0.2em] text-[#666] uppercase text-right hover:text-white transition-colors">
+                  VOLUME {sortIcon("volume")}
+                </button>
+              </div>
+              {currentMovers.map((stock) => (
+                <Link
+                  key={stock.ticker}
+                  href={`/stock/${stock.ticker}`}
+                  className="grid grid-cols-[1fr_100px_120px_80px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+                >
+                  <div>
+                    <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>
+                    <p className="text-[10px] text-white/40 mt-0.5">{stock.name}</p>
+                  </div>
+                  <div className="flex justify-end">
+                    <Sparkline data={stock.sparkline} width={80} height={24} positive={stock.dayChangePercent >= 0} />
+                  </div>
+                  <div className="text-right">
+                    <p className="font-[var(--font-anton)] text-[13px]">
+                      {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                    </p>
+                    <p className={`text-[10px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[11px] text-white/40">{stock.volume}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* MOST TRADED (desktop only, below movers) */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="hidden md:block mb-10"
+          >
+            <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase mb-4">
+              MOST TRADED
+            </h2>
+            <div className="grid grid-cols-2 gap-[1px] bg-white/8">
+              {mostTraded.map((s, i) => (
+                <motion.div
+                  key={s.ticker}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + i * 0.04 }}
+                >
+                  <Link
+                    href={`/stock/${s.ticker}`}
+                    className="block bg-[#0a0a0a] p-4 hover:bg-white/[0.03] transition-colors"
+                  >
+                    <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em] mb-1">{s.ticker}</p>
+                    <p className="text-[10px] text-white/30 truncate mb-2">{s.name}</p>
+                    <p className="font-[var(--font-anton)] text-[14px] mb-0.5">{"\u20B9"}{s.price.toLocaleString("en-IN")}</p>
+                    <p className={`text-[10px] font-medium ${s.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {s.dayChangePercent >= 0 ? "+" : ""}{s.dayChangePercent.toFixed(2)}%
+                    </p>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* STOCKS IN NEWS TODAY (mobile, below movers) */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="md:hidden mt-6 mb-8"
+          >
+            <Link href="/news" className="flex items-center justify-between mb-5 group">
+              <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase">
+                STOCKS IN NEWS
+              </h2>
+              <ChevronRight size={16} className="text-white/30 group-hover:text-white/60 transition-colors" />
+            </Link>
+            <div className="space-y-3">
+              {newsItems.slice(0, 3).map((news, i) => (
+                <Link
+                  key={`${news.ticker}-${i}`}
+                  href={`/stock/${news.ticker}`}
+                  className="block border border-white/8 p-4 hover:bg-white/[0.03] transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em]">{news.name}</p>
                     <p className={`text-[11px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                       {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
                     </p>
                   </div>
-                  <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-2">
-                    {news.headline}
-                  </p>
+                  <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-1">{news.headline}</p>
                   <p className="text-[9px] text-white/20">{formatRelativeTime(news.timestamp)}</p>
                 </Link>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
+              ))}
+            </div>
+          </motion.div>
 
-      {/* Right sidebar (desktop) */}
-      <aside className="hidden lg:block w-80 border-l border-white/8 shrink-0">
-        {isLoggedIn ? (
-        <div className="p-6 border-b border-white/8">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase">YOUR INVESTMENTS</p>
-            <button onClick={() => setShowInvestments(v => !v)} className="text-white/30 hover:text-white/60 transition-colors">
-              {showInvestments ? <Eye size={13} /> : <EyeOff size={13} />}
-            </button>
-          </div>
-          <p className="text-[9px] tracking-[0.2em] text-white/40 mb-1">CURRENT VALUE</p>
-          <p className="font-[var(--font-anton)] text-3xl tracking-tight mb-4">
-            {showInvestments ? <>{"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••••"}
-          </p>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] tracking-[0.1em] text-white/40">1D RETURNS</span>
-              <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">
-                {showInvestments ? <>+{"\u20B9"}{investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••"}
-                <span className="text-[#00D26A]/60 ml-1 text-[10px]">(+{investments.dayReturnsPercent.toFixed(2)}%)</span>
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] tracking-[0.1em] text-white/40">TOTAL RETURNS</span>
-              <span className="text-[12px] font-[var(--font-anton)] text-[#00D26A]">
-                {showInvestments ? <>+{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••"}
-                <span className="text-[#00D26A]/60 ml-1 text-[10px]">(+{investments.totalReturnsPercent.toFixed(2)}%)</span>
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] tracking-[0.1em] text-white/40">INVESTED</span>
-              <span className="text-[12px] font-[var(--font-anton)] text-white">
-                {showInvestments ? <>{"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</> : "••••••"}
-              </span>
-            </div>
-          </div>
-        </div>
-        ) : (
-        <div className="p-6 border-b border-white/8">
-          <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">ACCOUNT</p>
-          <p className="text-[11px] text-white/40 leading-relaxed mb-4">
-            Log in to view your investments, holdings, and portfolio performance.
-          </p>
-          <Link
-            href="/login"
-            className="block w-full py-3 text-center text-[10px] tracking-[0.15em] font-semibold bg-white text-black border border-white hover:bg-transparent hover:text-white transition-all duration-200"
+          {/* PRODUCTS & TOOLS (mobile: 2×2 grid) */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
+            className="md:hidden"
           >
-            LOG IN
-          </Link>
-        </div>
-        )}
-
-        <div className="p-6">
-          <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">PRODUCTS & TOOLS</p>
-          <div className="space-y-0">
-            {filteredProducts.map((item) => {
-              const Icon = iconMap[item.icon] || Target;
-              const route = productRoutes[item.label] || "/";
-              return (
-                <Link
-                  key={item.label}
-                  href={route}
-                  className="w-full flex items-center justify-between py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 group"
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon size={14} strokeWidth={1.5} className="text-[#666] group-hover:text-white transition-colors" />
-                    <span className="text-[11px] tracking-[0.1em] text-white/40 group-hover:text-white transition-colors">
+            <h2 className="font-[var(--font-anton)] text-base tracking-[0.1em] uppercase mb-5">
+              QUICK LINKS
+            </h2>
+            <div className="grid grid-cols-2 gap-[1px] bg-white/8">
+              {filteredProducts.map((item) => {
+                const Icon = iconMap[item.icon] || Target;
+                const route = productRoutes[item.label] || "/";
+                return (
+                  <Link
+                    key={item.label}
+                    href={route}
+                    className="bg-[#0a0a0a] p-5 flex flex-col items-center gap-3 hover:bg-white/[0.03] active:bg-white/[0.06] transition-colors"
+                  >
+                    <Icon size={20} strokeWidth={1.5} className="text-white/40" />
+                    <span className="text-[9px] tracking-[0.12em] text-white/50 text-center leading-tight">
                       {item.label}
                     </span>
-                  </div>
-                  <ChevronRight size={10} className="text-[#444]" />
-                </Link>
-              );
-            })}
-          </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
         </div>
-      </aside>
+
+        {/* RIGHT COLUMN (desktop only) */}
+        <aside className="hidden md:block border-l border-white/8 pl-8 min-w-0">
+          {/* Latest News */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="mb-8"
+          >
+            <Link href="/news" className="flex items-center justify-between mb-4 group">
+              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.12em] uppercase text-white/50">
+                LATEST NEWS
+              </h3>
+              <ChevronRight size={12} className="text-white/20 group-hover:text-white/50 transition-colors" />
+            </Link>
+            <div className="space-y-3">
+              {newsItems.slice(0, 4).map((news, i) => (
+                <Link
+                  key={`${news.ticker}-${i}`}
+                  href={`/stock/${news.ticker}`}
+                  className="block border border-white/8 p-4 hover:bg-white/[0.03] transition-colors"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="font-[var(--font-anton)] text-[11px] tracking-[0.05em]">{news.ticker}</span>
+                    <span className={`text-[10px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-1">{news.headline}</p>
+                  <p className="text-[9px] text-white/20">{formatRelativeTime(news.timestamp)}</p>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Upcoming Events */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
+            className="mb-8"
+          >
+            <Link href="/events" className="flex items-center justify-between mb-4 group">
+              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.12em] uppercase text-white/50">
+                UPCOMING EVENTS
+              </h3>
+              <ChevronRight size={12} className="text-white/20 group-hover:text-white/50 transition-colors" />
+            </Link>
+            <div className="space-y-2">
+              {[
+                { day: 15, month: "JUN", title: "MATHSOC ANNUAL MEET", ticker: "MATHSOC", type: "AGM" },
+                { day: 18, month: "JUN", title: "ENIGMA Q2 Results", ticker: "ENIGMA", type: "RESULTS" },
+                { day: 22, month: "JUN", title: "GASMONKEYS Racing", ticker: "GASMONKEYS", type: "EVENT" },
+              ].map((ev, i) => (
+                <Link
+                  key={i}
+                  href={`/stock/${ev.ticker}`}
+                  className="flex items-center gap-3 border border-white/6 p-3 hover:bg-white/[0.03] transition-colors"
+                >
+                  <div className="w-10 text-center shrink-0">
+                    <p className="text-[8px] tracking-[0.12em] text-white/25">{ev.month}</p>
+                    <p className="font-[var(--font-anton)] text-base">{ev.day}</p>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] text-white/60 truncate">{ev.title}</p>
+                    <p className="text-[9px] text-white/25">{ev.ticker}</p>
+                  </div>
+                  <span className="text-[8px] tracking-[0.1em] text-white/25 shrink-0">{ev.type}</span>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Products & Tools */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+          >
+            <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">PRODUCTS & TOOLS</p>
+            <div className="space-y-0">
+              {filteredProducts.map((item) => {
+                const Icon = iconMap[item.icon] || Target;
+                const route = productRoutes[item.label] || "/";
+                return (
+                  <Link
+                    key={item.label}
+                    href={route}
+                    className="w-full flex items-center justify-between py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon size={14} strokeWidth={1.5} className="text-[#666] group-hover:text-white transition-colors" />
+                      <span className="text-[11px] tracking-[0.1em] text-white/40 group-hover:text-white transition-colors">
+                        {item.label}
+                      </span>
+                    </div>
+                    <ChevronRight size={10} className="text-[#444]" />
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
+        </aside>
+      </div>
     </div>
   );
 }
