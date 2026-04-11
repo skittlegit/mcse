@@ -75,7 +75,7 @@ export default function HoldingsPage() {
 
   function handleOrder() {
     if (!selectedStock) return;
-    const result = placeOrder({ ticker: selectedStock.ticker, name: selectedStock.name, type: buySellTab, orderType, qty, price: selectedStock.price });
+    const result = placeOrder({ ticker: selectedStock.ticker, name: selectedStock.name, type: buySellTab, orderType, qty, price: selectedStock.price, pricingType: "MARKET" });
     setOrderMsg({ ok: result.success, text: result.message });
     if (result.success) setQty(1);
     setTimeout(() => setOrderMsg(null), 3000);
@@ -153,6 +153,35 @@ export default function HoldingsPage() {
         {/* Left column: Holdings list */}
         <div>
 
+        {/* Desktop: Portfolio summary strip (above table) */}
+        <div className="hidden md:flex items-center gap-8 border border-white/10 p-5 mb-6">
+          <div className="flex-1">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">CURRENT VALUE</p>
+            <p className="font-[var(--font-anton)] text-2xl tracking-tight">
+              {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+            </p>
+            <p className={`text-[12px] font-medium mt-1 ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+              {showValues ? (
+                <>{investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)</>
+              ) : (
+                <>{investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%</>
+              )}
+            </p>
+          </div>
+          <div className="border-l border-white/8 pl-8">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">INVESTED</p>
+            <p className="font-[var(--font-anton)] text-lg tracking-tight text-white/60">
+              {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
+            </p>
+          </div>
+          <div className="border-l border-white/8 pl-8">
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">1D RETURNS</p>
+            <p className={`font-[var(--font-anton)] text-lg tracking-tight ${investments.dayReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+              {showValues ? `${investments.dayReturns >= 0 ? "+" : ""}\u20B9${investments.dayReturns.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u2022\u2022\u2022"}
+            </p>
+          </div>
+        </div>
+
         {/* Mobile: Card list */}
         <div className="md:hidden">
           <div className="flex items-center gap-3 mb-3 relative">
@@ -204,7 +233,7 @@ export default function HoldingsPage() {
                 href={`/stock/${h.ticker}`}
                 className="flex items-center justify-between bg-white/[0.02] border border-white/6 p-4 hover:bg-white/[0.04] active:bg-white/[0.06] transition-colors"
               >
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="flex items-baseline gap-2">
                     <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{h.ticker}</p>
                     <p className="text-[10px] text-white/30 truncate">{h.name}</p>
@@ -213,7 +242,10 @@ export default function HoldingsPage() {
                     {showValues ? <>{h.qty} shares · Avg {"\u20B9"}{h.avgPrice.toFixed(2)}</> : <>{h.qty > 0 ? "\u2022\u2022\u2022" : ""}</>}
                   </p>
                 </div>
-                <div className="text-right shrink-0 ml-4">
+                <div className="shrink-0 mx-3">
+                  <Sparkline data={h.sparkline} width={44} height={16} positive={h.dayChangePercent >= 0} />
+                </div>
+                <div className="text-right shrink-0">
                   {mobileDisplay === "market" && (
                     <>
                       <p className="font-[var(--font-anton)] text-[13px]">
@@ -321,29 +353,8 @@ export default function HoldingsPage() {
         </div>
         </div>
 
-        {/* Right sidebar (desktop): Portfolio summary + Order panel + Transactions */}
+        {/* Right sidebar (desktop): Order panel + Transactions */}
         <aside className="hidden md:block space-y-6">
-          {/* Portfolio summary card */}
-          <div className="border border-white/10 p-5">
-            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-2">CURRENT VALUE</p>
-            <p className="font-[var(--font-anton)] text-2xl tracking-tight mb-1">
-              {showValues ? `\u20B9${investments.currentValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
-            </p>
-            <p className={`text-[12px] font-medium ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-              {showValues ? (
-                <>{investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{Math.abs(investments.totalReturns).toLocaleString("en-IN", { maximumFractionDigits: 0 })} ({investments.totalReturnsPercent.toFixed(2)}%)</>
-              ) : (
-                <>{investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%</>
-              )}
-            </p>
-            <div className="mt-4 pt-4 border-t border-white/8">
-              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1">INVESTED</p>
-              <p className="font-[var(--font-anton)] text-lg tracking-tight text-white/60">
-                {showValues ? `\u20B9${investments.investedValue.toLocaleString("en-IN", { maximumFractionDigits: 0 })}` : "\u20B9 \u2022\u2022\u2022\u2022\u2022\u2022"}
-              </p>
-            </div>
-          </div>
-
           {/* Order panel — shown when a holding is selected */}
           {selectedStock && (
             <div className="border border-white/10 p-5">

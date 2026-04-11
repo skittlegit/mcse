@@ -2,13 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, LayoutDashboard } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, LayoutDashboard, Calendar } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
 import NotificationDropdown from "./NotificationDropdown";
 import SearchModal from "./SearchModal";
 import { useAuth } from "@/lib/AuthContext";
+import { useAdmin } from "@/lib/AdminContext";
 
 /* Desktop tabs by role */
 const userDesktopTabs = [
@@ -22,6 +23,8 @@ const userDesktopTabs = [
 
 const companyAdminDesktopTabs = [
   { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/admin/news", label: "NEWS", icon: Newspaper },
+  { href: "/admin/events", label: "EVENTS", icon: Calendar },
   { href: "/markets", label: "MARKETS", icon: TrendingUp },
 ];
 
@@ -42,6 +45,8 @@ const userMobileTabs = [
 
 const companyAdminMobileTabs = [
   { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/admin/news", label: "NEWS", icon: Newspaper },
+  { href: "/admin/events", label: "EVENTS", icon: Calendar },
   { href: "/markets", label: "MARKETS", icon: TrendingUp },
 ];
 
@@ -57,6 +62,7 @@ export default function TopNav() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const { isLoggedIn, userName, role } = useAuth();
+  const { marketOpen } = useAdmin();
 
   const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "M";
 
@@ -76,7 +82,7 @@ export default function TopNav() {
 
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
-    if (href === "/admin") return pathname.startsWith("/admin");
+    if (href === "/admin") return pathname === "/admin";
     return pathname.startsWith(href);
   }
 
@@ -167,13 +173,26 @@ export default function TopNav() {
               ) : (
                 <Link
                   href="/login"
-                  className="h-8 px-3 border border-white/40 flex items-center justify-center text-[10px] tracking-[0.12em] text-white/60 hover:text-white hover:border-white transition-all duration-200"
+                  className="h-8 px-4 bg-white text-black flex items-center justify-center text-[10px] tracking-[0.12em] font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-200"
                 >
                   LOG IN
                 </Link>
               )}
             </div>
           </div>
+        </div>
+
+        {/* Market status banner */}
+        <div className="flex items-center justify-between h-7 px-4 md:px-12 max-w-[1280px] mx-auto border-t border-white/6">
+          <div className="flex items-center gap-2">
+            <span className={`w-1.5 h-1.5 rounded-full ${marketOpen ? "bg-[#00D26A]" : "bg-[#FF5252]"}`} />
+            <span className={`text-[9px] tracking-[0.15em] font-medium ${marketOpen ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+              MARKET {marketOpen ? "OPEN" : "CLOSED"}
+            </span>
+          </div>
+          <span className="text-[9px] tracking-[0.1em] text-white/20">
+            MON–FRI · 9:15 AM – 3:30 PM
+          </span>
         </div>
       </nav>
 

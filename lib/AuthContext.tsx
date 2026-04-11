@@ -15,7 +15,7 @@ interface AuthState {
   role: UserRole | null;
   userName: string | null;
   userEmail: string | null;
-  login: (email: string, password: string) => boolean;
+  login: (email: string, password: string) => UserRole | null;
   logout: () => void;
 }
 
@@ -24,7 +24,7 @@ const AuthContext = createContext<AuthState>({
   role: null,
   userName: null,
   userEmail: null,
-  login: () => false,
+  login: () => null,
   logout: () => {},
 });
 
@@ -34,16 +34,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [userName, setUserName] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  const login = useCallback((email: string, password: string) => {
+  const login = useCallback((email: string, password: string): UserRole | null => {
     const match = CREDENTIALS.find(c => c.email === email && c.password === password);
     if (match) {
       setIsLoggedIn(true);
       setRole(match.role);
       setUserName(match.name);
       setUserEmail(match.email);
-      return true;
+      return match.role;
     }
-    return false;
+    return null;
   }, []);
 
   const logout = useCallback(() => {

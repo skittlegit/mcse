@@ -8,8 +8,10 @@ export interface Order {
   name: string;
   type: "BUY" | "SELL";
   orderType: "DELIVERY" | "INTRADAY";
+  pricingType: "MARKET" | "LIMIT";
   qty: number;
   price: number;
+  limitPrice?: number;
   total: number;
   status: "COMPLETED" | "PENDING" | "CANCELLED";
   timestamp: number;
@@ -52,11 +54,11 @@ interface TradingState {
 const INITIAL_BALANCE = 100000;
 
 const MOCK_ORDERS: Order[] = [
-  { id: "ORD-001", ticker: "MATHSOC", name: "Math Society", type: "BUY", orderType: "DELIVERY", qty: 5, price: 2840.00, total: 14200.00, status: "COMPLETED", timestamp: Date.now() - 86400000 * 3 },
-  { id: "ORD-002", ticker: "ENIGMA", name: "Enigma Computer Science", type: "BUY", orderType: "DELIVERY", qty: 3, price: 3920.50, total: 11761.50, status: "COMPLETED", timestamp: Date.now() - 86400000 * 2 },
-  { id: "ORD-003", ticker: "CELESTE", name: "Celeste", type: "BUY", orderType: "INTRADAY", qty: 10, price: 1610.00, total: 16100.00, status: "COMPLETED", timestamp: Date.now() - 86400000 },
-  { id: "ORD-004", ticker: "MATHSOC", name: "Math Society", type: "SELL", orderType: "DELIVERY", qty: 2, price: 2892.45, total: 5784.90, status: "COMPLETED", timestamp: Date.now() - 43200000 },
-  { id: "ORD-005", ticker: "GASMONKEYS", name: "Gas Monkeys", type: "BUY", orderType: "DELIVERY", qty: 8, price: 1560.00, total: 12480.00, status: "COMPLETED", timestamp: Date.now() - 21600000 },
+  { id: "ORD-001", ticker: "MATHSOC", name: "Math Society", type: "BUY", orderType: "DELIVERY", pricingType: "MARKET", qty: 5, price: 2840.00, total: 14200.00, status: "COMPLETED", timestamp: Date.now() - 86400000 * 3 },
+  { id: "ORD-002", ticker: "ENIGMA", name: "Enigma Computer Science", type: "BUY", orderType: "DELIVERY", pricingType: "MARKET", qty: 3, price: 3920.50, total: 11761.50, status: "COMPLETED", timestamp: Date.now() - 86400000 * 2 },
+  { id: "ORD-003", ticker: "CELESTE", name: "Celeste", type: "BUY", orderType: "INTRADAY", pricingType: "MARKET", qty: 10, price: 1610.00, total: 16100.00, status: "COMPLETED", timestamp: Date.now() - 86400000 },
+  { id: "ORD-004", ticker: "MATHSOC", name: "Math Society", type: "SELL", orderType: "DELIVERY", pricingType: "MARKET", qty: 2, price: 2892.45, total: 5784.90, status: "COMPLETED", timestamp: Date.now() - 43200000 },
+  { id: "ORD-005", ticker: "GASMONKEYS", name: "Gas Monkeys", type: "BUY", orderType: "DELIVERY", pricingType: "MARKET", qty: 8, price: 1560.00, total: 12480.00, status: "COMPLETED", timestamp: Date.now() - 21600000 },
 ];
 
 const MOCK_TRANSACTIONS: Transaction[] = [
@@ -116,7 +118,9 @@ export function TradingProvider({ children }: { children: ReactNode }) {
   }, [orders]);
 
   const placeOrder = useCallback((orderInput: Omit<Order, "id" | "status" | "timestamp" | "total">) => {
-    const total = orderInput.price * orderInput.qty;
+    const isLimit = orderInput.pricingType === "LIMIT";
+    const effectivePrice = isLimit && orderInput.limitPrice ? orderInput.limitPrice : orderInput.price;
+    const total = effectivePrice * orderInput.qty;
 
     if (orderInput.type === "BUY" && total > balance) {
       return { success: false, message: `Insufficient balance. Need \u20B9${Math.round(total).toLocaleString("en-IN")} but have \u20B9${Math.round(balance).toLocaleString("en-IN")}` };
@@ -125,10 +129,17 @@ export function TradingProvider({ children }: { children: ReactNode }) {
     const newOrder: Order = {
       ...orderInput,
       id: `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
+      price: effectivePrice,
       total,
-      status: "COMPLETED",
+      status: isLimit ? "PENDING" : "COMPLETED",
       timestamp: Date.now(),
     };
+
+    // For LIMIT orders, no immediate balance/txn change — they stay PENDING
+    if (isLimit) {
+      setOrders(prev => [newOrder, ...prev]);
+      return { success: true, message: `LIMIT ${orderInput.type} order for ${orderInput.qty} ${orderInput.ticker} @ \u20B9${effectivePrice.toLocaleString("en-IN", { minimumFractionDigits: 2 })} placed (PENDING)` };
+    }
 
     const newBalance = orderInput.type === "BUY" ? +(balance - total).toFixed(2) : +(balance + total).toFixed(2);
 

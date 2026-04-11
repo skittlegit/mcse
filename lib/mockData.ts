@@ -538,7 +538,36 @@ export const allStocksEnriched = allStocksRaw.map((s) => {
   };
 });
 
-// ─── Enigma Company Admin Data ────────────────
+// ─── Order Book ─────────────────────────────────────────
+export interface OrderBookLevel {
+  price: number;
+  qty: number;
+  orders: number;
+}
+
+export interface OrderBook {
+  bids: OrderBookLevel[];
+  asks: OrderBookLevel[];
+}
+
+export function generateOrderBook(basePrice: number): OrderBook {
+  const bids: OrderBookLevel[] = [];
+  const asks: OrderBookLevel[] = [];
+  for (let i = 0; i < 5; i++) {
+    bids.push({
+      price: +(basePrice - (i + 1) * basePrice * 0.003).toFixed(2),
+      qty: Math.floor(50 + Math.random() * 200),
+      orders: Math.floor(3 + Math.random() * 15),
+    });
+    asks.push({
+      price: +(basePrice + (i + 1) * basePrice * 0.003).toFixed(2),
+      qty: Math.floor(50 + Math.random() * 200),
+      orders: Math.floor(3 + Math.random() * 15),
+    });
+  }
+  return { bids, asks };
+}
+
 export const enigmaCompanyData = {
   ticker: "ENIGMA",
   sharesInCirculation: 50000,

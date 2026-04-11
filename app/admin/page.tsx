@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Users,
   BarChart3,
@@ -66,38 +67,14 @@ function EnigmaDashboard() {
   const fund = enigma.fundamentals;
   const chartData = enigma.chartData["1M"];
   const co = enigmaCompanyData;
+  const { companyNews, companyEvents } = useAdmin();
 
-  const [newsTitle, setNewsTitle] = useState("");
-  const [newsContent, setNewsContent] = useState("");
-  const [localNews, setLocalNews] = useState(co.companyNews);
-  const [showNewsForm, setShowNewsForm] = useState(false);
-
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [localEvents, setLocalEvents] = useState(co.companyEvents);
-  const [showEventForm, setShowEventForm] = useState(false);
-
-  function publishNews() {
-    if (!newsTitle.trim()) return;
-    setLocalNews((prev) => [
-      { id: `CN-${Date.now()}`, title: newsTitle, content: newsContent, timestamp: Date.now() },
-      ...prev,
-    ]);
-    setNewsTitle("");
-    setNewsContent("");
-    setShowNewsForm(false);
-  }
-
-  function addEvent() {
-    if (!eventTitle.trim() || !eventDate.trim()) return;
-    setLocalEvents((prev) => [
-      ...prev,
-      { id: `CE-${Date.now()}`, title: eventTitle, date: eventDate, type: "EVENT" as const },
-    ]);
-    setEventTitle("");
-    setEventDate("");
-    setShowEventForm(false);
-  }
+  const recentNews = companyNews.slice(0, 3);
+  const pendingCount = companyNews.filter((n) => n.status === "PENDING").length;
+  const upcomingEvents = companyEvents
+    .filter((e) => new Date(e.date) >= new Date())
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .slice(0, 3);
 
   return (
     <>
@@ -200,7 +177,7 @@ function EnigmaDashboard() {
             <p className="text-[12px] text-white/40 leading-relaxed">{enigma.about}</p>
           </motion.div>
 
-          {/* Company News */}
+          {/* Company News — Summary Card */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -211,43 +188,31 @@ function EnigmaDashboard() {
               <div className="flex items-center gap-2">
                 <Newspaper size={13} className="text-white/30" />
                 <p className="text-[9px] tracking-[0.15em] text-white/30">COMPANY NEWS</p>
+                {pendingCount > 0 && (
+                  <span className="text-[7px] tracking-[0.1em] bg-amber-400/10 text-amber-400 border border-amber-400/20 px-1.5 py-0.5">{pendingCount} PENDING</span>
+                )}
               </div>
-              <button
-                onClick={() => setShowNewsForm(!showNewsForm)}
-                className="flex items-center gap-1.5 text-[9px] tracking-[0.1em] text-white/40 hover:text-white transition-colors"
-              >
-                <Plus size={12} /> PUBLISH
-              </button>
+              <Link href="/admin/news" className="text-[9px] tracking-[0.1em] text-white/40 hover:text-white transition-colors">
+                VIEW ALL {"\u2192"}
+              </Link>
             </div>
-            {showNewsForm && (
-              <div className="px-5 py-4 border-b border-white/8 space-y-3">
-                <input
-                  value={newsTitle}
-                  onChange={(e) => setNewsTitle(e.target.value)}
-                  placeholder="News Title"
-                  className="w-full bg-white/5 border border-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/20"
-                />
-                <textarea
-                  value={newsContent}
-                  onChange={(e) => setNewsContent(e.target.value)}
-                  placeholder="News content..."
-                  rows={3}
-                  className="w-full bg-white/5 border border-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/20 resize-none"
-                />
-                <button
-                  onClick={publishNews}
-                  className="px-4 py-2 bg-white text-black text-[10px] tracking-[0.1em] font-semibold hover:bg-white/90 transition-colors"
-                >
-                  PUBLISH NEWS
-                </button>
-              </div>
-            )}
-            {localNews.map((n, i) => (
-              <div key={n.id} className={`px-5 py-3.5 ${i < localNews.length - 1 ? "border-b border-white/6" : ""}`}>
+            {recentNews.length > 0 ? recentNews.map((n, i) => (
+              <div key={n.id} className={`px-5 py-3.5 ${i < recentNews.length - 1 ? "border-b border-white/6" : ""}`}>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className={`text-[7px] tracking-[0.1em] px-1 py-0.5 border ${
+                    n.status === "PENDING" ? "text-amber-400 border-amber-400/20" :
+                    n.status === "PUBLISHED" ? "text-[#00D26A] border-[#00D26A]/20" :
+                    "text-[#FF5252] border-[#FF5252]/20"
+                  }`}>{n.status}</span>
+                </div>
                 <p className="text-[11px] text-white/60">{n.title}</p>
                 <p className="text-[10px] text-white/25 mt-0.5">{new Date(n.timestamp).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
               </div>
-            ))}
+            )) : (
+              <div className="px-5 py-6 text-center">
+                <p className="text-[10px] text-white/20">No news articles yet</p>
+              </div>
+            )}
           </motion.div>
         </div>
 
@@ -277,7 +242,7 @@ function EnigmaDashboard() {
             ))}
           </motion.div>
 
-          {/* Events */}
+          {/* Events — Summary Card */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -289,44 +254,22 @@ function EnigmaDashboard() {
                 <Calendar size={13} className="text-white/30" />
                 <p className="text-[9px] tracking-[0.15em] text-white/30">UPCOMING EVENTS</p>
               </div>
-              <button
-                onClick={() => setShowEventForm(!showEventForm)}
-                className="flex items-center gap-1.5 text-[9px] tracking-[0.1em] text-white/40 hover:text-white transition-colors"
-              >
-                <Plus size={12} /> ADD
-              </button>
+              <Link href="/admin/events" className="text-[9px] tracking-[0.1em] text-white/40 hover:text-white transition-colors">
+                VIEW ALL {"\u2192"}
+              </Link>
             </div>
-            {showEventForm && (
-              <div className="px-5 py-4 border-b border-white/8 space-y-3">
-                <input
-                  value={eventTitle}
-                  onChange={(e) => setEventTitle(e.target.value)}
-                  placeholder="Event title"
-                  className="w-full bg-white/5 border border-white/10 px-3 py-2 text-xs text-white outline-none placeholder:text-white/20"
-                />
-                <input
-                  type="date"
-                  value={eventDate}
-                  onChange={(e) => setEventDate(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 px-3 py-2 text-xs text-white outline-none [color-scheme:dark]"
-                />
-                <button
-                  onClick={addEvent}
-                  className="px-4 py-2 bg-white text-black text-[10px] tracking-[0.1em] font-semibold hover:bg-white/90 transition-colors"
-                >
-                  ADD EVENT
-                </button>
-              </div>
-            )}
-            {localEvents.map((ev, i) => (
-              <div key={ev.id} className={`flex items-center justify-between px-5 py-3 ${i < localEvents.length - 1 ? "border-b border-white/6" : ""}`}>
+            {upcomingEvents.length > 0 ? upcomingEvents.map((ev, i) => (
+              <div key={ev.id} className={`flex items-center justify-between px-5 py-3 ${i < upcomingEvents.length - 1 ? "border-b border-white/6" : ""}`}>
                 <div>
                   <p className="text-[11px] text-white/60">{ev.title}</p>
-                  <p className="text-[10px] text-white/25 mt-0.5">{ev.date}</p>
+                  <p className="text-[10px] text-white/25 mt-0.5">{new Date(ev.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</p>
                 </div>
-                <span className="text-[8px] tracking-[0.1em] text-white/25 border border-white/15 px-1.5 py-0.5">{ev.type}</span>
               </div>
-            ))}
+            )) : (
+              <div className="px-5 py-6 text-center">
+                <p className="text-[10px] text-white/20">No upcoming events</p>
+              </div>
+            )}
           </motion.div>
 
           {/* Quick Stats */}
@@ -361,10 +304,12 @@ function EnigmaDashboard() {
    Total Admin Dashboard
    ═════════════════════════════════════════════════ */
 function TotalAdminDashboard() {
-  const { marketOpen, toggleMarket, listedStocks, toggleListing, announcements, addAnnouncement } = useAdmin();
+  const { marketOpen, toggleMarket, listedStocks, toggleListing, announcements, addAnnouncement, companyNews, approveNews, rejectNews } = useAdmin();
   const [annTitle, setAnnTitle] = useState("");
   const [annContent, setAnnContent] = useState("");
   const [showAnnForm, setShowAnnForm] = useState(false);
+
+  const pendingNews = companyNews.filter((n) => n.status === "PENDING");
 
   function publishAnnouncement() {
     if (!annTitle.trim()) return;
@@ -593,6 +538,51 @@ function TotalAdminDashboard() {
           </div>
         </motion.div>
       </div>
+
+      {/* Pending News Approvals */}
+      {pendingNews.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.25 }}
+          className="mt-8 border border-white/10"
+        >
+          <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
+            <div className="flex items-center gap-2">
+              <Newspaper size={13} className="text-amber-400/50" />
+              <p className="text-[9px] tracking-[0.15em] text-amber-400/60">PENDING NEWS APPROVAL ({pendingNews.length})</p>
+            </div>
+            <Link href="/admin/news" className="text-[9px] tracking-[0.1em] text-white/40 hover:text-white transition-colors">
+              VIEW ALL {"\u2192"}
+            </Link>
+          </div>
+          {pendingNews.map((n) => (
+            <div key={n.id} className="flex items-center justify-between px-5 py-3 border-b border-white/6 last:border-b-0">
+              <div className="flex-1 min-w-0 mr-4">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-[8px] tracking-[0.1em] text-white/20">{n.company}</span>
+                </div>
+                <p className="text-[11px] text-white/60">{n.title}</p>
+                <p className="text-[9px] text-white/25 mt-0.5">{new Date(n.timestamp).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</p>
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <button
+                  onClick={() => approveNews(n.id)}
+                  className="h-7 px-3 text-[8px] tracking-[0.1em] bg-[#00D26A] text-black font-semibold hover:bg-[#00D26A]/80 transition-colors"
+                >
+                  APPROVE
+                </button>
+                <button
+                  onClick={() => rejectNews(n.id)}
+                  className="h-7 px-3 text-[8px] tracking-[0.1em] border border-[#FF5252]/40 text-[#FF5252] hover:bg-[#FF5252]/10 transition-colors"
+                >
+                  REJECT
+                </button>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      )}
     </>
   );
 }

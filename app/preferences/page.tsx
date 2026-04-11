@@ -49,7 +49,7 @@ export default function PreferencesPage() {
         className="flex items-center gap-4 mb-8"
       >
         <Link
-          href="/profile"
+          href="/"
           className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"
         >
           <ArrowLeft size={15} />

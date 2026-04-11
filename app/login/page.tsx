@@ -15,9 +15,9 @@ export default function LoginPage() {
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const success = login(email, password);
-    if (success) {
-      router.push("/");
+    const role = login(email, password);
+    if (role) {
+      router.push(role === "companyAdmin" || role === "totalAdmin" ? "/admin" : "/");
     } else {
       setError("Invalid email or password");
     }

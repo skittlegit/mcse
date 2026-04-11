@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
+import { useAuth } from "@/lib/AuthContext";
 import {
   indices,
   topGainers,
@@ -14,6 +15,9 @@ import {
 } from "@/lib/mockData";
 
 export default function MarketsPage() {
+  const { role } = useAuth();
+  const isAdmin = role === "companyAdmin" || role === "totalAdmin";
+
   return (
     <div className="py-6">
       <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase mb-6">
@@ -25,7 +29,7 @@ export default function MarketsPage() {
         <h2 className="font-[var(--font-anton)] text-sm tracking-[0.12em] uppercase text-white/50 mb-4">
           INDICES
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[1px] bg-white/8">
+        <div className={`grid gap-[1px] bg-white/8 ${isAdmin ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"}`}>
           {indices.map((idx, i) => (
             <motion.div
               key={idx.name}

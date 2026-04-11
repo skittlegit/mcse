@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, use, useCallback } from "react";
+import { useState, use, useCallback, useMemo } from "react";
 import { ArrowLeft, Star, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { stockDirectory, watchlist, holdings, newsItems, formatRelativeTime } from "@/lib/mockData";
+import { stockDirectory, watchlist, holdings, newsItems, formatRelativeTime, generateOrderBook } from "@/lib/mockData";
 import { useTrading } from "@/lib/TradingContext";
 import Sparkline from "@/components/Sparkline";
 
@@ -24,6 +24,8 @@ export default function StockDetailPage({
   const [qty, setQty] = useState(1);
   const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
   const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
+  const [pricingType, setPricingType] = useState<"MARKET" | "LIMIT">("MARKET");
+  const [limitPrice, setLimitPrice] = useState<string>("");
   const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
 
   const isHeld = holdings.some((h) => h.ticker === ticker.toUpperCase());
@@ -32,6 +34,9 @@ export default function StockDetailPage({
   const tickerOrders = getOrdersForTicker(ticker.toUpperCase());
   const position = positions.find((p) => p.ticker === ticker.toUpperCase());
   const stockNews = newsItems.filter((n) => n.ticker === ticker.toUpperCase());
+  const orderBook = useMemo(() => stock ? generateOrderBook(stock.price) : null, [stock]);
+
+  const effectivePrice = pricingType === "LIMIT" && limitPrice ? parseFloat(limitPrice) : (stock?.price ?? 0);
 
   const handleOrder = useCallback(() => {
     if (!stock) return;
@@ -40,13 +45,15 @@ export default function StockDetailPage({
       name: stock.name,
       type: buySellTab,
       orderType,
+      pricingType,
       qty,
       price: stock.price,
+      ...(pricingType === "LIMIT" && limitPrice ? { limitPrice: parseFloat(limitPrice) } : {}),
     });
     setOrderMsg({ text: result.message, success: result.success });
-    if (result.success) setQty(1);
+    if (result.success) { setQty(1); setLimitPrice(""); }
     setTimeout(() => setOrderMsg(null), 3000);
-  }, [stock, placeOrder, buySellTab, orderType, qty]);
+  }, [stock, placeOrder, buySellTab, orderType, pricingType, limitPrice, qty]);
 
   if (!stock) {
     return (
@@ -312,7 +319,6 @@ export default function StockDetailPage({
               {[
                 { label: "MARKET CAP", value: stock.fundamentals.marketCap },
                 { label: "P/E RATIO", value: stock.fundamentals.pe.toFixed(1) },
-                { label: "EPS", value: `\u20B9${stock.fundamentals.eps.toFixed(2)}` },
                 { label: "BOOK VALUE", value: `\u20B9${stock.fundamentals.bookValue.toLocaleString("en-IN")}` },
                 { label: "ROE", value: `${stock.fundamentals.roe.toFixed(1)}%` },
                 { label: "VOLUME", value: stock.fundamentals.volume },
@@ -328,70 +334,12 @@ export default function StockDetailPage({
               <p className="text-[9px] tracking-[0.1em] text-white/20">SECTOR: <span className="text-white/40">{stock.fundamentals.sector}</span></p>
             </div>
           </motion.div>
-
-          {/* Stock News (mobile only) */}
-          {stockNews.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.45, duration: 0.3 }}
-              className="mt-7 md:mt-8"
-            >
-              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">NEWS</h3>
-              <div className="space-y-2">
-                {stockNews.map((news, i) => (
-                  <div key={i} className="border border-white/8 p-4 hover:bg-white/[0.02] transition-colors">
-                    <p className="text-[12px] text-white/70 leading-relaxed mb-2">{news.headline}</p>
-                    <div className="flex items-center gap-3">
-                      <span className="text-[9px] tracking-[0.1em] text-white/25">{formatRelativeTime(news.timestamp)}</span>
-                      <span className={`text-[10px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                        {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Order History for this stock */}
-          {tickerOrders.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
-              className="mt-7 md:mt-8"
-            >
-              <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">
-                YOUR ORDERS ({tickerOrders.length})
-              </h3>
-              <div className="space-y-2">
-                {tickerOrders.map((order) => (
-                  <div key={order.id} className="border border-white/8 p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <span className={`text-[9px] tracking-[0.15em] font-semibold px-2 py-0.5 border ${
-                        order.type === "BUY"
-                          ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5"
-                          : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/5"
-                      }`}>
-                        {order.type}
-                      </span>
-                      <div>
-                        <p className="text-[11px] text-white/50">{order.qty} shares @ {"\u20B9"}{order.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
-                        <p className="text-[9px] text-white/25 mt-0.5">{order.orderType} {"\u00B7"} {new Date(order.timestamp).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</p>
-                      </div>
-                    </div>
-                    <p className="font-[var(--font-anton)] text-[14px]">{"\u20B9"}{order.total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
         </div>
 
-        {/* Right column (desktop): Sticky order panel */}
+        {/* Right column (desktop): Sticky order panel + order book + news + orders */}
         <aside className="hidden md:block border-l border-white/8 pl-6">
-          <div className="sticky top-20">
+          <div className="sticky top-20 space-y-6">
+            <div>
             <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
 
             {/* BUY / SELL tabs */}
@@ -434,6 +382,38 @@ export default function StockDetailPage({
               </p>
             </div>
 
+            {/* Pricing type: MARKET / LIMIT */}
+            <div className="pt-4">
+              <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">PRICING</label>
+              <div className="flex border border-white/15">
+                {(["MARKET", "LIMIT"] as const).map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => { setPricingType(p); if (p === "MARKET") setLimitPrice(""); }}
+                    className={`flex-1 py-2 text-[9px] tracking-[0.15em] font-medium transition-all ${
+                      pricingType === p ? "bg-white text-black" : "text-white/40 hover:text-white"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Limit price input */}
+            {pricingType === "LIMIT" && (
+              <div className="pt-3">
+                <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">LIMIT PRICE</label>
+                <input
+                  type="number"
+                  value={limitPrice}
+                  onChange={(e) => setLimitPrice(e.target.value)}
+                  placeholder={stock.price.toFixed(2)}
+                  className="w-full h-10 bg-transparent border border-white/20 px-4 text-center font-[var(--font-anton)] text-lg text-white outline-none focus:border-white transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+              </div>
+            )}
+
             {/* Quantity */}
             <div className="pt-5">
               <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">QTY</label>
@@ -461,7 +441,7 @@ export default function StockDetailPage({
               <div className="flex justify-between items-center mt-4 py-3 border-t border-b border-white/8">
                 <span className="text-[10px] tracking-[0.1em] text-white/40">EST. TOTAL</span>
                 <span className="font-[var(--font-anton)] text-xl">
-                  {"\u20B9"}{(stock.price * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  {"\u20B9"}{(effectivePrice * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
@@ -478,17 +458,100 @@ export default function StockDetailPage({
                     : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
                 }`}
               >
-                {buySellTab} {stock.ticker}
+                {pricingType === "LIMIT" ? `${buySellTab} LIMIT` : buySellTab} {stock.ticker}
               </button>
             </div>
-
-            <div className="mt-4 pt-4 border-t border-white/8">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-[#00D26A]" />
-                <span className="text-[10px] tracking-[0.1em] text-white/40">MARKET OPEN</span>
-              </div>
-              <p className="text-[10px] text-white/20 mt-1">MCSE Exchange</p>
             </div>
+
+            {/* Order Book */}
+            {orderBook && (
+              <div className="border border-white/10">
+                <div className="px-4 py-3 border-b border-white/8">
+                  <p className="text-[9px] tracking-[0.15em] text-white/30">ORDER BOOK</p>
+                </div>
+                <div className="grid grid-cols-3 gap-0 px-4 py-2 border-b border-white/6">
+                  <span className="text-[8px] tracking-[0.1em] text-white/20">BID</span>
+                  <span className="text-[8px] tracking-[0.1em] text-white/20 text-center">QTY</span>
+                  <span className="text-[8px] tracking-[0.1em] text-white/20 text-right">ORDERS</span>
+                </div>
+                {orderBook.bids.map((b, i) => (
+                  <div key={`bid-${i}`} className="grid grid-cols-3 gap-0 px-4 py-1.5 border-b border-white/4">
+                    <span className="text-[10px] text-[#00D26A] font-[var(--font-anton)]">{"\u20B9"}{b.price.toLocaleString("en-IN")}</span>
+                    <span className="text-[10px] text-white/50 text-center">{b.qty}</span>
+                    <span className="text-[10px] text-white/30 text-right">{b.orders}</span>
+                  </div>
+                ))}
+                <div className="px-4 py-2 bg-white/[0.03] border-y border-white/8">
+                  <p className="text-[10px] text-white/40 text-center font-[var(--font-anton)]">
+                    {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })} LTP
+                  </p>
+                </div>
+                <div className="grid grid-cols-3 gap-0 px-4 py-2 border-b border-white/6">
+                  <span className="text-[8px] tracking-[0.1em] text-white/20">ASK</span>
+                  <span className="text-[8px] tracking-[0.1em] text-white/20 text-center">QTY</span>
+                  <span className="text-[8px] tracking-[0.1em] text-white/20 text-right">ORDERS</span>
+                </div>
+                {orderBook.asks.map((a, i) => (
+                  <div key={`ask-${i}`} className="grid grid-cols-3 gap-0 px-4 py-1.5 border-b border-white/4">
+                    <span className="text-[10px] text-[#FF5252] font-[var(--font-anton)]">{"\u20B9"}{a.price.toLocaleString("en-IN")}</span>
+                    <span className="text-[10px] text-white/50 text-center">{a.qty}</span>
+                    <span className="text-[10px] text-white/30 text-right">{a.orders}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Stock News */}
+            {stockNews.length > 0 && (
+              <div>
+                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-3">NEWS</h3>
+                <div className="space-y-2">
+                  {stockNews.map((news, i) => (
+                    <div key={i} className="border border-white/8 p-4 hover:bg-white/[0.02] transition-colors">
+                      <p className="text-[11px] text-white/60 leading-relaxed mb-2">{news.headline}</p>
+                      <div className="flex items-center gap-3">
+                        <span className="text-[9px] tracking-[0.1em] text-white/25">{formatRelativeTime(news.timestamp)}</span>
+                        <span className={`text-[10px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                          {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Order History */}
+            {tickerOrders.length > 0 && (
+              <div>
+                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-3">
+                  YOUR ORDERS ({tickerOrders.length})
+                </h3>
+                <div className="space-y-2">
+                  {tickerOrders.map((order) => (
+                    <div key={order.id} className="border border-white/8 p-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[8px] tracking-[0.15em] font-semibold px-1.5 py-0.5 border ${
+                          order.type === "BUY"
+                            ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5"
+                            : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/5"
+                        }`}>
+                          {order.type}
+                        </span>
+                        <div>
+                          <p className="text-[10px] text-white/50">{order.qty} @ {"\u20B9"}{order.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                          <p className="text-[8px] text-white/25 mt-0.5">
+                            {order.status !== "COMPLETED" && <span className="text-yellow-400 mr-1">{order.status}</span>}
+                            {order.orderType} {"\u00B7"} {new Date(order.timestamp).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="font-[var(--font-anton)] text-[12px]">{"\u20B9"}{order.total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>{/* end sticky */}
         </aside>
       </div>
@@ -515,6 +578,7 @@ export default function StockDetailPage({
                 orderType,
                 qty,
                 price: stock.price,
+                pricingType: "MARKET",
               });
               setOrderMsg({ text: result.message, success: result.success });
               setTimeout(() => setOrderMsg(null), 3000);
