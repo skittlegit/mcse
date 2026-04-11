@@ -1,33 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
+import { usePreferences, type Preferences } from "@/lib/PreferencesContext";
 
-interface Preference {
-  key: string;
-  label: string;
-  description: string;
-  enabled: boolean;
-}
-
-const defaultPreferences: Preference[] = [
-  { key: "notifications", label: "PUSH NOTIFICATIONS", description: "Receive alerts for order execution, price targets, and market updates", enabled: true },
-  { key: "emailAlerts", label: "EMAIL ALERTS", description: "Get daily portfolio summary and weekly market reports via email", enabled: false },
-  { key: "darkMode", label: "DARK MODE", description: "Use dark theme across the application (currently always on)", enabled: true },
-  { key: "confirmOrders", label: "CONFIRM BEFORE ORDER", description: "Show a confirmation dialog before placing buy/sell orders", enabled: true },
-  { key: "showBalance", label: "SHOW BALANCE ON HOME", description: "Display your available balance on the explore page", enabled: false },
+const preferenceItems: { key: keyof Pick<Preferences, "notifications" | "emailAlerts" | "darkMode" | "confirmOrders" | "showBalance">; label: string; description: string }[] = [
+  { key: "notifications", label: "PUSH NOTIFICATIONS", description: "Receive alerts for order execution, price targets, and market updates" },
+  { key: "emailAlerts", label: "EMAIL ALERTS", description: "Get daily portfolio summary and weekly market reports via email" },
+  { key: "darkMode", label: "DARK MODE", description: "Toggle between dark and light theme" },
+  { key: "confirmOrders", label: "CONFIRM BEFORE ORDER", description: "Show a confirmation dialog before placing buy/sell orders" },
+  { key: "showBalance", label: "SHOW BALANCE ON HOME", description: "Display your available balance on the explore page" },
 ];
 
 export default function PreferencesPage() {
   const { isLoggedIn } = useAuth();
-  const [prefs, setPrefs] = useState<Preference[]>(defaultPreferences);
-  const [defaultOrderType, setDefaultOrderType] = useState("DELIVERY");
-  const [defaultQty, setDefaultQty] = useState("1");
-  const [saved, setSaved] = useState(false);
+  const prefs = usePreferences();
 
   if (!isLoggedIn) {
     return (
@@ -35,10 +25,6 @@ export default function PreferencesPage() {
         <LoginPrompt message="Log in to manage your preferences." />
       </div>
     );
-  }
-
-  function togglePref(key: string) {
-    setPrefs(prev => prev.map(p => p.key === key ? { ...p, enabled: !p.enabled } : p));
   }
 
   return (
@@ -63,30 +49,30 @@ export default function PreferencesPage() {
 
       {/* Preference toggles */}
       <div className="border border-white/8">
-        {prefs.map((pref, i) => (
+        {preferenceItems.map((item, i) => (
           <motion.div
-            key={pref.key}
+            key={item.key}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.03 * i, duration: 0.3 }}
             className={`flex items-center justify-between px-5 py-4 ${
-              i < prefs.length - 1 ? "border-b border-white/6" : ""
+              i < preferenceItems.length - 1 ? "border-b border-white/6" : ""
             }`}
           >
             <div className="flex-1 min-w-0 pr-4">
-              <p className="text-[11px] tracking-[0.1em] text-white/60 mb-0.5">{pref.label}</p>
-              <p className="text-[10px] text-white/25 leading-relaxed">{pref.description}</p>
+              <p className="text-[11px] tracking-[0.1em] text-white/60 mb-0.5">{item.label}</p>
+              <p className="text-[10px] text-white/25 leading-relaxed">{item.description}</p>
             </div>
             <button
-              onClick={() => togglePref(pref.key)}
+              onClick={() => prefs.togglePref(item.key)}
               className={`w-11 h-6 border flex items-center shrink-0 transition-all duration-200 ${
-                pref.enabled
+                prefs[item.key]
                   ? "bg-white/10 border-white/30"
                   : "bg-transparent border-white/15"
               }`}
             >
               <div className={`w-4 h-4 transition-all duration-200 ${
-                pref.enabled
+                prefs[item.key]
                   ? "bg-white ml-[calc(100%-1.25rem)]"
                   : "bg-white/20 ml-0.5"
               }`} />
@@ -107,44 +93,39 @@ export default function PreferencesPage() {
           <div className="px-5 py-4 border-b border-white/6">
             <p className="text-[11px] tracking-[0.1em] text-white/60 mb-0.5">DEFAULT ORDER TYPE</p>
             <select
-              value={defaultOrderType}
-              onChange={(e) => setDefaultOrderType(e.target.value)}
+              value={prefs.defaultOrderType}
+              onChange={(e) => prefs.setPref("defaultOrderType", e.target.value as "DELIVERY" | "INTRADAY")}
               className="mt-1 bg-transparent border border-white/15 text-[11px] text-white/50 px-3 py-1.5 outline-none appearance-none cursor-pointer" style={{ fontSize: '16px' }}
             >
-              <option value="DELIVERY" className="bg-[#0a0a0a]">DELIVERY</option>
-              <option value="INTRADAY" className="bg-[#0a0a0a]">INTRADAY</option>
+              <option value="DELIVERY" className="bg-bg">DELIVERY</option>
+              <option value="INTRADAY" className="bg-bg">INTRADAY</option>
             </select>
           </div>
           <div className="px-5 py-4">
             <p className="text-[11px] tracking-[0.1em] text-white/60 mb-0.5">DEFAULT QUANTITY</p>
             <select
-              value={defaultQty}
-              onChange={(e) => setDefaultQty(e.target.value)}
+              value={prefs.defaultQty}
+              onChange={(e) => prefs.setPref("defaultQty", parseInt(e.target.value))}
               className="mt-1 bg-transparent border border-white/15 text-[11px] text-white/50 px-3 py-1.5 outline-none appearance-none cursor-pointer" style={{ fontSize: '16px' }}
             >
-              <option value="1" className="bg-[#0a0a0a]">1</option>
-              <option value="5" className="bg-[#0a0a0a]">5</option>
-              <option value="10" className="bg-[#0a0a0a]">10</option>
-              <option value="25" className="bg-[#0a0a0a]">25</option>
+              <option value="1" className="bg-bg">1</option>
+              <option value="5" className="bg-bg">5</option>
+              <option value="10" className="bg-bg">10</option>
+              <option value="25" className="bg-bg">25</option>
             </select>
           </div>
         </div>
       </motion.div>
 
-      {/* Save button */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.25 }}
-        className="mt-8"
+      {/* Auto-save note */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="mt-6 text-[9px] tracking-[0.15em] text-white/20 text-center"
       >
-        <button
-          onClick={() => { setSaved(true); setTimeout(() => setSaved(false), 2500); }}
-          className="w-full h-11 text-[10px] tracking-[0.2em] font-semibold border border-white bg-white text-black hover:bg-transparent hover:text-white transition-all duration-200"
-        >
-          {saved ? "SAVED \u2713" : "SAVE PREFERENCES"}
-        </button>
-      </motion.div>
+        CHANGES SAVED AUTOMATICALLY
+      </motion.p>
     </div>
   );
 }

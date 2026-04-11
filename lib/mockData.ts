@@ -277,13 +277,13 @@ export const volumeShockers: MoverStock[] = [
 
 // ─── Products & Tools ───────────────────────────────────
 export const productsAndTools = [
-  { label: "IPO", icon: "target" },
-  { label: "BONDS", icon: "landmark" },
-  { label: "ETFs", icon: "layers" },
-  { label: "INTRADAY SCREENER", icon: "scan" },
-  { label: "STOCKS SIP", icon: "repeat" },
-  { label: "MTF STOCKS", icon: "trending-up" },
-  { label: "EVENTS CALENDAR", icon: "calendar" },
+  { label: "IPO", icon: "target", description: "Apply to upcoming initial public offerings" },
+  { label: "BONDS", icon: "landmark", description: "Fixed-income securities for steady returns" },
+  { label: "ETFs", icon: "layers", description: "Exchange-traded funds across sectors" },
+  { label: "INTRADAY SCREENER", icon: "scan", description: "Filter stocks by technical signals" },
+  { label: "STOCKS SIP", icon: "repeat", description: "Systematic investment plans for stocks" },
+  { label: "MTF STOCKS", icon: "trending-up", description: "Margin trading facility stocks" },
+  { label: "EVENTS CALENDAR", icon: "calendar", description: "Track corporate events and results" },
 ];
 
 // ─── Ticker Tape Data ───────────────────────────────────

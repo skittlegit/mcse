@@ -109,19 +109,19 @@ function EnigmaDashboard() {
         transition={{ duration: 0.4, delay: 0.05 }}
         className="grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-white/8 mb-8"
       >
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <span className="text-[9px] tracking-[0.15em] text-white/25">SHARES IN CIRCULATION</span>
           <p className="font-[var(--font-anton)] text-lg mt-1">{co.sharesInCirculation.toLocaleString("en-IN")}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <span className="text-[9px] tracking-[0.15em] text-white/25">MARKET CAP</span>
           <p className="font-[var(--font-anton)] text-lg mt-1">{fund.marketCap}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <span className="text-[9px] tracking-[0.15em] text-white/25">P/E RATIO</span>
           <p className="font-[var(--font-anton)] text-lg mt-1">{fund.pe}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <span className="text-[9px] tracking-[0.15em] text-white/25">VOLUME</span>
           <p className="font-[var(--font-anton)] text-lg mt-1">{fund.volume}</p>
         </div>
@@ -328,7 +328,7 @@ function TotalAdminDashboard() {
         transition={{ duration: 0.4, delay: 0.05 }}
         className="grid grid-cols-2 md:grid-cols-5 gap-[1px] bg-white/8 mb-8"
       >
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <div className="flex items-center gap-2 mb-1">
             <Users size={13} className="text-white/30" />
             <span className="text-[9px] tracking-[0.15em] text-white/25">TOTAL USERS</span>
@@ -336,28 +336,28 @@ function TotalAdminDashboard() {
           <p className="font-[var(--font-anton)] text-xl">{platformStats.totalUsers}</p>
           <p className="text-[10px] text-[#00D26A] mt-0.5">{platformStats.activeToday} active</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <div className="flex items-center gap-2 mb-1">
             <Activity size={13} className="text-white/30" />
             <span className="text-[9px] tracking-[0.15em] text-white/25">TRADES</span>
           </div>
           <p className="font-[var(--font-anton)] text-xl">{platformStats.totalTrades.toLocaleString("en-IN")}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <div className="flex items-center gap-2 mb-1">
             <DollarSign size={13} className="text-white/30" />
             <span className="text-[9px] tracking-[0.15em] text-white/25">VOLUME</span>
           </div>
           <p className="font-[var(--font-anton)] text-xl">{"\u20B9"}{platformStats.totalVolume.toLocaleString("en-IN")}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <div className="flex items-center gap-2 mb-1">
             <BarChart3 size={13} className="text-white/30" />
             <span className="text-[9px] tracking-[0.15em] text-white/25">LISTED</span>
           </div>
           <p className="font-[var(--font-anton)] text-xl">{listedStocks.length}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4 md:p-5">
+        <div className="bg-bg p-4 md:p-5">
           <div className="flex items-center gap-2 mb-1">
             <Power size={13} className={marketOpen ? "text-[#00D26A]" : "text-[#FF5252]"} />
             <span className="text-[9px] tracking-[0.15em] text-white/25">MARKET</span>

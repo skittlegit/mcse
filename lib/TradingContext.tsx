@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
+import { watchlist as mockWatchlist } from "@/lib/mockData";
 
 export interface Order {
   id: string;
@@ -45,10 +46,13 @@ interface TradingState {
   positions: Position[];
   transactions: Transaction[];
   balance: number;
+  watchlistTickers: Set<string>;
   placeOrder: (order: Omit<Order, "id" | "status" | "timestamp" | "total">) => { success: boolean; message: string };
   getOrdersForTicker: (ticker: string) => Order[];
   getBuyCount: (ticker?: string) => number;
   getSellCount: (ticker?: string) => number;
+  toggleWatchlist: (ticker: string) => void;
+  isWatched: (ticker: string) => boolean;
 }
 
 const INITIAL_BALANCE = 100000;
@@ -74,16 +78,22 @@ const TradingContext = createContext<TradingState>({
   positions: [],
   transactions: [],
   balance: INITIAL_BALANCE,
+  watchlistTickers: new Set(),
   placeOrder: () => ({ success: false, message: "" }),
   getOrdersForTicker: () => [],
   getBuyCount: () => 0,
   getSellCount: () => 0,
+  toggleWatchlist: () => {},
+  isWatched: () => false,
 });
 
 export function TradingProvider({ children }: { children: ReactNode }) {
   const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS);
   const [transactions, setTransactions] = useState<Transaction[]>(MOCK_TRANSACTIONS);
   const [balance, setBalance] = useState(INITIAL_BALANCE);
+  const [watchlistTickers, setWatchlistTickers] = useState<Set<string>>(
+    () => new Set(mockWatchlist.map(w => w.ticker))
+  );
 
   // Derive positions from orders
   const positions = useMemo(() => {
@@ -175,8 +185,21 @@ export function TradingProvider({ children }: { children: ReactNode }) {
     return orders.filter(o => o.type === "SELL" && (!ticker || o.ticker === ticker)).length;
   }, [orders]);
 
+  const toggleWatchlist = useCallback((ticker: string) => {
+    setWatchlistTickers(prev => {
+      const next = new Set(prev);
+      if (next.has(ticker)) next.delete(ticker);
+      else next.add(ticker);
+      return next;
+    });
+  }, []);
+
+  const isWatched = useCallback((ticker: string) => {
+    return watchlistTickers.has(ticker);
+  }, [watchlistTickers]);
+
   return (
-    <TradingContext.Provider value={{ orders, positions, transactions, balance, placeOrder, getOrdersForTicker, getBuyCount, getSellCount }}>
+    <TradingContext.Provider value={{ orders, positions, transactions, balance, watchlistTickers, placeOrder, getOrdersForTicker, getBuyCount, getSellCount, toggleWatchlist, isWatched }}>
       {children}
     </TradingContext.Provider>
   );

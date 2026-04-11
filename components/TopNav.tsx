@@ -89,7 +89,7 @@ export default function TopNav() {
   return (
     <>
       {/* Desktop + Mobile Top Nav */}
-      <nav className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-white/10">
+      <nav className="sticky top-0 z-50 bg-bg/95 backdrop-blur-md border-b border-white/10">
         <div className="max-w-[1280px] mx-auto flex items-center justify-between h-14 px-4 md:px-12">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
@@ -197,7 +197,7 @@ export default function TopNav() {
       </nav>
 
       {/* Mobile bottom tab bar — 4 tabs, 56px tall */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md border-t border-white/10" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-bg/95 backdrop-blur-md border-t border-white/10" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-center justify-around h-14 px-2">
           {mobileTabs.map((tab) => {
             const active = isActive(tab.href);

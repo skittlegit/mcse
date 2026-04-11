@@ -43,7 +43,7 @@ export default function SupportPage() {
         transition={{ duration: 0.4, delay: 0.05 }}
         className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-white/8 mb-8"
       >
-        <div className="bg-[#0a0a0a] p-5 flex items-center gap-4">
+        <div className="bg-bg p-5 flex items-center gap-4">
           <div className="w-10 h-10 border border-white/20 flex items-center justify-center shrink-0">
             <Mail size={16} className="text-white/40" />
           </div>
@@ -52,7 +52,7 @@ export default function SupportPage() {
             <p className="text-[12px] text-white/70">support@mcse.in</p>
           </div>
         </div>
-        <div className="bg-[#0a0a0a] p-5 flex items-center gap-4">
+        <div className="bg-bg p-5 flex items-center gap-4">
           <div className="w-10 h-10 border border-white/20 flex items-center justify-center shrink-0">
             <Phone size={16} className="text-white/40" />
           </div>
@@ -61,7 +61,7 @@ export default function SupportPage() {
             <p className="text-[12px] text-white/70">+91 80 0000 MCSE</p>
           </div>
         </div>
-        <div className="bg-[#0a0a0a] p-5 flex items-center gap-4">
+        <div className="bg-bg p-5 flex items-center gap-4">
           <div className="w-10 h-10 border border-white/20 flex items-center justify-center shrink-0">
             <MessageSquare size={16} className="text-white/40" />
           </div>

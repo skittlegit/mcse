@@ -36,7 +36,7 @@ export default function MarketsPage() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04 }}
-              className="bg-[#0a0a0a] p-5"
+              className="bg-bg p-5"
             >
               <p className="text-[9px] tracking-[0.15em] text-white/30 uppercase mb-2">
                 {idx.name}

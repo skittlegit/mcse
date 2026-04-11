@@ -111,7 +111,7 @@ export default function NotificationDropdown({ onClose }: { onClose: () => void 
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.96 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute right-0 top-10 w-[340px] bg-[#0a0a0a] border border-white/15 z-50 max-h-[28rem] flex flex-col"
+      className="absolute right-0 top-10 w-[340px] bg-bg border border-white/15 z-50 max-h-[28rem] flex flex-col"
     >
       <div className="px-5 py-3 border-b border-white/10 shrink-0">
         <div className="flex items-center justify-between">

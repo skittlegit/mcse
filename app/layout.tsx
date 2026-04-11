@@ -5,6 +5,7 @@ import AppShell from "@/components/AppShell";
 import { AuthProvider } from "@/lib/AuthContext";
 import { TradingProvider } from "@/lib/TradingContext";
 import { AdminProvider } from "@/lib/AdminContext";
+import { PreferencesProvider } from "@/lib/PreferencesContext";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -38,15 +39,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased overflow-x-hidden`} style={{ background: "#0a0a0a" }} suppressHydrationWarning>
-      <body className="min-h-full bg-[#0a0a0a] text-white overflow-x-hidden">
-        <AuthProvider>
-          <TradingProvider>
-            <AdminProvider>
-              <AppShell>{children}</AppShell>
-            </AdminProvider>
-          </TradingProvider>
-        </AuthProvider>
+    <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased overflow-x-hidden`} suppressHydrationWarning>
+      <body className="min-h-full bg-bg text-white overflow-x-hidden">
+        <PreferencesProvider>
+          <AuthProvider>
+            <TradingProvider>
+              <AdminProvider>
+                <AppShell>{children}</AppShell>
+              </AdminProvider>
+            </TradingProvider>
+          </AuthProvider>
+        </PreferencesProvider>
       </body>
     </html>
   );

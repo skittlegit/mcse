@@ -8,6 +8,8 @@ import Link from "next/link";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
 import { useTrading } from "@/lib/TradingContext";
+import { usePreferences } from "@/lib/PreferencesContext";
+import OrderConfirmModal from "@/components/OrderConfirmModal";
 import {
   holdings,
   investments,
@@ -33,6 +35,7 @@ type SortDir = "asc" | "desc";
 export default function HoldingsPage() {
   const { isLoggedIn } = useAuth();
   const { transactions, balance, placeOrder } = useTrading();
+  const { confirmOrders } = usePreferences();
   const [showValues, setShowValues] = useState(true);
   const [sortKey, setSortKey] = useState<SortKey>("currentValue");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
@@ -46,6 +49,7 @@ export default function HoldingsPage() {
   const [pricingType, setPricingType] = useState<"MARKET" | "LIMIT">("MARKET");
   const [limitPrice, setLimitPrice] = useState<string>("");
   const [orderMsg, setOrderMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const sorted = useMemo(() => {
     const arr = [...holdings];
@@ -77,7 +81,7 @@ export default function HoldingsPage() {
 
   const effectivePrice = pricingType === "LIMIT" && limitPrice ? parseFloat(limitPrice) : (selectedStock?.price ?? 0);
 
-  function handleOrder() {
+  function executeOrder() {
     if (!selectedStock) return;
     const result = placeOrder({
       ticker: selectedStock.ticker,
@@ -92,6 +96,14 @@ export default function HoldingsPage() {
     setOrderMsg({ ok: result.success, text: result.message });
     if (result.success) { setQty(1); setLimitPrice(""); }
     setTimeout(() => setOrderMsg(null), 3000);
+  }
+
+  function handleOrder() {
+    if (confirmOrders) {
+      setConfirmOpen(true);
+    } else {
+      executeOrder();
+    }
   }
 
   if (!isLoggedIn) {
@@ -206,7 +218,7 @@ export default function HoldingsPage() {
               SORT
             </button>
             {sortOpen && (
-              <div className="absolute top-full left-0 mt-1 z-20 border border-white/15 bg-[#0a0a0a] min-w-[140px]">
+              <div className="absolute top-full left-0 mt-1 z-20 border border-white/15 bg-bg min-w-[140px]">
                 {(["ticker", "currentPrice", "returnsPercent", "currentValue", "dayChangePercent"] as SortKey[]).map((key) => (
                   <button
                     key={key}
@@ -577,7 +589,7 @@ export default function HoldingsPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.96 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[80vh] bg-[#0a0a0a] border border-white/15 z-50 overflow-y-auto"
+              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[80vh] bg-bg border border-white/15 z-50 overflow-y-auto"
             >
               <div className="flex items-center justify-between p-5 border-b border-white/10">
                 <h3 className="font-[var(--font-anton)] text-lg tracking-[0.1em]">PORTFOLIO ANALYSIS</h3>
@@ -589,15 +601,15 @@ export default function HoldingsPage() {
               <div className="p-5 md:p-6">
                 {/* Stats grid */}
                 <div className="grid grid-cols-3 gap-[1px] bg-white/8 mb-6">
-                  <div className="bg-[#0a0a0a] p-4">
+                  <div className="bg-bg p-4">
                     <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">XIRR</p>
                     <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">+{portfolioAnalysis.xirr}%</p>
                   </div>
-                  <div className="bg-[#0a0a0a] p-4">
+                  <div className="bg-bg p-4">
                     <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">{portfolioAnalysis.benchmarkName}</p>
                     <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">+{portfolioAnalysis.benchmarkReturn}%</p>
                   </div>
-                  <div className="bg-[#0a0a0a] p-4">
+                  <div className="bg-bg p-4">
                     <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">ALPHA</p>
                     <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">+{portfolioAnalysis.outperformance}%</p>
                   </div>
@@ -707,6 +719,21 @@ export default function HoldingsPage() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Order confirm modal */}
+      {selectedStock && (
+        <OrderConfirmModal
+          open={confirmOpen}
+          onCancel={() => setConfirmOpen(false)}
+          onConfirm={() => { setConfirmOpen(false); executeOrder(); }}
+          type={buySellTab}
+          ticker={selectedStock.ticker}
+          qty={qty}
+          price={effectivePrice}
+          pricingType={pricingType}
+          total={effectivePrice * qty}
+        />
+      )}
     </div>
   );
 }

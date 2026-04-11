@@ -5,7 +5,7 @@ import { indices } from "@/lib/mockData";
 
 export default function IndexBar() {
   return (
-    <div className="w-full bg-[#0a0a0a] border-b border-white/8 overflow-x-auto scrollbar-hide">
+    <div className="w-full bg-bg border-b border-white/8 overflow-x-auto scrollbar-hide">
       <motion.div
         initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}

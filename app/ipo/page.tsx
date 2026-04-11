@@ -88,15 +88,15 @@ export default function IPOPage() {
 
       {/* Summary strip */}
       <div className="grid grid-cols-3 gap-[1px] bg-white/8 mb-6">
-        <div className="bg-[#0a0a0a] p-4">
+        <div className="bg-bg p-4">
           <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">LIVE</p>
           <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">{ipoList.filter(i => i.status === "LIVE").length}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4">
+        <div className="bg-bg p-4">
           <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">UPCOMING</p>
           <p className="font-[var(--font-anton)] text-xl">{ipoList.filter(i => i.status === "UPCOMING").length}</p>
         </div>
-        <div className="bg-[#0a0a0a] p-4">
+        <div className="bg-bg p-4">
           <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">CLOSED</p>
           <p className="font-[var(--font-anton)] text-xl text-white/30">{ipoList.filter(i => i.status === "CLOSED").length}</p>
         </div>

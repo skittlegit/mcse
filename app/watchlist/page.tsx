@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { useState, useMemo, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ChevronDown, ChevronUp, Plus, X, Eye } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
@@ -55,6 +55,16 @@ export default function WatchlistPage() {
 
   const [hoveredTicker, setHoveredTicker] = useState<string | null>(null);
   const hoveredStock = watchlist.find(s => s.ticker === hoveredTicker);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = useCallback((ticker: string) => {
+    if (leaveTimer.current) { clearTimeout(leaveTimer.current); leaveTimer.current = null; }
+    setHoveredTicker(ticker);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    leaveTimer.current = setTimeout(() => setHoveredTicker(null), 300);
+  }, []);
 
   if (!isLoggedIn) {
     return (
@@ -158,10 +168,10 @@ export default function WatchlistPage() {
             className="bg-transparent border border-white/15 text-[10px] tracking-[0.1em] text-white/60 px-3 py-1.5 outline-none appearance-none cursor-pointer"
             style={{ fontSize: '16px' }}
           >
-            <option value="ticker" className="bg-[#0a0a0a]">NAME</option>
-            <option value="price" className="bg-[#0a0a0a]">PRICE</option>
-            <option value="dayChangePercent" className="bg-[#0a0a0a]">CHANGE %</option>
-            <option value="volume" className="bg-[#0a0a0a]">VOLUME</option>
+            <option value="ticker" className="bg-bg">NAME</option>
+            <option value="price" className="bg-bg">PRICE</option>
+            <option value="dayChangePercent" className="bg-bg">CHANGE %</option>
+            <option value="volume" className="bg-bg">VOLUME</option>
           </select>
         </div>
         <div className="space-y-2">
@@ -229,7 +239,8 @@ export default function WatchlistPage() {
               key={stock.ticker}
               href={`/stock/${stock.ticker}`}
               className="grid grid-cols-[1fr_80px_100px_90px_80px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
-              onMouseEnter={() => setHoveredTicker(stock.ticker)}
+              onMouseEnter={() => handleMouseEnter(stock.ticker)}
+              onMouseLeave={handleMouseLeave}
             >
               <div>
                 <div className="flex items-center gap-3">
@@ -322,9 +333,17 @@ export default function WatchlistPage() {
       </div>
 
       {/* Right sidebar (desktop): Stock preview panel */}
-      <aside className="hidden md:block">
+      <aside className="hidden md:block" onMouseEnter={() => { if (leaveTimer.current) { clearTimeout(leaveTimer.current); leaveTimer.current = null; } }} onMouseLeave={handleMouseLeave}>
+        <AnimatePresence mode="wait">
         {hoveredStock ? (
-          <div className="border border-white/10 p-5 sticky top-24">
+          <motion.div
+            key={hoveredStock.ticker}
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 8 }}
+            transition={{ duration: 0.2 }}
+            className="border border-white/10 p-5 sticky top-24"
+          >
             <p className="font-[var(--font-anton)] text-lg tracking-[0.05em] mb-1">{hoveredStock.ticker}</p>
             <p className="text-[11px] text-white/40 mb-4">{hoveredStock.name}</p>
             <p className="font-[var(--font-anton)] text-2xl tracking-tight mb-1">
@@ -360,12 +379,19 @@ export default function WatchlistPage() {
             >
               VIEW DETAILS
             </Link>
-          </div>
+          </motion.div>
         ) : (
-          <div className="border border-white/8 p-8 flex items-center justify-center min-h-[200px]">
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="border border-white/8 p-8 flex items-center justify-center min-h-[200px]"
+          >
             <p className="text-[11px] tracking-[0.15em] text-white/15 text-center uppercase">HOVER A STOCK<br/>TO PREVIEW</p>
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </aside>
       </div>
     </div>
