@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, FolderOpen } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, LayoutDashboard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
@@ -10,8 +10,8 @@ import NotificationDropdown from "./NotificationDropdown";
 import SearchModal from "./SearchModal";
 import { useAuth } from "@/lib/AuthContext";
 
-/* Desktop tabs: 6 items */
-const desktopTabs = [
+/* Desktop tabs by role */
+const userDesktopTabs = [
   { href: "/", label: "EXPLORE", icon: BarChart3 },
   { href: "/holdings", label: "HOLDINGS", icon: Briefcase },
   { href: "/positions", label: "POSITIONS", icon: LineChart },
@@ -20,12 +20,35 @@ const desktopTabs = [
   { href: "/watchlist", label: "WATCHLIST", icon: Eye },
 ];
 
-/* Mobile bottom tabs: 4 items */
-const mobileTabs = [
-  { href: "/", label: "EXPLORE", icon: BarChart3 },
+const companyAdminDesktopTabs = [
+  { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/markets", label: "MARKETS", icon: TrendingUp },
+];
+
+const totalAdminDesktopTabs = [
+  { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/markets", label: "MARKETS", icon: TrendingUp },
   { href: "/news", label: "NEWS", icon: Newspaper },
-  { href: "/portfolio", label: "PORTFOLIO", icon: FolderOpen },
+];
+
+/* Mobile bottom tabs by role */
+const userMobileTabs = [
+  { href: "/", label: "EXPLORE", icon: BarChart3 },
+  { href: "/holdings", label: "HOLDINGS", icon: Briefcase },
+  { href: "/positions", label: "POSITIONS", icon: LineChart },
+  { href: "/news", label: "NEWS", icon: Newspaper },
   { href: "/watchlist", label: "WATCHLIST", icon: Eye },
+];
+
+const companyAdminMobileTabs = [
+  { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/markets", label: "MARKETS", icon: TrendingUp },
+];
+
+const totalAdminMobileTabs = [
+  { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/markets", label: "MARKETS", icon: TrendingUp },
+  { href: "/news", label: "NEWS", icon: Newspaper },
 ];
 
 export default function TopNav() {
@@ -33,9 +56,12 @@ export default function TopNav() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const { isLoggedIn, userName } = useAuth();
+  const { isLoggedIn, userName, role } = useAuth();
 
   const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "M";
+
+  const desktopTabs = role === "companyAdmin" ? companyAdminDesktopTabs : role === "totalAdmin" ? totalAdminDesktopTabs : userDesktopTabs;
+  const mobileTabs = role === "companyAdmin" ? companyAdminMobileTabs : role === "totalAdmin" ? totalAdminMobileTabs : userMobileTabs;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -50,7 +76,7 @@ export default function TopNav() {
 
   function isActive(href: string) {
     if (href === "/") return pathname === "/";
-    if (href === "/portfolio") return pathname === "/portfolio" || pathname === "/holdings" || pathname === "/positions";
+    if (href === "/admin") return pathname.startsWith("/admin");
     return pathname.startsWith(href);
   }
 
@@ -161,12 +187,12 @@ export default function TopNav() {
               <Link
                 key={tab.label}
                 href={tab.href}
-                className={`relative flex flex-col items-center gap-0.5 py-1.5 px-3 transition-all duration-200 ${
+                className={`relative flex flex-col items-center gap-0.5 py-1.5 px-1.5 transition-all duration-200 ${
                   active ? "text-white" : "text-white/35"
                 }`}
               >
-                <Icon size={20} strokeWidth={active ? 2 : 1.5} />
-                <span className="text-[8px] tracking-[0.1em] uppercase">{tab.label}</span>
+                <Icon size={18} strokeWidth={active ? 2 : 1.5} />
+                <span className="text-[7px] tracking-[0.08em] uppercase">{tab.label}</span>
               </Link>
             );
           })}

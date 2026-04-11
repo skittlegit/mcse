@@ -27,7 +27,7 @@ export interface Position {
 
 export interface Transaction {
   id: string;
-  type: "BUY" | "SELL" | "DEPOSIT" | "WITHDRAWAL";
+  type: "BUY" | "SELL";
   ticker?: string;
   name?: string;
   qty?: number;
@@ -44,13 +44,12 @@ interface TradingState {
   transactions: Transaction[];
   balance: number;
   placeOrder: (order: Omit<Order, "id" | "status" | "timestamp" | "total">) => { success: boolean; message: string };
-  addFunds: (amount: number) => void;
   getOrdersForTicker: (ticker: string) => Order[];
   getBuyCount: (ticker?: string) => number;
   getSellCount: (ticker?: string) => number;
 }
 
-const INITIAL_BALANCE = 693.69;
+const INITIAL_BALANCE = 100000;
 
 const MOCK_ORDERS: Order[] = [
   { id: "ORD-001", ticker: "MATHSOC", name: "Math Society", type: "BUY", orderType: "DELIVERY", qty: 5, price: 2840.00, total: 14200.00, status: "COMPLETED", timestamp: Date.now() - 86400000 * 3 },
@@ -61,13 +60,11 @@ const MOCK_ORDERS: Order[] = [
 ];
 
 const MOCK_TRANSACTIONS: Transaction[] = [
-  { id: "TXN-001", type: "DEPOSIT", amount: 50000, balance: 50693.69, timestamp: Date.now() - 86400000 * 5, description: "Initial deposit" },
-  { id: "TXN-002", type: "BUY", ticker: "MATHSOC", name: "Math Society", qty: 5, price: 2840.00, amount: -14200.00, balance: 36493.69, timestamp: Date.now() - 86400000 * 3, description: "Bought 5 MATHSOC @ \u20B92,840.00" },
-  { id: "TXN-003", type: "BUY", ticker: "ENIGMA", name: "Enigma Computer Science", qty: 3, price: 3920.50, amount: -11761.50, balance: 24732.19, timestamp: Date.now() - 86400000 * 2, description: "Bought 3 ENIGMA @ \u20B93,920.50" },
-  { id: "TXN-004", type: "BUY", ticker: "CELESTE", name: "Celeste", qty: 10, price: 1610.00, amount: -16100.00, balance: 8632.19, timestamp: Date.now() - 86400000, description: "Bought 10 CELESTE @ \u20B91,610.00" },
-  { id: "TXN-005", type: "SELL", ticker: "MATHSOC", name: "Math Society", qty: 2, price: 2892.45, amount: 5784.90, balance: 14417.09, timestamp: Date.now() - 43200000, description: "Sold 2 MATHSOC @ \u20B92,892.45" },
-  { id: "TXN-006", type: "BUY", ticker: "GASMONKEYS", name: "Gas Monkeys", qty: 8, price: 1560.00, amount: -12480.00, balance: 1937.09, timestamp: Date.now() - 21600000, description: "Bought 8 GASMONKEYS @ \u20B91,560.00" },
-  { id: "TXN-007", type: "WITHDRAWAL", amount: -1243.40, balance: 693.69, timestamp: Date.now() - 7200000, description: "Withdrawal to bank" },
+  { id: "TXN-002", type: "BUY", ticker: "MATHSOC", name: "Math Society", qty: 5, price: 2840.00, amount: -14200.00, balance: 85800.00, timestamp: Date.now() - 86400000 * 3, description: "Bought 5 MATHSOC @ \u20B92,840.00" },
+  { id: "TXN-003", type: "BUY", ticker: "ENIGMA", name: "Enigma Computer Science", qty: 3, price: 3920.50, amount: -11761.50, balance: 74038.50, timestamp: Date.now() - 86400000 * 2, description: "Bought 3 ENIGMA @ \u20B93,920.50" },
+  { id: "TXN-004", type: "BUY", ticker: "CELESTE", name: "Celeste", qty: 10, price: 1610.00, amount: -16100.00, balance: 57938.50, timestamp: Date.now() - 86400000, description: "Bought 10 CELESTE @ \u20B91,610.00" },
+  { id: "TXN-005", type: "SELL", ticker: "MATHSOC", name: "Math Society", qty: 2, price: 2892.45, amount: 5784.90, balance: 63723.40, timestamp: Date.now() - 43200000, description: "Sold 2 MATHSOC @ \u20B92,892.45" },
+  { id: "TXN-006", type: "BUY", ticker: "GASMONKEYS", name: "Gas Monkeys", qty: 8, price: 1560.00, amount: -12480.00, balance: 51243.40, timestamp: Date.now() - 21600000, description: "Bought 8 GASMONKEYS @ \u20B91,560.00" },
 ];
 
 const TradingContext = createContext<TradingState>({
@@ -76,7 +73,6 @@ const TradingContext = createContext<TradingState>({
   transactions: [],
   balance: INITIAL_BALANCE,
   placeOrder: () => ({ success: false, message: "" }),
-  addFunds: () => {},
   getOrdersForTicker: () => [],
   getBuyCount: () => 0,
   getSellCount: () => 0,
@@ -118,20 +114,6 @@ export function TradingProvider({ children }: { children: ReactNode }) {
     }
     return result;
   }, [orders]);
-
-  const addFunds = useCallback((amount: number) => {
-    const newBalance = +(balance + amount).toFixed(2);
-    const txn: Transaction = {
-      id: `TXN-${Date.now()}`,
-      type: "DEPOSIT",
-      amount,
-      balance: newBalance,
-      timestamp: Date.now(),
-      description: `Added \u20B9${amount.toLocaleString("en-IN")} to account`,
-    };
-    setTransactions(prev => [txn, ...prev]);
-    setBalance(newBalance);
-  }, [balance]);
 
   const placeOrder = useCallback((orderInput: Omit<Order, "id" | "status" | "timestamp" | "total">) => {
     const total = orderInput.price * orderInput.qty;
@@ -183,7 +165,7 @@ export function TradingProvider({ children }: { children: ReactNode }) {
   }, [orders]);
 
   return (
-    <TradingContext.Provider value={{ orders, positions, transactions, balance, placeOrder, addFunds, getOrdersForTicker, getBuyCount, getSellCount }}>
+    <TradingContext.Provider value={{ orders, positions, transactions, balance, placeOrder, getOrdersForTicker, getBuyCount, getSellCount }}>
       {children}
     </TradingContext.Provider>
   );

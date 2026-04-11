@@ -426,9 +426,7 @@ export interface StockFundamentals {
   pe: number;
   eps: number;
   bookValue: number;
-  dividendYield: number;
   roe: number;
-  debtToEquity: number;
   w52High: number;
   w52Low: number;
   volume: string;
@@ -503,13 +501,13 @@ export const allStocksRaw = [
 ];
 
 const stockFundamentals: Record<string, StockFundamentals> = {
-  MATHSOC: { marketCap: "14.5Cr", pe: 28.4, eps: 101.84, bookValue: 1820.0, dividendYield: 0.8, roe: 18.2, debtToEquity: 0.12, w52High: 3120.0, w52Low: 1950.0, volume: "15.8M", avgVolume: "12.1M", sector: "Education" },
-  ENIGMA: { marketCap: "19.9Cr", pe: 34.2, eps: 116.60, bookValue: 2540.0, dividendYield: 0.0, roe: 22.5, debtToEquity: 0.08, w52High: 4250.0, w52Low: 2680.0, volume: "7.8M", avgVolume: "9.3M", sector: "Technology" },
-  GASMONKEYS: { marketCap: "7.9Cr", pe: 15.8, eps: 99.93, bookValue: 980.0, dividendYield: 1.2, roe: 14.6, debtToEquity: 0.35, w52High: 1820.0, w52Low: 1020.0, volume: "12.4M", avgVolume: "10.8M", sector: "Automotive" },
-  MASTERSHOT: { marketCap: "8.4Cr", pe: 22.1, eps: 76.44, bookValue: 1120.0, dividendYield: 0.5, roe: 16.8, debtToEquity: 0.18, w52High: 1890.0, w52Low: 1150.0, volume: "8.5M", avgVolume: "7.2M", sector: "Media & Entertainment" },
-  ERUDITE: { marketCap: "5.4Cr", pe: 19.6, eps: 55.48, bookValue: 720.0, dividendYield: 1.5, roe: 20.1, debtToEquity: 0.05, w52High: 1240.0, w52Low: 680.0, volume: "14.3M", avgVolume: "11.5M", sector: "Education" },
-  INSIGHT: { marketCap: "2.3Cr", pe: 12.4, eps: 37.79, bookValue: 310.0, dividendYield: 2.0, roe: 24.3, debtToEquity: 0.02, w52High: 520.0, w52Low: 290.0, volume: "22.1M", avgVolume: "18.4M", sector: "Analytics" },
-  CELESTE: { marketCap: "8.2Cr", pe: 31.5, eps: 52.23, bookValue: 1050.0, dividendYield: 0.3, roe: 15.4, debtToEquity: 0.15, w52High: 1780.0, w52Low: 980.0, volume: "9.2M", avgVolume: "7.6M", sector: "Science & Research" },
+  MATHSOC: { marketCap: "14.5Cr", pe: 28.4, eps: 101.84, bookValue: 1820.0, roe: 18.2, w52High: 3120.0, w52Low: 1950.0, volume: "15.8M", avgVolume: "12.1M", sector: "Education" },
+  ENIGMA: { marketCap: "19.9Cr", pe: 34.2, eps: 116.60, bookValue: 2540.0, roe: 22.5, w52High: 4250.0, w52Low: 2680.0, volume: "7.8M", avgVolume: "9.3M", sector: "Technology" },
+  GASMONKEYS: { marketCap: "7.9Cr", pe: 15.8, eps: 99.93, bookValue: 980.0, roe: 14.6, w52High: 1820.0, w52Low: 1020.0, volume: "12.4M", avgVolume: "10.8M", sector: "Automotive" },
+  MASTERSHOT: { marketCap: "8.4Cr", pe: 22.1, eps: 76.44, bookValue: 1120.0, roe: 16.8, w52High: 1890.0, w52Low: 1150.0, volume: "8.5M", avgVolume: "7.2M", sector: "Media & Entertainment" },
+  ERUDITE: { marketCap: "5.4Cr", pe: 19.6, eps: 55.48, bookValue: 720.0, roe: 20.1, w52High: 1240.0, w52Low: 680.0, volume: "14.3M", avgVolume: "11.5M", sector: "Education" },
+  INSIGHT: { marketCap: "2.3Cr", pe: 12.4, eps: 37.79, bookValue: 310.0, roe: 24.3, w52High: 520.0, w52Low: 290.0, volume: "22.1M", avgVolume: "18.4M", sector: "Analytics" },
+  CELESTE: { marketCap: "8.2Cr", pe: 31.5, eps: 52.23, bookValue: 1050.0, roe: 15.4, w52High: 1780.0, w52Low: 980.0, volume: "9.2M", avgVolume: "7.6M", sector: "Science & Research" },
 };
 
 export const stockDirectory: Record<string, StockInfo> = {};
@@ -539,3 +537,27 @@ export const allStocksEnriched = allStocksRaw.map((s) => {
     sparkline: holdingSparklines[s.ticker] || [s.price, s.price, s.price, s.price, s.price],
   };
 });
+
+// ─── Enigma Company Admin Data ────────────────
+export const enigmaCompanyData = {
+  ticker: "ENIGMA",
+  sharesInCirculation: 50000,
+  shareholders: [
+    { name: "Aditya Verma", shares: 8500, percentage: 17.0 },
+    { name: "Riya Sharma", shares: 6200, percentage: 12.4 },
+    { name: "Karthik Nair", shares: 5800, percentage: 11.6 },
+    { name: "Priya Mehta", shares: 4100, percentage: 8.2 },
+    { name: "Arjun Das", shares: 3600, percentage: 7.2 },
+    { name: "Sneha Iyer", shares: 2900, percentage: 5.8 },
+  ],
+  companyNews: [
+    { id: "CN-1", title: "Enigma wins National Hackathon 2026", content: "Enigma's team secured first place at the National Collegiate Hackathon held in Bangalore, beating 200+ teams.", timestamp: Date.now() - 86400000 * 2 },
+    { id: "CN-2", title: "New CTF Cybersecurity Lab launched", content: "Enigma inaugurated a dedicated cybersecurity lab with state-of-the-art infrastructure for CTF competitions.", timestamp: Date.now() - 86400000 * 7 },
+    { id: "CN-3", title: "Open-source contribution drive hits 500 PRs", content: "Members contributed over 500 pull requests to major open-source projects during the spring contribution drive.", timestamp: Date.now() - 86400000 * 14 },
+  ],
+  companyEvents: [
+    { id: "CE-1", title: "Annual Hackathon", date: "2026-04-25", type: "EVENT" as const },
+    { id: "CE-2", title: "Q1 Results Announcement", date: "2026-05-02", type: "RESULTS" as const },
+    { id: "CE-3", title: "Annual General Meeting", date: "2026-05-15", type: "AGM" as const },
+  ],
+};

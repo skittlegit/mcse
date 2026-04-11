@@ -19,7 +19,7 @@ export default function StockDetailPage({
   const { ticker } = use(params);
   const router = useRouter();
   const stock = stockDirectory[ticker.toUpperCase()];
-  const { placeOrder, getOrdersForTicker, positions, balance, addFunds } = useTrading();
+  const { placeOrder, getOrdersForTicker, positions, balance } = useTrading();
   const [range, setRange] = useState<string>("1D");
   const [qty, setQty] = useState(1);
   const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
@@ -131,8 +131,8 @@ export default function StockDetailPage({
         </div>
       </motion.div>
 
-      {/* Desktop: 3-column grid (40% / 35% / 25%) */}
-      <div className="md:grid md:grid-cols-[2fr_1.75fr_1.25fr] md:gap-0 py-6">
+      {/* Desktop: 2-column grid (70% / 30%) */}
+      <div className="md:grid md:grid-cols-[7fr_3fr] md:gap-0 py-6">
         {/* Main content - Col 1: Chart + Price */}
         <div className="min-w-0 md:pr-6">
           {/* Price */}
@@ -314,9 +314,7 @@ export default function StockDetailPage({
                 { label: "P/E RATIO", value: stock.fundamentals.pe.toFixed(1) },
                 { label: "EPS", value: `\u20B9${stock.fundamentals.eps.toFixed(2)}` },
                 { label: "BOOK VALUE", value: `\u20B9${stock.fundamentals.bookValue.toLocaleString("en-IN")}` },
-                { label: "DIV YIELD", value: `${stock.fundamentals.dividendYield.toFixed(1)}%` },
                 { label: "ROE", value: `${stock.fundamentals.roe.toFixed(1)}%` },
-                { label: "DEBT/EQUITY", value: stock.fundamentals.debtToEquity.toFixed(2) },
                 { label: "VOLUME", value: stock.fundamentals.volume },
                 { label: "AVG VOLUME", value: stock.fundamentals.avgVolume },
               ].map((item) => (
@@ -337,7 +335,7 @@ export default function StockDetailPage({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, duration: 0.3 }}
-              className="mt-7 md:hidden"
+              className="mt-7 md:mt-8"
             >
               <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">NEWS</h3>
               <div className="space-y-2">
@@ -391,110 +389,10 @@ export default function StockDetailPage({
           )}
         </div>
 
-        {/* Desktop sidebar: Overview + Fundamentals + Order Panel */}
-        <aside className="hidden md:block border-l border-white/8 pl-6 col-span-2">
-          <div className="md:grid md:grid-cols-[1.4fr_1fr] md:gap-0">
-            {/* Col 2: Overview + Fundamentals + News */}
-            <div className="md:pr-6">
-              {/* Overview */}
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.3 }}
-              >
-                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">OVERVIEW</h3>
-                <div className="grid grid-cols-3 gap-[1px] bg-white/8">
-                  {[
-                    { label: "OPEN", value: stock.overview.open },
-                    { label: "DAY LOW", value: stock.overview.dayLow },
-                    { label: "DAY HIGH", value: stock.overview.dayHigh },
-                  ].map((item) => (
-                    <div key={item.label} className="bg-[#0a0a0a] p-4">
-                      <p className="text-[9px] tracking-[0.2em] text-white/25 uppercase mb-1.5">{item.label}</p>
-                      <p className="font-[var(--font-anton)] text-lg">
-                        {"\u20B9"}{item.value.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Fundamentals */}
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35, duration: 0.3 }}
-                className="mt-6"
-              >
-                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">FUNDAMENTALS</h3>
-                <div className="grid grid-cols-3 gap-[1px] bg-white/8">
-                  {[
-                    { label: "MARKET CAP", value: stock.fundamentals.marketCap },
-                    { label: "P/E RATIO", value: stock.fundamentals.pe.toFixed(1) },
-                    { label: "EPS", value: `\u20B9${stock.fundamentals.eps.toFixed(2)}` },
-                    { label: "BOOK VALUE", value: `\u20B9${stock.fundamentals.bookValue.toLocaleString("en-IN")}` },
-                    { label: "DIV YIELD", value: `${stock.fundamentals.dividendYield.toFixed(1)}%` },
-                    { label: "ROE", value: `${stock.fundamentals.roe.toFixed(1)}%` },
-                  ].map((item) => (
-                    <div key={item.label} className="bg-[#0a0a0a] p-3">
-                      <p className="text-[8px] tracking-[0.2em] text-white/25 uppercase mb-1">{item.label}</p>
-                      <p className="font-[var(--font-anton)] text-sm">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* 52W Range */}
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.3 }}
-                className="mt-6"
-              >
-                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-3">52W RANGE</h3>
-                <div className="border border-white/8 p-4">
-                  <div className="flex justify-between mb-2">
-                    <span className="text-[9px] text-white/30">{"\u20B9"}{stock.fundamentals.w52Low.toLocaleString("en-IN")}</span>
-                    <span className="text-[9px] text-white/30">{"\u20B9"}{stock.fundamentals.w52High.toLocaleString("en-IN")}</span>
-                  </div>
-                  <div className="h-1.5 bg-white/8 relative">
-                    <div
-                      className="absolute top-1/2 -translate-y-1/2 w-2 h-2 bg-white"
-                      style={{
-                        left: `${Math.min(100, Math.max(0, ((stock.price - stock.fundamentals.w52Low) / (stock.fundamentals.w52High - stock.fundamentals.w52Low)) * 100))}%`,
-                        transform: "translate(-50%, -50%)",
-                      }}
-                    />
-                    <div className="h-full bg-gradient-to-r from-[#FF5252]/40 via-white/20 to-[#00D26A]/40" style={{ width: "100%" }} />
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Stock News (desktop) */}
-              {stockNews.length > 0 && (
-                <div className="mt-6">
-                  <p className="text-[9px] tracking-[0.15em] text-white/25 mb-3">NEWS ({stockNews.length})</p>
-                  <div className="space-y-2">
-                    {stockNews.map((news, i) => (
-                      <div key={i} className="border border-white/8 p-3 hover:bg-white/[0.02] transition-colors">
-                        <p className="text-[11px] text-white/60 leading-relaxed mb-1.5 line-clamp-2">{news.headline}</p>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[8px] tracking-[0.1em] text-white/20">{formatRelativeTime(news.timestamp)}</span>
-                          <span className={`text-[9px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                            {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Col 3: Order Panel (sticky) */}
-            <div className="border-l border-white/8 pl-6">
-              <div className="sticky top-24">
-                <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
+        {/* Right column (desktop): Sticky order panel */}
+        <aside className="hidden md:block border-l border-white/8 pl-6">
+          <div className="sticky top-20">
+            <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
 
             {/* BUY / SELL tabs */}
             <div className="flex border-b border-white/8">
@@ -537,7 +435,7 @@ export default function StockDetailPage({
             </div>
 
             {/* Quantity */}
-            <div className="pt-5 flex-1">
+            <div className="pt-5">
               <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">QTY</label>
               <div className="flex items-center border border-white/20">
                 <button
@@ -569,19 +467,7 @@ export default function StockDetailPage({
 
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
-                  <button
-                    onClick={() => {
-                      addFunds(10000);
-                      setOrderMsg({ text: "Added \u20B910,000 to your balance", success: true });
-                      setTimeout(() => setOrderMsg(null), 3000);
-                    }}
-                    className="text-[8px] tracking-[0.1em] text-white/30 border border-white/15 px-2 py-0.5 hover:text-white hover:border-white transition-all"
-                  >
-                    + ADD
-                  </button>
-                </div>
+                <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
               </div>
 
               <button
@@ -603,9 +489,7 @@ export default function StockDetailPage({
               </div>
               <p className="text-[10px] text-white/20 mt-1">MCSE Exchange</p>
             </div>
-              </div>{/* end sticky */}
-            </div>{/* end Col 3 */}
-          </div>{/* end inner grid */}
+          </div>{/* end sticky */}
         </aside>
       </div>
 

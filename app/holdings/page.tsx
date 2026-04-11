@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState, useMemo } from "react";
-import { Eye, EyeOff, ChevronDown, ChevronUp, BarChart3, X, ArrowUpDown } from "lucide-react";
+import { Eye, EyeOff, ChevronDown, ChevronUp, BarChart3, X, ArrowUpDown, Minus, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import {
   holdings,
   investments,
   portfolioAnalysis,
+  stockDirectory,
 } from "@/lib/mockData";
 import {
   ResponsiveContainer,
@@ -31,13 +32,18 @@ type SortDir = "asc" | "desc";
 
 export default function HoldingsPage() {
   const { isLoggedIn } = useAuth();
-  const { transactions } = useTrading();
+  const { transactions, balance, placeOrder } = useTrading();
   const [showValues, setShowValues] = useState(true);
   const [sortKey, setSortKey] = useState<SortKey>("currentValue");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [analyseOpen, setAnalyseOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [mobileDisplay, setMobileDisplay] = useState<"market" | "current" | "returns" | "dayChange">("market");
+  const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
+  const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
+  const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
+  const [qty, setQty] = useState(1);
+  const [orderMsg, setOrderMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const sorted = useMemo(() => {
     const arr = [...holdings];
@@ -63,6 +69,17 @@ export default function HoldingsPage() {
   }
 
   const recentTxns = transactions.filter(t => t.type === "BUY" || t.type === "SELL").slice(0, 5);
+
+  const selectedStock = selectedTicker ? stockDirectory[selectedTicker] : null;
+  const selectedHolding = selectedTicker ? holdings.find(h => h.ticker === selectedTicker) : null;
+
+  function handleOrder() {
+    if (!selectedStock) return;
+    const result = placeOrder({ ticker: selectedStock.ticker, name: selectedStock.name, type: buySellTab, orderType, qty, price: selectedStock.price });
+    setOrderMsg({ ok: result.success, text: result.message });
+    if (result.success) setQty(1);
+    setTimeout(() => setOrderMsg(null), 3000);
+  }
 
   if (!isLoggedIn) {
     return (
@@ -263,10 +280,10 @@ export default function HoldingsPage() {
           </div>
 
           {sorted.map((h) => (
-            <Link
+            <div
               key={h.ticker}
-              href={`/stock/${h.ticker}`}
-              className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+              onClick={() => { setSelectedTicker(h.ticker); setQty(1); setOrderMsg(null); }}
+              className={`grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center cursor-pointer ${selectedTicker === h.ticker ? "bg-white/[0.06]" : ""}`}
             >
               <div>
                 <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{h.ticker}</p>
@@ -299,12 +316,12 @@ export default function HoldingsPage() {
                   {showValues ? `\u20B9${h.investedValue.toLocaleString("en-IN")}` : "\u2022\u2022\u2022\u2022"}
                 </p>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
         </div>
 
-        {/* Right sidebar (desktop): Portfolio summary + Donut + Transactions */}
+        {/* Right sidebar (desktop): Portfolio summary + Order panel + Transactions */}
         <aside className="hidden md:block space-y-6">
           {/* Portfolio summary card */}
           <div className="border border-white/10 p-5">
@@ -327,51 +344,148 @@ export default function HoldingsPage() {
             </div>
           </div>
 
-          {/* Sector allocation donut */}
-          <div className="border border-white/10 p-5">
-            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">SECTOR ALLOCATION</p>
-            <div className="w-full h-40">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={portfolioAnalysis.sectorAllocation}
-                    dataKey="value"
-                    nameKey="sector"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={60}
-                    innerRadius={30}
-                    strokeWidth={1}
-                    stroke="#0a0a0a"
+          {/* Order panel — shown when a holding is selected */}
+          {selectedStock && (
+            <div className="border border-white/10 p-5">
+              {/* Order feedback toast */}
+              <AnimatePresence>
+                {orderMsg && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    className={`mb-4 p-3 border text-[10px] tracking-[0.1em] ${orderMsg.ok ? "border-[#00D26A]/30 text-[#00D26A] bg-[#00D26A]/5" : "border-[#FF5252]/30 text-[#FF5252] bg-[#FF5252]/5"}`}
                   >
-                    {portfolioAnalysis.sectorAllocation.map((_: { sector: string; value: number }, idx: number) => (
-                      <Cell key={idx} fill={["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][idx % 6]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ background: "#111", border: "1px solid rgba(255,255,255,0.15)", fontSize: 11, color: "#fff" }}
-                    formatter={(value) => [`${value}%`, ""]}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="space-y-1.5 mt-3">
-              {portfolioAnalysis.sectorAllocation.map((s: { sector: string; value: number }, i: number) => (
-                <div key={s.sector} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2" style={{ backgroundColor: ["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][i % 6] }} />
-                    <span className="text-[10px] text-white/50">{s.sector}</span>
-                  </div>
-                  <span className="text-[11px] font-[var(--font-anton)]">{s.value}%</span>
+                    {orderMsg.text}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Stock header */}
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="font-[var(--font-anton)] text-[15px] tracking-[0.05em]">{selectedStock.ticker}</p>
+                  <p className="text-[10px] text-white/40">{selectedStock.name}</p>
                 </div>
-              ))}
+                <div className="text-right">
+                  <p className="font-[var(--font-anton)] text-[15px]">{"\u20B9"}{selectedStock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                  <p className={`text-[10px] font-medium ${selectedStock.changePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                    {selectedStock.changePercent >= 0 ? "+" : ""}{selectedStock.changePercent.toFixed(2)}%
+                  </p>
+                </div>
+              </div>
+
+              {/* Holding info */}
+              {selectedHolding && (
+                <div className="grid grid-cols-2 gap-2 mb-4 p-3 bg-white/[0.03] border border-white/6">
+                  <div>
+                    <p className="text-[8px] tracking-[0.1em] text-white/25">QTY HELD</p>
+                    <p className="text-[12px] font-[var(--font-anton)]">{selectedHolding.qty}</p>
+                  </div>
+                  <div>
+                    <p className="text-[8px] tracking-[0.1em] text-white/25">AVG PRICE</p>
+                    <p className="text-[12px] font-[var(--font-anton)]">{"\u20B9"}{selectedHolding.avgPrice.toFixed(2)}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* BUY / SELL tabs */}
+              <div className="flex border-b border-white/10 mb-4">
+                <button
+                  onClick={() => setBuySellTab("BUY")}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium transition-colors ${buySellTab === "BUY" ? "text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/30 hover:text-white/50"}`}
+                >
+                  BUY
+                </button>
+                <button
+                  onClick={() => setBuySellTab("SELL")}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium transition-colors ${buySellTab === "SELL" ? "text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/30 hover:text-white/50"}`}
+                >
+                  SELL
+                </button>
+              </div>
+
+              {/* Order type */}
+              <div className="flex gap-3 mb-4">
+                {(["DELIVERY", "INTRADAY"] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setOrderType(t)}
+                    className={`flex items-center gap-1.5 text-[10px] tracking-[0.1em] transition-colors ${orderType === t ? "text-white" : "text-white/30 hover:text-white/50"}`}
+                  >
+                    <span className={`w-3 h-3 border ${orderType === t ? "border-white bg-white" : "border-white/30"}`}>
+                      {orderType === t && <span className="block w-1.5 h-1.5 bg-[#0a0a0a] m-auto mt-[2px]" />}
+                    </span>
+                    {t}
+                  </button>
+                ))}
+              </div>
+
+              {/* Quantity */}
+              <div className="mb-4">
+                <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1.5">QUANTITY</p>
+                <div className="flex items-center border border-white/15">
+                  <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-10 flex items-center justify-center hover:bg-white/5 transition-colors">
+                    <Minus size={12} />
+                  </button>
+                  <input
+                    type="number"
+                    min={1}
+                    value={qty}
+                    onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="flex-1 h-10 text-center bg-transparent text-[14px] font-[var(--font-anton)] outline-none border-x border-white/15 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <button onClick={() => setQty(qty + 1)} className="w-10 h-10 flex items-center justify-center hover:bg-white/5 transition-colors">
+                    <Plus size={12} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Est total */}
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-[9px] tracking-[0.15em] text-white/30">EST. TOTAL</p>
+                <p className="font-[var(--font-anton)] text-[15px]">{"\u20B9"}{(selectedStock.price * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+              </div>
+
+              {/* Balance */}
+              <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/8">
+                <p className="text-[9px] tracking-[0.15em] text-white/30">BALANCE</p>
+                <p className="text-[11px] text-white/50">{"\u20B9"}{balance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+              </div>
+
+              {/* Action button */}
+              <button
+                onClick={handleOrder}
+                className={`w-full py-3 text-[11px] tracking-[0.2em] font-medium transition-all hover:opacity-90 ${
+                  buySellTab === "BUY"
+                    ? "bg-[#00D26A] text-black"
+                    : "bg-[#FF5252] text-white"
+                }`}
+              >
+                {buySellTab} {selectedStock.ticker}
+              </button>
+
+              {/* View detail link */}
+              <Link
+                href={`/stock/${selectedStock.ticker}`}
+                className="block mt-3 text-[10px] tracking-[0.1em] text-white/30 hover:text-white transition-colors text-center"
+              >
+                VIEW STOCK DETAILS →
+              </Link>
             </div>
-          </div>
+          )}
+
+          {/* Placeholder when no stock selected */}
+          {!selectedStock && (
+            <div className="border border-white/10 p-5 flex items-center justify-center min-h-[120px]">
+              <p className="text-[10px] tracking-[0.1em] text-white/20 text-center">SELECT A HOLDING<br />TO TRADE</p>
+            </div>
+          )}
 
           {/* Recent transactions */}
           {recentTxns.length > 0 && (
             <div className="border border-white/10 p-5">
-              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">RECENT TRANSACTIONS</p>
+              <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">RECENT ACTIVITY</p>
               <div className="space-y-2">
                 {recentTxns.map((txn) => (
                   <div key={txn.id} className="flex items-center justify-between py-1.5">
@@ -389,12 +503,6 @@ export default function HoldingsPage() {
                   </div>
                 ))}
               </div>
-              <Link
-                href="/transactions"
-                className="block mt-3 pt-3 border-t border-white/6 text-[10px] tracking-[0.1em] text-white/30 hover:text-white transition-colors text-center"
-              >
-                VIEW ALL TRANSACTIONS
-              </Link>
             </div>
           )}
         </aside>

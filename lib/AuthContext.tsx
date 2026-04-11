@@ -6,7 +6,7 @@ export type UserRole = "user" | "companyAdmin" | "totalAdmin";
 
 const CREDENTIALS: { email: string; password: string; role: UserRole; name: string }[] = [
   { email: "aeleni@mcse.in", password: "Mcse@25", role: "user", name: "DEEPAK AELENI" },
-  { email: "companyadmin@mcse.in", password: "CompAdmin@25", role: "companyAdmin", name: "COMPANY ADMIN" },
+  { email: "companyadmin@mcse.in", password: "CompAdmin@25", role: "companyAdmin", name: "ENIGMA ADMIN" },
   { email: "totaladmin@mcse.in", password: "TotalAdmin@25", role: "totalAdmin", name: "TOTAL ADMIN" },
 ];
 

@@ -345,7 +345,6 @@ export default function PositionsPage() {
             <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">QUICK LINKS</p>
             <div className="space-y-2">
               <Link href="/holdings" className="block text-[10px] tracking-[0.1em] text-white/40 hover:text-white transition-colors py-1">VIEW HOLDINGS</Link>
-              <Link href="/transactions" className="block text-[10px] tracking-[0.1em] text-white/40 hover:text-white transition-colors py-1">TRANSACTION HISTORY</Link>
               <Link href="/" className="block text-[10px] tracking-[0.1em] text-white/40 hover:text-white transition-colors py-1">EXPLORE STOCKS</Link>
             </div>
           </div>

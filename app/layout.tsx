@@ -4,6 +4,7 @@ import "./globals.css";
 import AppShell from "@/components/AppShell";
 import { AuthProvider } from "@/lib/AuthContext";
 import { TradingProvider } from "@/lib/TradingContext";
+import { AdminProvider } from "@/lib/AdminContext";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -41,7 +42,9 @@ export default function RootLayout({
       <body className="min-h-full bg-[#0a0a0a] text-white overflow-x-hidden">
         <AuthProvider>
           <TradingProvider>
-            <AppShell>{children}</AppShell>
+            <AdminProvider>
+              <AppShell>{children}</AppShell>
+            </AdminProvider>
           </TradingProvider>
         </AuthProvider>
       </body>
