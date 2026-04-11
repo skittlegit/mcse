@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, ChevronDown, PieChart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Layers, ChevronDown, PieChart, ArrowLeft } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
 
 interface ETF {
@@ -57,10 +58,12 @@ const etfs: ETF[] = [
 
 export default function ETFsPage() {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const router = useRouter();
 
   return (
     <div className="pb-20 md:pb-12 py-6">
       <div className="flex items-center gap-3 mb-8">
+        <button onClick={() => router.back()} className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"><ArrowLeft size={15} /></button>
         <Layers size={18} className="text-white/40" />
         <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">ETFs</h1>
         <span className="text-[10px] tracking-[0.1em] text-white/25 ml-1">{etfs.length} FUNDS</span>

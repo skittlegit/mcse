@@ -43,6 +43,8 @@ export default function HoldingsPage() {
   const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
   const [orderType, setOrderType] = useState<"DELIVERY" | "INTRADAY">("DELIVERY");
   const [qty, setQty] = useState(1);
+  const [pricingType, setPricingType] = useState<"MARKET" | "LIMIT">("MARKET");
+  const [limitPrice, setLimitPrice] = useState<string>("");
   const [orderMsg, setOrderMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const sorted = useMemo(() => {
@@ -73,11 +75,22 @@ export default function HoldingsPage() {
   const selectedStock = selectedTicker ? stockDirectory[selectedTicker] : null;
   const selectedHolding = selectedTicker ? holdings.find(h => h.ticker === selectedTicker) : null;
 
+  const effectivePrice = pricingType === "LIMIT" && limitPrice ? parseFloat(limitPrice) : (selectedStock?.price ?? 0);
+
   function handleOrder() {
     if (!selectedStock) return;
-    const result = placeOrder({ ticker: selectedStock.ticker, name: selectedStock.name, type: buySellTab, orderType, qty, price: selectedStock.price, pricingType: "MARKET" });
+    const result = placeOrder({
+      ticker: selectedStock.ticker,
+      name: selectedStock.name,
+      type: buySellTab,
+      orderType,
+      qty,
+      price: selectedStock.price,
+      pricingType,
+      ...(pricingType === "LIMIT" && limitPrice ? { limitPrice: parseFloat(limitPrice) } : {}),
+    });
     setOrderMsg({ ok: result.success, text: result.message });
-    if (result.success) setQty(1);
+    if (result.success) { setQty(1); setLimitPrice(""); }
     setTimeout(() => setOrderMsg(null), 3000);
   }
 
@@ -432,6 +445,35 @@ export default function HoldingsPage() {
                 ))}
               </div>
 
+              {/* Price */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-[9px] tracking-[0.15em] text-white/30">PRICE</p>
+                  <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={pricingType === "MARKET"}
+                      onChange={(e) => {
+                        if (e.target.checked) { setPricingType("MARKET"); setLimitPrice(""); }
+                        else { setPricingType("LIMIT"); setLimitPrice(selectedStock.price.toFixed(2)); }
+                      }}
+                      className="w-3 h-3 accent-white"
+                    />
+                    <span className="text-[9px] tracking-[0.15em] text-white/50">MARKET</span>
+                  </label>
+                </div>
+                <input
+                  type="number"
+                  value={pricingType === "MARKET" ? selectedStock.price.toFixed(2) : limitPrice}
+                  onChange={(e) => setLimitPrice(e.target.value)}
+                  disabled={pricingType === "MARKET"}
+                  placeholder={selectedStock.price.toFixed(2)}
+                  className={`w-full h-10 bg-transparent border px-4 text-center font-[var(--font-anton)] text-[14px] text-white outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                    pricingType === "MARKET" ? "text-white/40 border-white/10 cursor-not-allowed" : "border-white/20 focus:border-white"
+                  }`}
+                />
+              </div>
+
               {/* Quantity */}
               <div className="mb-4">
                 <p className="text-[9px] tracking-[0.15em] text-white/30 mb-1.5">QUANTITY</p>
@@ -455,7 +497,7 @@ export default function HoldingsPage() {
               {/* Est total */}
               <div className="flex items-center justify-between mb-2">
                 <p className="text-[9px] tracking-[0.15em] text-white/30">EST. TOTAL</p>
-                <p className="font-[var(--font-anton)] text-[15px]">{"\u20B9"}{(selectedStock.price * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
+                <p className="font-[var(--font-anton)] text-[15px]">{"\u20B9"}{(effectivePrice * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
               </div>
 
               {/* Balance */}
@@ -473,7 +515,7 @@ export default function HoldingsPage() {
                     : "bg-[#FF5252] text-white"
                 }`}
               >
-                {buySellTab} {selectedStock.ticker}
+                {pricingType === "LIMIT" ? `${buySellTab} LIMIT` : buySellTab} {selectedStock.ticker}
               </button>
 
               {/* View detail link */}

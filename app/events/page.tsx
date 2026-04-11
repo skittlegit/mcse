@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
 interface CalendarEvent {
   day: number;
@@ -41,6 +42,7 @@ const MONTH_NAMES = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SE
 const DAY_NAMES = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
 
 export default function EventsPage() {
+  const router = useRouter();
   const [viewMonth, setViewMonth] = useState(5); // June
   const [viewYear, setViewYear] = useState(2026);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
@@ -76,7 +78,10 @@ export default function EventsPage() {
 
   return (
     <div className="py-6">
-      <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase mb-6">EVENTS CALENDAR</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => router.back()} className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"><ArrowLeft size={15} /></button>
+        <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">EVENTS CALENDAR</h1>
+      </div>
 
       {/* Desktop 2-column grid */}
       <div className="md:grid md:grid-cols-[13fr_7fr] md:gap-8">

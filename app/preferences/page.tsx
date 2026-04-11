@@ -20,12 +20,14 @@ const defaultPreferences: Preference[] = [
   { key: "darkMode", label: "DARK MODE", description: "Use dark theme across the application (currently always on)", enabled: true },
   { key: "confirmOrders", label: "CONFIRM BEFORE ORDER", description: "Show a confirmation dialog before placing buy/sell orders", enabled: true },
   { key: "showBalance", label: "SHOW BALANCE ON HOME", description: "Display your available balance on the explore page", enabled: false },
-  { key: "biometric", label: "BIOMETRIC LOGIN", description: "Use fingerprint or face ID for quick login on supported devices", enabled: false },
 ];
 
 export default function PreferencesPage() {
   const { isLoggedIn } = useAuth();
   const [prefs, setPrefs] = useState<Preference[]>(defaultPreferences);
+  const [defaultOrderType, setDefaultOrderType] = useState("DELIVERY");
+  const [defaultQty, setDefaultQty] = useState("1");
+  const [saved, setSaved] = useState(false);
 
   if (!isLoggedIn) {
     return (
@@ -104,14 +106,22 @@ export default function PreferencesPage() {
         <div className="border border-white/8">
           <div className="px-5 py-4 border-b border-white/6">
             <p className="text-[11px] tracking-[0.1em] text-white/60 mb-0.5">DEFAULT ORDER TYPE</p>
-            <select className="mt-1 bg-transparent border border-white/15 text-[11px] text-white/50 px-3 py-1.5 outline-none appearance-none cursor-pointer" style={{ fontSize: '16px' }}>
+            <select
+              value={defaultOrderType}
+              onChange={(e) => setDefaultOrderType(e.target.value)}
+              className="mt-1 bg-transparent border border-white/15 text-[11px] text-white/50 px-3 py-1.5 outline-none appearance-none cursor-pointer" style={{ fontSize: '16px' }}
+            >
               <option value="DELIVERY" className="bg-[#0a0a0a]">DELIVERY</option>
               <option value="INTRADAY" className="bg-[#0a0a0a]">INTRADAY</option>
             </select>
           </div>
           <div className="px-5 py-4">
             <p className="text-[11px] tracking-[0.1em] text-white/60 mb-0.5">DEFAULT QUANTITY</p>
-            <select className="mt-1 bg-transparent border border-white/15 text-[11px] text-white/50 px-3 py-1.5 outline-none appearance-none cursor-pointer" style={{ fontSize: '16px' }}>
+            <select
+              value={defaultQty}
+              onChange={(e) => setDefaultQty(e.target.value)}
+              className="mt-1 bg-transparent border border-white/15 text-[11px] text-white/50 px-3 py-1.5 outline-none appearance-none cursor-pointer" style={{ fontSize: '16px' }}
+            >
               <option value="1" className="bg-[#0a0a0a]">1</option>
               <option value="5" className="bg-[#0a0a0a]">5</option>
               <option value="10" className="bg-[#0a0a0a]">10</option>
@@ -119,6 +129,21 @@ export default function PreferencesPage() {
             </select>
           </div>
         </div>
+      </motion.div>
+
+      {/* Save button */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.25 }}
+        className="mt-8"
+      >
+        <button
+          onClick={() => { setSaved(true); setTimeout(() => setSaved(false), 2500); }}
+          className="w-full h-11 text-[10px] tracking-[0.2em] font-semibold border border-white bg-white text-black hover:bg-transparent hover:text-white transition-all duration-200"
+        >
+          {saved ? "SAVED \u2713" : "SAVE PREFERENCES"}
+        </button>
       </motion.div>
     </div>
   );

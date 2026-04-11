@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Clock, TrendingUp, Users, CheckCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Clock, TrendingUp, Users, CheckCircle, ArrowLeft } from "lucide-react";
 
 interface IPO {
   name: string;
@@ -67,6 +68,7 @@ function daysUntil(dateStr: string): number {
 }
 
 export default function IPOPage() {
+  const router = useRouter();
   const [appliedSet, setAppliedSet] = useState<Set<string>>(new Set());
   const [selectedIPO, setSelectedIPO] = useState<string | null>(null);
 
@@ -77,7 +79,10 @@ export default function IPOPage() {
   return (
     <div className="py-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">IPO</h1>
+        <div className="flex items-center gap-3">
+          <button onClick={() => router.back()} className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"><ArrowLeft size={15} /></button>
+          <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">IPO</h1>
+        </div>
         <span className="text-[9px] tracking-[0.15em] text-white/25">{ipoList.filter(i => i.status === "LIVE").length} LIVE · {ipoList.filter(i => i.status === "UPCOMING").length} UPCOMING</span>
       </div>
 

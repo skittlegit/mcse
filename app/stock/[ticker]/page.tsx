@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, use, useCallback, useMemo } from "react";
-import { ArrowLeft, Star, Bookmark } from "lucide-react";
+import { ArrowLeft, Star, Bookmark, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,6 +27,7 @@ export default function StockDetailPage({
   const [pricingType, setPricingType] = useState<"MARKET" | "LIMIT">("MARKET");
   const [limitPrice, setLimitPrice] = useState<string>("");
   const [orderMsg, setOrderMsg] = useState<{ text: string; success: boolean } | null>(null);
+  const [mobileOrderOpen, setMobileOrderOpen] = useState(false);
 
   const isHeld = holdings.some((h) => h.ticker === ticker.toUpperCase());
   const isWatched = watchlist.some((w) => w.ticker === ticker.toUpperCase());
@@ -382,37 +383,34 @@ export default function StockDetailPage({
               </p>
             </div>
 
-            {/* Pricing type: MARKET / LIMIT */}
+            {/* Price */}
             <div className="pt-4">
-              <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">PRICING</label>
-              <div className="flex border border-white/15">
-                {(["MARKET", "LIMIT"] as const).map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => { setPricingType(p); if (p === "MARKET") setLimitPrice(""); }}
-                    className={`flex-1 py-2 text-[9px] tracking-[0.15em] font-medium transition-all ${
-                      pricingType === p ? "bg-white text-black" : "text-white/40 hover:text-white"
-                    }`}
-                  >
-                    {p}
-                  </button>
-                ))}
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-[10px] tracking-[0.1em] text-white/40">PRICE</label>
+                <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={pricingType === "MARKET"}
+                    onChange={(e) => {
+                      if (e.target.checked) { setPricingType("MARKET"); setLimitPrice(""); }
+                      else { setPricingType("LIMIT"); setLimitPrice(stock.price.toFixed(2)); }
+                    }}
+                    className="w-3 h-3 accent-white"
+                  />
+                  <span className="text-[9px] tracking-[0.15em] text-white/50">MARKET</span>
+                </label>
               </div>
+              <input
+                type="number"
+                value={pricingType === "MARKET" ? stock.price.toFixed(2) : limitPrice}
+                onChange={(e) => setLimitPrice(e.target.value)}
+                disabled={pricingType === "MARKET"}
+                placeholder={stock.price.toFixed(2)}
+                className={`w-full h-10 bg-transparent border px-4 text-center font-[var(--font-anton)] text-lg text-white outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                  pricingType === "MARKET" ? "text-white/40 border-white/10 cursor-not-allowed" : "border-white/20 focus:border-white"
+                }`}
+              />
             </div>
-
-            {/* Limit price input */}
-            {pricingType === "LIMIT" && (
-              <div className="pt-3">
-                <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">LIMIT PRICE</label>
-                <input
-                  type="number"
-                  value={limitPrice}
-                  onChange={(e) => setLimitPrice(e.target.value)}
-                  placeholder={stock.price.toFixed(2)}
-                  className="w-full h-10 bg-transparent border border-white/20 px-4 text-center font-[var(--font-anton)] text-lg text-white outline-none focus:border-white transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                />
-              </div>
-            )}
 
             {/* Quantity */}
             <div className="pt-5">
@@ -521,6 +519,36 @@ export default function StockDetailPage({
               </div>
             )}
 
+            {/* Stock Events */}
+            {stock.events && stock.events.length > 0 && (
+              <div>
+                <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-3">UPCOMING EVENTS</h3>
+                <div className="space-y-2">
+                  {stock.events.map((event, i) => {
+                    const typeColors: Record<string, string> = {
+                      RESULTS: "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/5",
+                      AGM: "text-blue-400 border-blue-400/30 bg-blue-400/5",
+                      DIVIDEND: "text-yellow-400 border-yellow-400/30 bg-yellow-400/5",
+                      EVENT: "text-white/50 border-white/20 bg-white/5",
+                    };
+                    return (
+                      <div key={i} className="border border-white/8 p-3 flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <span className={`text-[7px] tracking-[0.15em] font-semibold px-1.5 py-0.5 border ${typeColors[event.type] || typeColors.EVENT}`}>
+                            {event.type}
+                          </span>
+                          <p className="text-[11px] text-white/60">{event.title}</p>
+                        </div>
+                        <span className="text-[9px] tracking-[0.1em] text-white/25 whitespace-nowrap ml-3">
+                          {new Date(event.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Order History */}
             {tickerOrders.length > 0 && (
               <div>
@@ -560,35 +588,164 @@ export default function StockDetailPage({
       <div className="fixed bottom-14 left-0 right-0 z-40 md:hidden border-t border-white/12 bg-[#0a0a0a]/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
         <div className="flex">
           <button
-            onClick={() => {
-              setBuySellTab("BUY");
-              handleOrder();
-            }}
+            onClick={() => { setBuySellTab("BUY"); setMobileOrderOpen(true); }}
             className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#00D26A] text-black active:bg-[#00D26A]/80 transition-all"
           >
             BUY {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 0 })}
           </button>
           <button
-            onClick={() => {
-              setBuySellTab("SELL");
-              const result = placeOrder({
-                ticker: stock.ticker,
-                name: stock.name,
-                type: "SELL",
-                orderType,
-                qty,
-                price: stock.price,
-                pricingType: "MARKET",
-              });
-              setOrderMsg({ text: result.message, success: result.success });
-              setTimeout(() => setOrderMsg(null), 3000);
-            }}
+            onClick={() => { setBuySellTab("SELL"); setMobileOrderOpen(true); }}
             className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#FF5252] text-white active:bg-[#FF5252]/80 transition-all"
           >
             SELL
           </button>
         </div>
       </div>
+
+      {/* Mobile order panel overlay */}
+      <AnimatePresence>
+        {mobileOrderOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileOrderOpen(false)}
+              className="fixed inset-0 z-50 bg-black/60 md:hidden"
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 300 }}
+              className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#0a0a0a] border-t border-white/12 max-h-[80vh] overflow-y-auto"
+            >
+              {/* Panel header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-white/8">
+                <div className="flex items-center gap-3">
+                  <span className={`text-[10px] tracking-[0.15em] font-semibold px-2.5 py-1 border ${
+                    buySellTab === "BUY"
+                      ? "text-[#00D26A] border-[#00D26A]/30 bg-[#00D26A]/10"
+                      : "text-[#FF5252] border-[#FF5252]/30 bg-[#FF5252]/10"
+                  }`}>{buySellTab}</span>
+                  <span className="font-[var(--font-anton)] text-base tracking-[0.05em]">{stock.ticker}</span>
+                  <span className="text-[10px] text-white/40">{"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</span>
+                </div>
+                <button onClick={() => setMobileOrderOpen(false)} className="w-8 h-8 flex items-center justify-center border border-white/15 hover:border-white/40 transition-colors">
+                  <X size={14} className="text-white/50" />
+                </button>
+              </div>
+
+              <div className="px-5 py-5 space-y-5">
+                {/* Buy/Sell toggle */}
+                <div className="flex border border-white/8">
+                  <button
+                    onClick={() => setBuySellTab("BUY")}
+                    className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold transition-all ${
+                      buySellTab === "BUY" ? "bg-[#00D26A]/10 text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/40"
+                    }`}
+                  >BUY</button>
+                  <button
+                    onClick={() => setBuySellTab("SELL")}
+                    className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold transition-all ${
+                      buySellTab === "SELL" ? "bg-[#FF5252]/10 text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/40"
+                    }`}
+                  >SELL</button>
+                </div>
+
+                {/* Order type */}
+                <div className="flex gap-0">
+                  {(["DELIVERY", "INTRADAY"] as const).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setOrderType(t)}
+                      className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
+                        orderType === t ? "bg-white/5 text-white/60" : "text-white/30"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Price input + market checkbox */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-[10px] tracking-[0.1em] text-white/40">PRICE</label>
+                    <label className="flex items-center gap-1.5 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={pricingType === "MARKET"}
+                        onChange={(e) => {
+                          if (e.target.checked) { setPricingType("MARKET"); setLimitPrice(""); }
+                          else { setPricingType("LIMIT"); setLimitPrice(stock.price.toFixed(2)); }
+                        }}
+                        className="w-3 h-3 accent-white"
+                      />
+                      <span className="text-[9px] tracking-[0.15em] text-white/50">MARKET</span>
+                    </label>
+                  </div>
+                  <input
+                    type="number"
+                    value={pricingType === "MARKET" ? stock.price.toFixed(2) : limitPrice}
+                    onChange={(e) => setLimitPrice(e.target.value)}
+                    disabled={pricingType === "MARKET"}
+                    placeholder={stock.price.toFixed(2)}
+                    className={`w-full h-10 bg-transparent border px-4 text-center font-[var(--font-anton)] text-lg text-white outline-none transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                      pricingType === "MARKET" ? "text-white/40 border-white/10 cursor-not-allowed" : "border-white/20 focus:border-white"
+                    }`}
+                  />
+                </div>
+
+                {/* Quantity */}
+                <div>
+                  <label className="text-[10px] tracking-[0.1em] text-white/40 mb-2 block">QTY</label>
+                  <div className="flex items-center border border-white/20">
+                    <button
+                      onClick={() => setQty(Math.max(1, qty - 1))}
+                      className="w-12 h-10 flex items-center justify-center text-white/40 hover:text-white transition-colors"
+                    >{"\u2212"}</button>
+                    <input
+                      type="number"
+                      value={qty}
+                      onChange={(e) => setQty(Math.max(1, parseInt(e.target.value) || 1))}
+                      className="flex-1 h-10 bg-transparent text-center font-[var(--font-anton)] text-lg text-white outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <button
+                      onClick={() => setQty(qty + 1)}
+                      className="w-12 h-10 flex items-center justify-center text-white/40 hover:text-white transition-colors"
+                    >{"+"}</button>
+                  </div>
+                </div>
+
+                {/* Total + Balance */}
+                <div className="border-t border-b border-white/8 py-3 flex justify-between items-center">
+                  <span className="text-[10px] tracking-[0.1em] text-white/40">EST. TOTAL</span>
+                  <span className="font-[var(--font-anton)] text-xl">
+                    {"\u20B9"}{(effectivePrice * qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
+                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
+                </div>
+
+                {/* Confirm button */}
+                <button
+                  onClick={() => { handleOrder(); setMobileOrderOpen(false); }}
+                  className={`w-full h-12 text-[11px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
+                    buySellTab === "BUY"
+                      ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
+                      : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
+                  }`}
+                >
+                  {pricingType === "LIMIT" ? `${buySellTab} LIMIT` : buySellTab} {stock.ticker}
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

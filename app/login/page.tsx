@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function LoginPage() {
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   function handleLogin(e: React.FormEvent) {
@@ -64,13 +66,22 @@ export default function LoginPage() {
             <label className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-2 block">
               PASSWORD
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
-              className="w-full h-12 bg-transparent border border-white/20 px-4 text-[16px] tracking-[0.08em] text-white placeholder:text-white/15 outline-none focus:border-white transition-colors duration-150"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={"\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022"}
+                className="w-full h-12 bg-transparent border border-white/20 px-4 pr-12 text-[16px] tracking-[0.08em] text-white placeholder:text-white/15 outline-none focus:border-white transition-colors duration-150"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
           {error && (
@@ -84,6 +95,16 @@ export default function LoginPage() {
             LOG IN
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-[10px] tracking-[0.1em] text-white/30 mb-3">DON&apos;T HAVE AN ACCOUNT?</p>
+          <a
+            href="#"
+            className="inline-block w-full h-11 leading-[2.75rem] border border-white/20 text-[10px] tracking-[0.2em] text-white/50 font-semibold uppercase hover:border-white hover:text-white transition-all duration-200"
+          >
+            REGISTER
+          </a>
+        </div>
 
         <p className="text-[10px] tracking-[0.1em] text-white/20 text-center mt-6">
           MATH CLUB STOCK EXCHANGE

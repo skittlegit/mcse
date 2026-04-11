@@ -288,6 +288,37 @@ export default function ExplorePage() {
               })}
             </div>
           </motion.div>
+
+          {/* PRODUCTS & TOOLS (desktop: list) */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="hidden md:block mt-8"
+          >
+            <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">PRODUCTS & TOOLS</p>
+            <div className="space-y-0">
+              {filteredProducts.map((item) => {
+                const Icon = iconMap[item.icon] || Target;
+                const route = productRoutes[item.label] || "/";
+                return (
+                  <Link
+                    key={item.label}
+                    href={route}
+                    className="w-full flex items-center justify-between py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Icon size={14} strokeWidth={1.5} className="text-[#666] group-hover:text-white transition-colors" />
+                      <span className="text-[11px] tracking-[0.1em] text-white/40 group-hover:text-white transition-colors">
+                        {item.label}
+                      </span>
+                    </div>
+                    <ChevronRight size={10} className="text-[#444]" />
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
         </div>
 
         {/* RIGHT COLUMN (desktop only) */}
@@ -360,36 +391,6 @@ export default function ExplorePage() {
                   <span className="text-[8px] tracking-[0.1em] text-white/25 shrink-0">{ev.type}</span>
                 </Link>
               ))}
-            </div>
-          </motion.div>
-
-          {/* Products & Tools */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-          >
-            <p className="text-[9px] tracking-[0.2em] text-[#666] uppercase mb-4">PRODUCTS & TOOLS</p>
-            <div className="space-y-0">
-              {filteredProducts.map((item) => {
-                const Icon = iconMap[item.icon] || Target;
-                const route = productRoutes[item.label] || "/";
-                return (
-                  <Link
-                    key={item.label}
-                    href={route}
-                    className="w-full flex items-center justify-between py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon size={14} strokeWidth={1.5} className="text-[#666] group-hover:text-white transition-colors" />
-                      <span className="text-[11px] tracking-[0.1em] text-white/40 group-hover:text-white transition-colors">
-                        {item.label}
-                      </span>
-                    </div>
-                    <ChevronRight size={10} className="text-[#444]" />
-                  </Link>
-                );
-              })}
             </div>
           </motion.div>
         </aside>

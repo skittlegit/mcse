@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronUp, ChevronDown, ArrowLeft } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
 import { allStocksEnriched } from "@/lib/mockData";
 
@@ -13,6 +14,7 @@ type SortDir = "asc" | "desc";
 const sectors = ["ALL", ...Array.from(new Set(allStocksEnriched.map((s) => s.sector)))];
 
 export default function ScreenerPage() {
+  const router = useRouter();
   const [sector, setSector] = useState("ALL");
   const [minChange, setMinChange] = useState(-10);
   const [maxChange, setMaxChange] = useState(10);
@@ -49,7 +51,10 @@ export default function ScreenerPage() {
 
   return (
     <div className="py-6">
-      <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase mb-6">SCREENER</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <button onClick={() => router.back()} className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"><ArrowLeft size={15} /></button>
+        <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">SCREENER</h1>
+      </div>
 
       {/* Mobile: Filters inline */}
       <div className="md:hidden border border-white/8 p-4 mb-6 space-y-4">

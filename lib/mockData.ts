@@ -443,6 +443,7 @@ export interface StockInfo {
   chartData: Record<string, { day: string; price: number }[]>;
   overview: { open: number; dayLow: number; dayHigh: number };
   fundamentals: StockFundamentals;
+  events?: { title: string; date: string; type: "RESULTS" | "AGM" | "DIVIDEND" | "EVENT" }[];
 }
 
 function generateChartData(basePrice: number): Record<string, { day: string; price: number }[]> {
@@ -511,12 +512,46 @@ const stockFundamentals: Record<string, StockFundamentals> = {
 };
 
 export const stockDirectory: Record<string, StockInfo> = {};
+
+const perStockEvents: Record<string, StockInfo["events"]> = {
+  MATHSOC: [
+    { title: "Q4 Results Announcement", date: "2026-07-10", type: "RESULTS" },
+    { title: "Annual General Meeting", date: "2026-08-02", type: "AGM" },
+  ],
+  ENIGMA: [
+    { title: "Q4 Results Announcement", date: "2026-07-05", type: "RESULTS" },
+    { title: "Interim Dividend — ₹12/share", date: "2026-07-20", type: "DIVIDEND" },
+    { title: "Tech Expo Showcase", date: "2026-08-15", type: "EVENT" },
+  ],
+  GASMONKEYS: [
+    { title: "Annual General Meeting", date: "2026-07-18", type: "AGM" },
+    { title: "Q4 Results Announcement", date: "2026-08-01", type: "RESULTS" },
+  ],
+  MASTERSHOT: [
+    { title: "Film Festival Premiere", date: "2026-07-12", type: "EVENT" },
+    { title: "Q4 Results Announcement", date: "2026-08-05", type: "RESULTS" },
+  ],
+  ERUDITE: [
+    { title: "Q4 Results Announcement", date: "2026-07-15", type: "RESULTS" },
+  ],
+  INSIGHT: [
+    { title: "Annual Data Summit", date: "2026-07-08", type: "EVENT" },
+    { title: "Q4 Results Announcement", date: "2026-07-22", type: "RESULTS" },
+    { title: "Final Dividend — ₹8/share", date: "2026-08-10", type: "DIVIDEND" },
+  ],
+  CELESTE: [
+    { title: "Observatory Open Night", date: "2026-07-14", type: "EVENT" },
+    { title: "Q4 Results Announcement", date: "2026-07-28", type: "RESULTS" },
+  ],
+};
+
 for (const s of allStocksRaw) {
   stockDirectory[s.ticker] = {
     ...s,
     chartData: generateChartData(s.price),
     overview: { open: s.price, dayLow: +(s.price * 0.985).toFixed(2), dayHigh: +(s.price * 1.012).toFixed(2) },
     fundamentals: stockFundamentals[s.ticker],
+    events: perStockEvents[s.ticker],
   };
 }
 
