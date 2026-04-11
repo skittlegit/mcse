@@ -14,6 +14,7 @@ import {
   volumeShockers,
   productsAndTools,
   newsItems,
+  formatRelativeTime,
   type MoverStock,
 } from "@/lib/mockData";
 
@@ -112,46 +113,6 @@ export default function ExplorePage() {
           </div>
         </motion.div>
         )}
-
-        {/* MOST TRADED */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
-          className="mb-9 md:mb-10"
-        >
-          <div className="flex items-center justify-between mb-5 md:mb-5">
-            <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase">
-              MOST TRADED
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/8">
-            {mostTraded.map((stock) => (
-              <Link
-                key={stock.ticker}
-                href={`/stock/${stock.ticker}`}
-                className="bg-[#0a0a0a] p-5 md:p-5 hover:bg-white/[0.03] transition-colors duration-150 active:bg-white/[0.06]"
-              >
-                <div className="w-10 h-10 border border-white/25 flex items-center justify-center mb-3">
-                  <span className="text-[9px] tracking-[0.1em] text-white/50">
-                    {stock.ticker.slice(0, 3)}
-                  </span>
-                </div>
-                <p className="font-[var(--font-anton)] text-[11px] tracking-[0.08em] mb-1.5 truncate">
-                  {stock.name.toUpperCase()}
-                </p>
-                <p className="font-[var(--font-anton)] text-xl md:text-2xl tracking-tight">
-                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-                </p>
-                <p className={`text-[11px] mt-1.5 font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                  {stock.dayChangePercent >= 0 ? "+" : ""}
-                  {stock.dayChangePercent.toFixed(2)}%
-                </p>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
 
         {/* TOP MOVERS TODAY */}
         <motion.div
@@ -304,12 +265,12 @@ export default function ExplorePage() {
           transition={{ duration: 0.4, delay: 0.2 }}
           className="mt-9 md:mt-10"
         >
-          <div className="flex items-center justify-between mb-5">
+          <Link href="/news" className="flex items-center justify-between mb-5 group">
             <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase">
               STOCKS IN NEWS TODAY
             </h2>
-            <ChevronRight size={16} className="text-white/30" />
-          </div>
+            <ChevronRight size={16} className="text-white/30 group-hover:text-white/60 transition-colors" />
+          </Link>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {newsItems.map((news, i) => (
               <motion.div
@@ -336,7 +297,7 @@ export default function ExplorePage() {
                   <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-2">
                     {news.headline}
                   </p>
-                  <p className="text-[9px] text-white/20">{news.time}</p>
+                  <p className="text-[9px] text-white/20">{formatRelativeTime(news.timestamp)}</p>
                 </Link>
               </motion.div>
             ))}

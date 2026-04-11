@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, Plus, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Plus, X, Eye } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
 import LoginPrompt from "@/components/LoginPrompt";
 import { useAuth } from "@/lib/AuthContext";
@@ -285,6 +285,31 @@ export default function WatchlistPage() {
         <div className="py-16 text-center">
           <p className="text-[11px] tracking-[0.15em] text-white/20 uppercase">NO RESULTS FOR &quot;{search}&quot;</p>
         </div>
+      )}
+
+      {sorted.length === 0 && search.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center justify-center py-20 md:py-28"
+        >
+          <div className="w-16 h-16 border border-white/15 flex items-center justify-center mb-6">
+            <Eye size={24} strokeWidth={1.5} className="text-white/20" />
+          </div>
+          <h2 className="font-[var(--font-anton)] text-xl md:text-2xl tracking-[0.1em] uppercase mb-2">
+            NO STOCKS WATCHED
+          </h2>
+          <p className="text-[11px] tracking-[0.1em] text-white/40 text-center max-w-xs mb-6">
+            Your watchlist is empty. Explore the market and add stocks you want to track.
+          </p>
+          <Link
+            href="/stocks"
+            className="px-8 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+          >
+            EXPLORE STOCKS
+          </Link>
+        </motion.div>
       )}
     </div>
   );

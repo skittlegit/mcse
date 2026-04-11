@@ -287,10 +287,17 @@ export const productsAndTools = [
 ];
 
 // ─── Ticker Tape Data ───────────────────────────────────
-export const tickerTapeItems = [
+const tickerTapeRaw = [
   ...holdings.map(h => ({ ticker: h.ticker, price: h.currentPrice, changePercent: h.dayChangePercent })),
   ...watchlist.map(w => ({ ticker: w.ticker, price: w.price, changePercent: w.dayChangePercent })),
 ];
+// Deduplicate by ticker — holdings take priority
+const tickerSeen = new Set<string>();
+export const tickerTapeItems = tickerTapeRaw.filter(item => {
+  if (tickerSeen.has(item.ticker)) return false;
+  tickerSeen.add(item.ticker);
+  return true;
+});
 
 // ─── User Profile ───────────────────────────────────────
 export const userProfile = {
@@ -346,7 +353,7 @@ export interface NewsItem {
   ticker: string;
   name: string;
   headline: string;
-  time: string;
+  timestamp: number;
   price: number;
   dayChange: number;
   dayChangePercent: number;
@@ -357,7 +364,7 @@ export const newsItems: NewsItem[] = [
     ticker: "MATHSOC",
     name: "Math Society",
     headline: "Math Society announces annual inter-college competition with record participation expected from 45+ colleges. Prize pool increased to \u20B950,000.",
-    time: "6 minutes ago",
+    timestamp: Date.now() - 6 * 60 * 1000,
     price: 2892.45,
     dayChange: 34.20,
     dayChangePercent: 1.20,
@@ -366,7 +373,7 @@ export const newsItems: NewsItem[] = [
     ticker: "ENIGMA",
     name: "Enigma CS",
     headline: "Enigma Computer Science clarifies recent membership surge is organic. Club confirms no pending restructuring plans for the upcoming semester.",
-    time: "7 minutes ago",
+    timestamp: Date.now() - 23 * 60 * 1000,
     price: 3987.60,
     dayChange: -22.40,
     dayChangePercent: -0.56,
@@ -375,7 +382,7 @@ export const newsItems: NewsItem[] = [
     ticker: "GASMONKEYS",
     name: "Gas Monkeys",
     headline: "Gas Monkeys secures sponsorship deal with leading automotive brand for their flagship racing event this April.",
-    time: "12 minutes ago",
+    timestamp: Date.now() - 2 * 3600 * 1000,
     price: 1578.90,
     dayChange: 18.75,
     dayChangePercent: 1.20,
@@ -384,12 +391,20 @@ export const newsItems: NewsItem[] = [
     ticker: "CELESTE",
     name: "Celeste",
     headline: "Celeste astronomy club to host public telescope viewing event. Expected to attract 500+ attendees this weekend.",
-    time: "18 minutes ago",
+    timestamp: Date.now() - 5 * 3600 * 1000,
     price: 1645.30,
     dayChange: 28.90,
     dayChangePercent: 1.79,
   },
 ];
+
+export function formatRelativeTime(ts: number): string {
+  const diff = Math.max(0, Math.floor((Date.now() - ts) / 1000));
+  if (diff < 60) return `${diff}s ago`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  return `${Math.floor(diff / 86400)}d ago`;
+}
 
 // ─── Trading Screens ────────────────────────────────────
 export interface TradingScreen {
@@ -477,7 +492,7 @@ function generateChartData(basePrice: number): Record<string, { day: string; pri
   };
 }
 
-const allStocksRaw = [
+export const allStocksRaw = [
   { ticker: "MATHSOC", name: "Math Society", price: 2892.45, changePercent: 1.20, about: "Math Society is the flagship mathematics club of the institution, dedicated to fostering mathematical thinking, competitive problem-solving, and academic excellence. Founded in 2018, it organises national-level olympiads, workshops, and inter-college quiz competitions. The society has over 500 active members and has produced multiple national math olympiad finalists." },
   { ticker: "ENIGMA", name: "Enigma Computer Science", price: 3987.60, changePercent: -0.56, about: "Enigma is the premier computer science and coding club, focused on software development, competitive programming, and emerging technologies. It hosts annual hackathons, CTF cybersecurity contests, and open-source contribution drives. Enigma alumni have gone on to roles at leading tech companies and research institutions worldwide." },
   { ticker: "GASMONKEYS", name: "Gas Monkeys", price: 1578.90, changePercent: 1.20, about: "Gas Monkeys is the automotive and mechanical engineering club, known for building custom vehicles, go-karts, and participating in national-level design challenges. The club maintains a dedicated workshop and has won multiple podium finishes at collegiate racing events. Members gain hands-on experience in fabrication, engine tuning, and aerodynamics." },
@@ -506,3 +521,21 @@ for (const s of allStocksRaw) {
     fundamentals: stockFundamentals[s.ticker],
   };
 }
+
+// Enriched flat list for screener / stocks page (merges fundamentals + sparkline)
+const holdingSparklines: Record<string, number[]> = {};
+for (const h of holdings) holdingSparklines[h.ticker] = h.sparkline;
+
+export const allStocksEnriched = allStocksRaw.map((s) => {
+  const f = stockFundamentals[s.ticker];
+  return {
+    ticker: s.ticker,
+    name: s.name,
+    price: s.price,
+    dayChangePercent: s.changePercent,
+    sector: f.sector,
+    pe: f.pe,
+    volume: parseFloat(f.volume) * 1_000_000,
+    sparkline: holdingSparklines[s.ticker] || [s.price, s.price, s.price, s.price, s.price],
+  };
+});

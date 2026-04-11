@@ -394,18 +394,23 @@ export default function HoldingsPage() {
               </div>
 
               {/* Order type tabs — now clickable */}
-              <div className="flex gap-0 px-6 pt-4">
-                {(["DELIVERY", "INTRADAY"] as const).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => setOrderType(t)}
-                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
-                      orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
-                    }`}
-                  >
-                    {t}
-                  </button>
-                ))}
+              <div className="px-6 pt-4">
+                <div className="flex gap-0 mb-1.5">
+                  {(["DELIVERY", "INTRADAY"] as const).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setOrderType(t)}
+                      className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
+                        orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[8px] tracking-[0.05em] text-white/20">
+                  {orderType === "DELIVERY" ? "Shares held in your portfolio long-term" : "Buy & sell within the same trading day"}
+                </p>
               </div>
 
               {/* Quantity */}

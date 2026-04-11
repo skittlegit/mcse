@@ -156,7 +156,7 @@ export default function LoadingScreen({ onDone }: { onDone: () => void }) {
         {/* Progress */}
         <div className="ld-progress-wrap">
           <div className="ld-progress-track">
-            <div className="ld-progress-bar" style={{ width: `${progress}%` }} />
+            <div className="ld-progress-bar ld-progress-bar-animate" />
           </div>
           <span className="ld-progress-pct">{Math.floor(progress)}%</span>
         </div>

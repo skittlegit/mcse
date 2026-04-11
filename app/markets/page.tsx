@@ -10,6 +10,7 @@ import {
   topLosers,
   mostTraded,
   newsItems,
+  formatRelativeTime,
 } from "@/lib/mockData";
 
 export default function MarketsPage() {
@@ -247,7 +248,7 @@ export default function MarketsPage() {
                 <p className="text-[11px] text-white/40 leading-relaxed line-clamp-2 mb-2">
                   {news.headline}
                 </p>
-                <p className="text-[9px] text-white/20">{news.time}</p>
+                <p className="text-[9px] text-white/20">{formatRelativeTime(news.timestamp)}</p>
               </Link>
             </motion.div>
           ))}

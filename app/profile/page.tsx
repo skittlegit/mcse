@@ -38,7 +38,7 @@ const sections = [
 
 export default function ProfilePage() {
   const { isLoggedIn, logout, role, userName, userEmail } = useAuth();
-  const { balance } = useTrading();
+  const { balance, addFunds } = useTrading();
   const router = useRouter();
 
   const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "?";
@@ -142,7 +142,15 @@ export default function ProfilePage() {
           </div>
           <div>
             <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1">BALANCE</p>
-            <p className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</p>
+            <div className="flex items-center gap-2">
+              <p className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</p>
+              <button
+                onClick={() => addFunds(10000)}
+                className="text-[8px] tracking-[0.1em] text-white/30 border border-white/15 px-2 py-0.5 hover:text-white hover:border-white transition-all"
+              >
+                + ADD
+              </button>
+            </div>
           </div>
         </div>
         <Link

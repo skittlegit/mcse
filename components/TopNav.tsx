@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Shield } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Shield, List } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
@@ -11,11 +11,12 @@ import SearchModal from "./SearchModal";
 import { useAuth } from "@/lib/AuthContext";
 
 const tabs = [
-  { href: "/", label: "EXPLORE", icon: BarChart3 },
-  { href: "/holdings", label: "HOLDINGS", icon: Briefcase },
-  { href: "/positions", label: "POSITIONS", icon: LineChart },
-  { href: "/watchlist", label: "WATCHLIST", icon: Eye },
-  { href: "/admin", label: "ADMIN", icon: Shield },
+  { href: "/", label: "EXPLORE", icon: BarChart3, subtitle: "" },
+  { href: "/stocks", label: "STOCKS", icon: List, subtitle: "" },
+  { href: "/holdings", label: "HOLDINGS", icon: Briefcase, subtitle: "long-term" },
+  { href: "/positions", label: "POSITIONS", icon: LineChart, subtitle: "intraday" },
+  { href: "/watchlist", label: "WATCHLIST", icon: Eye, subtitle: "" },
+  { href: "/admin", label: "ADMIN", icon: Shield, subtitle: "" },
 ];
 
 export default function TopNav() {
@@ -72,6 +73,7 @@ export default function TopNav() {
                 <Link
                   key={tab.label}
                   href={tab.href}
+                  title={tab.subtitle || undefined}
                   className={`relative text-[11px] tracking-[0.2em] font-light py-4 transition-all duration-200 ${
                     active ? "text-white" : "text-white/50 hover:text-white"
                   }`}
@@ -99,7 +101,7 @@ export default function TopNav() {
               className="flex items-center gap-2 h-8 px-3 border border-white/20 hover:border-white/60 transition-colors duration-200"
             >
               <Search size={14} strokeWidth={1.5} />
-              <span className="hidden sm:block text-[10px] tracking-[0.1em] text-white/30">Ctrl+K</span>
+              <span className="hidden sm:block text-[10px] tracking-[0.1em] text-white/30">Search stocks... <span className="text-white/15">Ctrl+K</span></span>
             </motion.button>
 
             {/* Notification bell */}

@@ -177,6 +177,11 @@ body {
 .ld-progress-wrap { width: 100%; display: flex; align-items: center; gap: 12px; }
 .ld-progress-track { flex: 1; height: 1px; background: rgba(255,255,255,0.08); overflow: hidden; }
 .ld-progress-bar { height: 100%; background: rgba(255,255,255,0.55); transition: width 0.1s linear; }
+.ld-progress-bar-animate { animation: ld-progress-fill 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+@keyframes ld-progress-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
 .ld-progress-pct {
   font-family: "MonumentExtended", monospace;
   font-size: 10px; letter-spacing: 0.1em;

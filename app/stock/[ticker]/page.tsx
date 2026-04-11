@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, use, useCallback } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Star, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { stockDirectory, watchlist, holdings, newsItems } from "@/lib/mockData";
+import { stockDirectory, watchlist, holdings, newsItems, formatRelativeTime } from "@/lib/mockData";
 import { useTrading } from "@/lib/TradingContext";
 import Sparkline from "@/components/Sparkline";
 
@@ -19,7 +19,7 @@ export default function StockDetailPage({
   const { ticker } = use(params);
   const router = useRouter();
   const stock = stockDirectory[ticker.toUpperCase()];
-  const { placeOrder, getOrdersForTicker, positions, balance } = useTrading();
+  const { placeOrder, getOrdersForTicker, positions, balance, addFunds } = useTrading();
   const [range, setRange] = useState<string>("1D");
   const [qty, setQty] = useState(1);
   const [buySellTab, setBuySellTab] = useState<"BUY" | "SELL">("BUY");
@@ -119,10 +119,14 @@ export default function StockDetailPage({
 
         <div className="flex items-center gap-2">
           {isHeld && (
-            <span className="text-[8px] tracking-[0.15em] text-[#00D26A] border border-[#00D26A]/30 bg-[#00D26A]/10 px-2.5 py-1">HELD</span>
+            <span className="flex items-center gap-1.5 text-[8px] tracking-[0.15em] text-[#00D26A] border border-[#00D26A]/30 bg-[#00D26A]/10 px-2.5 py-1 cursor-default" title="You hold this stock">
+              <Bookmark size={10} fill="currentColor" /> HELD
+            </span>
           )}
           {isWatched && (
-            <span className="text-[8px] tracking-[0.15em] text-white/40 border border-white/15 px-2.5 py-1">WATCHED</span>
+            <span className="flex items-center gap-1.5 text-[8px] tracking-[0.15em] text-white/40 border border-white/15 px-2.5 py-1 cursor-default" title="In your watchlist">
+              <Star size={10} fill="currentColor" /> WATCHED
+            </span>
           )}
         </div>
       </motion.div>
@@ -189,8 +193,8 @@ export default function StockDetailPage({
             ))}
           </motion.div>
 
-          {/* Your holding info (if held) */}
-          {holdingData && (
+          {/* Your holding info (if held) — uses position data for consistency */}
+          {position && (
             <motion.div
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
@@ -201,20 +205,20 @@ export default function StockDetailPage({
               <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
                 <div>
                   <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1.5">QTY</p>
-                  <p className="font-[var(--font-anton)] text-base">{holdingData.qty}</p>
+                  <p className="font-[var(--font-anton)] text-base">{position.qty}</p>
                 </div>
                 <div>
                   <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1.5">AVG PRICE</p>
-                  <p className="font-[var(--font-anton)] text-base">{"\u20B9"}{holdingData.avgPrice.toFixed(2)}</p>
+                  <p className="font-[var(--font-anton)] text-base">{"\u20B9"}{position.avgPrice.toFixed(2)}</p>
                 </div>
                 <div>
                   <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1.5">INVESTED</p>
-                  <p className="font-[var(--font-anton)] text-base">{"\u20B9"}{holdingData.investedValue.toLocaleString("en-IN")}</p>
+                  <p className="font-[var(--font-anton)] text-base">{"\u20B9"}{(position.avgPrice * position.qty).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
                 </div>
                 <div>
                   <p className="text-[9px] tracking-[0.15em] text-white/25 uppercase mb-1.5">RETURNS</p>
-                  <p className={`font-[var(--font-anton)] text-base ${holdingData.returnsPercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                    {holdingData.returnsPercent >= 0 ? "+" : ""}{holdingData.returnsPercent.toFixed(2)}%
+                  <p className={`font-[var(--font-anton)] text-base ${position.pnlPercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                    {position.pnlPercent >= 0 ? "+" : ""}{position.pnlPercent.toFixed(2)}%
                   </p>
                 </div>
               </div>
@@ -340,7 +344,7 @@ export default function StockDetailPage({
                   <div key={i} className="border border-white/8 p-4 hover:bg-white/[0.02] transition-colors">
                     <p className="text-[12px] text-white/70 leading-relaxed mb-2">{news.headline}</p>
                     <div className="flex items-center gap-3">
-                      <span className="text-[9px] tracking-[0.1em] text-white/25">{news.time}</span>
+                      <span className="text-[9px] tracking-[0.1em] text-white/25">{formatRelativeTime(news.timestamp)}</span>
                       <span className={`text-[10px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                         {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
                       </span>
@@ -417,18 +421,23 @@ export default function StockDetailPage({
             </div>
 
             {/* Order type */}
-            <div className="flex gap-0 px-6 pt-4">
-              {(["DELIVERY", "INTRADAY"] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setOrderType(t)}
-                  className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
-                    orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
+            <div className="px-6 pt-4">
+              <div className="flex gap-0 mb-1.5">
+                {(["DELIVERY", "INTRADAY"] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setOrderType(t)}
+                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
+                      orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[8px] tracking-[0.05em] text-white/20">
+                {orderType === "DELIVERY" ? "Shares held in your portfolio long-term" : "Buy & sell within the same trading day"}
+              </p>
             </div>
 
             {/* Quantity */}
@@ -464,7 +473,19 @@ export default function StockDetailPage({
 
               <div className="mt-4 flex items-center justify-between">
                 <span className="text-[10px] tracking-[0.1em] text-white/40">BALANCE</span>
-                <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
+                  <button
+                    onClick={() => {
+                      addFunds(10000);
+                      setOrderMsg({ text: "Added \u20B910,000 to your balance", success: true });
+                      setTimeout(() => setOrderMsg(null), 3000);
+                    }}
+                    className="text-[8px] tracking-[0.1em] text-white/30 border border-white/15 px-2 py-0.5 hover:text-white hover:border-white transition-all"
+                  >
+                    + ADD
+                  </button>
+                </div>
               </div>
 
               <button
@@ -496,7 +517,7 @@ export default function StockDetailPage({
                     <div key={i} className="border border-white/8 p-3 hover:bg-white/[0.02] transition-colors">
                       <p className="text-[11px] text-white/60 leading-relaxed mb-1.5 line-clamp-2">{news.headline}</p>
                       <div className="flex items-center gap-2">
-                        <span className="text-[8px] tracking-[0.1em] text-white/20">{news.time}</span>
+                        <span className="text-[8px] tracking-[0.1em] text-white/20">{formatRelativeTime(news.timestamp)}</span>
                         <span className={`text-[9px] font-medium ${news.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                           {news.dayChangePercent >= 0 ? "+" : ""}{news.dayChangePercent.toFixed(2)}%
                         </span>

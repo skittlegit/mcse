@@ -7,10 +7,18 @@ import TopNav from "./TopNav";
 import TickerTape from "./TickerTape";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("mcse-booted")) {
+      return false;
+    }
+    return true;
+  });
 
   const handleDone = useCallback(() => {
     setLoading(false);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("mcse-booted", "1");
+    }
   }, []);
 
   return (

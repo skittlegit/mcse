@@ -44,6 +44,7 @@ interface TradingState {
   transactions: Transaction[];
   balance: number;
   placeOrder: (order: Omit<Order, "id" | "status" | "timestamp" | "total">) => { success: boolean; message: string };
+  addFunds: (amount: number) => void;
   getOrdersForTicker: (ticker: string) => Order[];
   getBuyCount: (ticker?: string) => number;
   getSellCount: (ticker?: string) => number;
@@ -75,6 +76,7 @@ const TradingContext = createContext<TradingState>({
   transactions: [],
   balance: INITIAL_BALANCE,
   placeOrder: () => ({ success: false, message: "" }),
+  addFunds: () => {},
   getOrdersForTicker: () => [],
   getBuyCount: () => 0,
   getSellCount: () => 0,
@@ -116,6 +118,20 @@ export function TradingProvider({ children }: { children: ReactNode }) {
     }
     return result;
   }, [orders]);
+
+  const addFunds = useCallback((amount: number) => {
+    const newBalance = +(balance + amount).toFixed(2);
+    const txn: Transaction = {
+      id: `TXN-${Date.now()}`,
+      type: "DEPOSIT",
+      amount,
+      balance: newBalance,
+      timestamp: Date.now(),
+      description: `Added \u20B9${amount.toLocaleString("en-IN")} to account`,
+    };
+    setTransactions(prev => [txn, ...prev]);
+    setBalance(newBalance);
+  }, [balance]);
 
   const placeOrder = useCallback((orderInput: Omit<Order, "id" | "status" | "timestamp" | "total">) => {
     const total = orderInput.price * orderInput.qty;
@@ -167,7 +183,7 @@ export function TradingProvider({ children }: { children: ReactNode }) {
   }, [orders]);
 
   return (
-    <TradingContext.Provider value={{ orders, positions, transactions, balance, placeOrder, getOrdersForTicker, getBuyCount, getSellCount }}>
+    <TradingContext.Provider value={{ orders, positions, transactions, balance, placeOrder, addFunds, getOrdersForTicker, getBuyCount, getSellCount }}>
       {children}
     </TradingContext.Provider>
   );
