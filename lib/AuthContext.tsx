@@ -29,10 +29,11 @@ const AuthContext = createContext<AuthState>({
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [role, setRole] = useState<UserRole | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
+  // BYPASS: defaulted to logged-in for review — revert to useState(false) / null to restore
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [role, setRole] = useState<UserRole | null>("user");
+  const [userName, setUserName] = useState<string | null>("DEEPAK AELENI");
+  const [userEmail, setUserEmail] = useState<string | null>("aeleni@mcse.in");
 
   const login = useCallback((email: string, password: string) => {
     const match = CREDENTIALS.find(c => c.email === email && c.password === password);
