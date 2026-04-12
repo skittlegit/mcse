@@ -84,9 +84,9 @@ export default function ExplorePage() {
       {/* Marketing hero — non-logged-in users */}
       {!isLoggedIn && (
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
           className="border border-white/10 p-8 md:p-12 mb-8 md:mb-10 relative overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none" />
@@ -156,9 +156,9 @@ export default function ExplorePage() {
 
       {/* Products & Tools — full-width feature grid */}
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
         className="mb-8 md:mb-10"
       >
         <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase mb-5">
@@ -173,7 +173,7 @@ export default function ExplorePage() {
                 key={item.label}
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.03 * i, duration: 0.3 }}
+                transition={{ delay: 0.02 * i, duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
               >
                 <Link
                   href={route}
@@ -197,9 +197,9 @@ export default function ExplorePage() {
         <div className="min-w-0">
           {/* TOP MOVERS TODAY */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+            transition={{ duration: 0.3, delay: 0.05, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-9 md:mb-10"
           >
             <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase mb-5">
@@ -311,9 +311,9 @@ export default function ExplorePage() {
 
           {/* MOST TRADED (desktop, below movers) */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
+            transition={{ duration: 0.3, delay: 0.08, ease: [0.25, 0.1, 0.25, 1] }}
             className="hidden md:block mb-10"
           >
             <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase mb-5">
@@ -343,9 +343,9 @@ export default function ExplorePage() {
 
           {/* STOCKS IN NEWS TODAY (mobile, below movers) */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
             className="md:hidden mt-6 mb-8"
           >
             <Link href="/news" className="flex items-center justify-between mb-5 group">
@@ -380,9 +380,9 @@ export default function ExplorePage() {
         <aside className="hidden md:block border-l border-white/8 pl-8 min-w-0">
           {/* Latest News */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ duration: 0.3, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-8"
           >
             <Link href="/news" className="flex items-center justify-between mb-4 group">
@@ -413,9 +413,9 @@ export default function ExplorePage() {
 
           {/* Upcoming Events */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.25 }}
+            transition={{ duration: 0.3, delay: 0.12, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-8"
           >
             <Link href="/events" className="flex items-center justify-between mb-4 group">

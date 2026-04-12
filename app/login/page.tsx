@@ -36,9 +36,9 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex items-center gap-3 mb-10">
           <div className="w-11 h-11 border-2 border-white flex items-center justify-center">
-            <span className="font-monument text-sm font-extrabold tracking-tight">M</span>
+            <span className="font-[var(--font-anton)] text-sm tracking-tight">M</span>
           </div>
-          <span className="font-monument text-[13px] tracking-[0.2em] uppercase">MCSE</span>
+          <span className="font-[var(--font-anton)] text-[13px] tracking-[0.2em] uppercase">MCSE</span>
         </div>
 
         <h1 className="font-[var(--font-anton)] text-3xl tracking-[0.08em] uppercase mb-2">

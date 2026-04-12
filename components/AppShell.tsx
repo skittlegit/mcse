@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import LoadingScreen from "./LoadingScreen";
 import TopNav from "./TopNav";
 import TickerTape from "./TickerTape";
@@ -27,11 +27,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {loading && <LoadingScreen onDone={handleDone} />}
       </AnimatePresence>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: loading ? 0 : 1 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="relative flex flex-col min-h-screen"
+      <div
+        className={`relative flex flex-col min-h-screen transition-opacity duration-700 ease-out ${loading ? "opacity-0" : "opacity-100"}`}
       >
         {/* Grain overlay */}
         <div
@@ -66,7 +63,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <main className="flex-1 relative z-10 max-w-[1280px] mx-auto w-full px-4 md:px-12 pb-20 md:pb-0">
           {children}
         </main>
-      </motion.div>
+      </div>
     </>
   );
 }

@@ -115,9 +115,9 @@ export default function StockDetailPage({
 
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         className="flex items-center justify-between py-4 border-b border-white/8"
       >
         <div className="flex items-center gap-4">
@@ -166,9 +166,9 @@ export default function StockDetailPage({
         <div className="min-w-0 md:pr-6">
           {/* Price */}
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.3 }}
+            transition={{ delay: 0.04, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-7 md:mb-8"
           >
             <p className="font-[var(--font-anton)] text-3xl md:text-4xl tracking-tight mb-1.5">
@@ -188,9 +188,9 @@ export default function StockDetailPage({
 
           {/* Chart */}
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.3 }}
+            transition={{ delay: 0.06, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-5 md:mb-6 border border-white/8 p-4 md:p-6"
           >
             <Sparkline data={chartValues} width={600} height={180} strokeWidth={1.5} positive={stock.changePercent >= 0} />
@@ -203,9 +203,9 @@ export default function StockDetailPage({
 
           {/* Time range selector */}
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.3 }}
+            transition={{ delay: 0.08, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
             className="flex items-center gap-0 mb-7 md:mb-8 overflow-x-auto scrollbar-hide"
           >
             {timeRanges.map((r) => (
@@ -226,9 +226,9 @@ export default function StockDetailPage({
           {/* Your holding info (if held) — uses position data for consistency */}
           {position && (
             <motion.div
-              initial={{ opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.3 }}
+              transition={{ delay: 0.1, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               className="mb-7 md:mb-8 border border-white/10 p-5"
             >
               <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-4">YOUR HOLDING</p>
@@ -257,9 +257,9 @@ export default function StockDetailPage({
 
           {/* Overview */}
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
+            transition={{ delay: 0.1, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">OVERVIEW</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-[1px] bg-white/8">
@@ -281,9 +281,9 @@ export default function StockDetailPage({
           {/* About the Company */}
           {stock.about && (
             <motion.div
-              initial={{ opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.32, duration: 0.3 }}
+              transition={{ delay: 0.12, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
               className="mt-7 md:mt-8"
             >
               <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">ABOUT {stock.ticker}</h3>
@@ -299,9 +299,9 @@ export default function StockDetailPage({
 
           {/* 52-Week Range */}
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.3 }}
+            transition={{ delay: 0.14, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
             className="mt-7 md:mt-8"
           >
             <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">52 WEEK RANGE</h3>
@@ -331,9 +331,9 @@ export default function StockDetailPage({
 
           {/* Fundamentals */}
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.3 }}
+            transition={{ delay: 0.16, duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
             className="mt-7 md:mt-8"
           >
             <h3 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">FUNDAMENTALS</h3>
@@ -360,7 +360,7 @@ export default function StockDetailPage({
 
         {/* Right column (desktop): Sticky order panel + order book + news + orders */}
         <aside className="hidden md:block border-l border-white/8 pl-6">
-          <div className="sticky top-20 space-y-6">
+          <div className="sticky top-[6rem] space-y-6">
             <div>
             <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
 
@@ -641,7 +641,7 @@ export default function StockDetailPage({
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 300 }}
+              transition={{ type: "tween", duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
               className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-bg border-t border-white/12 max-h-[85vh] overflow-hidden flex flex-col"
               style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
             >

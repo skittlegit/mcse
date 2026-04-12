@@ -36,7 +36,7 @@ export default function OrderConfirmModal({
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            transition={{ type: "tween", duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[80] w-[min(400px,90vw)] bg-bg border border-white/15"
           >
             {/* Header */}

@@ -10,7 +10,7 @@ export default function TickerTape() {
       <div className="flex items-center h-full animate-ticker whitespace-nowrap">
         {items.map((item, i) => (
           <div key={`${item.ticker}-${i}`} className="flex items-center gap-2 px-3 md:px-6">
-            <span className="text-[10px] font-monument tracking-[0.1em] text-white/60">
+            <span className="text-[10px] font-[var(--font-anton)] tracking-[0.1em] text-white/60">
               {item.ticker}
             </span>
             <span className="text-[10px] text-white/80">

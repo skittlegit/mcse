@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, LayoutDashboard, Calendar, ClipboardCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -91,14 +92,19 @@ export default function TopNav() {
   return (
     <>
       {/* Desktop + Mobile Top Nav */}
-      <nav className="bg-bg/95 backdrop-blur-md border-b border-white/10">
+      <nav className="relative z-10 bg-bg/95 backdrop-blur-md border-b border-white/10">
         <div className="max-w-[1280px] mx-auto flex items-center justify-between h-14 px-4 md:px-12">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="w-8 h-8 border border-white/80 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-200">
-              <span className="font-monument text-[10px] font-extrabold tracking-tight">M</span>
-            </div>
-            <span className="font-monument text-[11px] tracking-[0.18em] uppercase hidden sm:block">
+            <Image
+              src="/Layer 11.png"
+              alt="MCSE"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain logo-img"
+              priority
+            />
+            <span className="font-[var(--font-anton)] text-[13px] tracking-[0.18em] uppercase hidden sm:block">
               MCSE
             </span>
           </Link>
@@ -131,8 +137,7 @@ export default function TopNav() {
           {/* Right: Actions */}
           <div className="flex items-center gap-3">
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSearchOpen(true)}
               className="flex items-center gap-2 h-8 px-3 border border-white/20 hover:border-white/60 transition-colors duration-200"
             >
@@ -144,8 +149,7 @@ export default function TopNav() {
 
             <div className="relative">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => { setNotifOpen(!notifOpen); setProfileOpen(false); }}
                 className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white/60 transition-colors duration-200 relative"
               >
@@ -161,10 +165,9 @@ export default function TopNav() {
               {isLoggedIn ? (
                 <>
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => { setProfileOpen(!profileOpen); setNotifOpen(false); }}
-                    className="w-8 h-8 border border-white flex items-center justify-center text-[10px] font-monument tracking-wider hover:bg-white hover:text-black transition-all duration-200"
+                    className="w-8 h-8 border border-white flex items-center justify-center text-[10px] font-[var(--font-anton)] tracking-wider hover:bg-white hover:text-black transition-all duration-200"
                   >
                     {initials}
                   </motion.button>

@@ -87,7 +87,7 @@ function EnigmaDashboard() {
       >
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 md:w-16 md:h-16 border-2 border-white flex items-center justify-center">
-            <span className="font-monument text-lg md:text-xl font-extrabold tracking-wider">E</span>
+            <span className="font-[var(--font-anton)] text-lg md:text-xl tracking-wider">E</span>
           </div>
           <div>
             <h1 className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-[0.08em] uppercase">ENIGMA</h1>

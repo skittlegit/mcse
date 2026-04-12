@@ -134,10 +134,10 @@
 
 /* Page entrance animation */
 @keyframes page-enter {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
-main > * { animation: page-enter 0.3s ease-out both; }
+main > * { animation: page-enter 0.25s cubic-bezier(0.25, 0.1, 0.25, 1) both; }
 
 * { border-radius: 0 !important; }
 
@@ -151,20 +151,8 @@ body {
   font-family: var(--font-inter), sans-serif;
 }
 
-/* Fonts */
-@font-face {
-  font-family: "MonumentExtended";
-  src: url("/fonts/MonumentExtended-Regular.otf") format("opentype");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "MonumentExtended";
-  src: url("/fonts/MonumentExtended-Ultrabold.otf") format("opentype");
-  font-weight: 800;
-  font-display: swap;
-}
-.font-monument { font-family: "MonumentExtended", sans-serif; }
+/* Logo light mode */
+[data-theme="light"] .logo-img { filter: invert(1); }
 
 /* Hide scrollbar */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
