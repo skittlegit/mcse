@@ -16,8 +16,8 @@ export default function AdminNewsPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const isTotalAdmin = role === "totalAdmin";
-  const isCompanyAdmin = role === "companyAdmin";
+  const isTotalAdmin = role === "admin";
+  const isCompanyAdmin = role === "company";
 
   // Company admin sees their news; total admin sees all
   const visibleNews = companyNews;

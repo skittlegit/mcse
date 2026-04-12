@@ -249,6 +249,38 @@ export default function ExplorePage() {
             </div>
           </motion.div>
 
+          {/* MOST TRADED (desktop, below movers) */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="hidden md:block mb-10"
+          >
+            <h2 className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.1em] uppercase mb-5">
+              MOST TRADED
+            </h2>
+            <div className="space-y-0">
+              {mostTraded.map((s) => (
+                <Link
+                  key={s.ticker}
+                  href={`/stock/${s.ticker}`}
+                  className="flex items-center justify-between py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors group"
+                >
+                  <div>
+                    <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em]">{s.ticker}</p>
+                    <p className="text-[9px] text-white/30">{s.name}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-[var(--font-anton)] text-[12px]">{"\u20B9"}{s.price.toLocaleString("en-IN")}</p>
+                    <p className={`text-[10px] font-medium ${s.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                      {s.dayChangePercent >= 0 ? "+" : ""}{s.dayChangePercent.toFixed(2)}%
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+
           {/* STOCKS IN NEWS TODAY (mobile, below movers) */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -352,38 +384,6 @@ export default function ExplorePage() {
                     <p className="text-[9px] text-white/25">{ev.ticker}</p>
                   </div>
                   <span className="text-[8px] tracking-[0.1em] text-white/25 shrink-0">{ev.type}</span>
-                </Link>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Most Traded */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="mb-8"
-          >
-            <h3 className="font-[var(--font-anton)] text-sm tracking-[0.12em] uppercase text-white/50 mb-4">
-              MOST TRADED
-            </h3>
-            <div className="space-y-0">
-              {mostTraded.map((s) => (
-                <Link
-                  key={s.ticker}
-                  href={`/stock/${s.ticker}`}
-                  className="flex items-center justify-between py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors group"
-                >
-                  <div>
-                    <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em]">{s.ticker}</p>
-                    <p className="text-[9px] text-white/30">{s.name}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-[var(--font-anton)] text-[12px]">{"\u20B9"}{s.price.toLocaleString("en-IN")}</p>
-                    <p className={`text-[10px] font-medium ${s.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
-                      {s.dayChangePercent >= 0 ? "+" : ""}{s.dayChangePercent.toFixed(2)}%
-                    </p>
-                  </div>
                 </Link>
               ))}
             </div>

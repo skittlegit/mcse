@@ -275,6 +275,13 @@ export const volumeShockers: MoverStock[] = [
   { ticker: "INSIGHT", name: "Insight", price: 468.55, dayChangePercent: 1.18, volume: "8.5M", sparkline: [460, 462, 464, 465, 467, 468, 468] },
 ];
 
+// ─── Market Breadth ─────────────────────────────────────
+export const marketBreadth = {
+  advances: 1247,
+  declines: 892,
+  unchanged: 61,
+};
+
 // ─── Products & Tools ───────────────────────────────────
 export const productsAndTools = [
   { label: "IPO", icon: "target", description: "Apply to upcoming initial public offerings" },

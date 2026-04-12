@@ -19,7 +19,7 @@ export default function LoginPage() {
     setError("");
     const role = login(email, password);
     if (role) {
-      router.push(role === "companyAdmin" || role === "totalAdmin" ? "/admin" : "/");
+      router.push(role === "company" || role === "admin" ? "/admin" : "/");
     } else {
       setError("Invalid email or password");
     }
@@ -99,7 +99,9 @@ export default function LoginPage() {
         <div className="mt-6 text-center">
           <p className="text-[10px] tracking-[0.1em] text-white/30 mb-3">DON&apos;T HAVE AN ACCOUNT?</p>
           <a
-            href="#"
+            href="https://www.mu-aeon.com/events?event=mcse"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block w-full h-11 leading-[2.75rem] border border-white/20 text-[10px] tracking-[0.2em] text-white/50 font-semibold uppercase hover:border-white hover:text-white transition-all duration-200"
           >
             REGISTER

@@ -96,6 +96,26 @@
 [data-theme="light"] .active\:bg-\[\#00D26A\]\/80:active { color: #000000 !important; }
 [data-theme="light"] .divide-white\/6 > * + * { border-color: rgba(0,0,0,0.08); }
 
+/* Light theme — missing utility overrides */
+[data-theme="light"] .text-white\/15 { color: rgba(17,17,17,0.15); }
+[data-theme="light"] .text-\[\#666\] { color: rgba(17,17,17,0.45); }
+[data-theme="light"] .bg-bg\/95 { background-color: rgba(245,245,245,0.95) !important; }
+[data-theme="light"] .group:hover .group-hover\:text-white\/60 { color: rgba(17,17,17,0.60); }
+[data-theme="light"] .placeholder\:text-white\/15::placeholder { color: rgba(17,17,17,0.15); }
+[data-theme="light"] .hover\:text-white\/80:hover { color: rgba(17,17,17,0.80) !important; }
+[data-theme="light"] .hover\:text-white\/70:hover { color: rgba(17,17,17,0.70) !important; }
+[data-theme="light"] .hover\:text-white\/60:hover { color: rgba(17,17,17,0.60) !important; }
+[data-theme="light"] .bg-bg { background-color: var(--color-bg) !important; }
+[data-theme="light"] .hover\:bg-white\/\[0\.02\]:hover { background-color: rgba(0,0,0,0.03) !important; }
+[data-theme="light"] .text-white\/70 { color: rgba(17,17,17,0.70); }
+[data-theme="light"] .focus\:border-white\/30:focus { border-color: rgba(0,0,0,0.20) !important; }
+
+/* Light theme — overlay adjustments */
+[data-theme="light"] .grain-overlay { opacity: 0.03 !important; mix-blend-mode: multiply !important; }
+[data-theme="light"] .circuit-overlay { opacity: 0.015 !important; }
+[data-theme="light"] .circuit-overlay svg path { stroke: #000 !important; }
+[data-theme="light"] .circuit-overlay svg circle { stroke: #000 !important; fill: #000 !important; }
+
 /* Page entrance animation */
 @keyframes page-enter {
   from { opacity: 0; transform: translateY(6px); }

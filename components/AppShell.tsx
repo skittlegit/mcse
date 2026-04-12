@@ -35,7 +35,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       >
         {/* Grain overlay */}
         <div
-          className="fixed inset-0 z-0 pointer-events-none opacity-[0.06]"
+          className="grain-overlay fixed inset-0 z-0 pointer-events-none opacity-[0.06]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")`,
             mixBlendMode: "overlay",
@@ -43,7 +43,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         />
 
         {/* Abstract geometric accent */}
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-[0.03]">
+        <div className="circuit-overlay fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-[0.03]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="circuit" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">

@@ -54,7 +54,7 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
               </p>
               {role && role !== "user" && (
                 <span className="text-[7px] tracking-[0.1em] px-1.5 py-0.5 border border-white/20 text-white/50 uppercase shrink-0">
-                  {role === "companyAdmin" ? "CO. ADMIN" : "ADMIN"}
+                  {role === "company" ? "CO. ADMIN" : "ADMIN"}
                 </span>
               )}
             </div>
@@ -72,7 +72,7 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
       </div>
 
       {/* Admin dashboard link */}
-      {(role === "companyAdmin" || role === "totalAdmin") && (
+      {(role === "company" || role === "admin") && (
         <Link
           href="/admin"
           onClick={onClose}
@@ -80,7 +80,7 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
         >
           <Shield size={12} className="text-white/40" />
           <span className="text-[11px] tracking-[0.1em] text-white/50">
-            {role === "totalAdmin" ? "ADMIN DASHBOARD" : "COMPANY DASHBOARD"}
+            {role === "admin" ? "ADMIN DASHBOARD" : "COMPANY DASHBOARD"}
           </span>
           <ChevronRight size={12} className="text-white/20 ml-auto" />
         </Link>

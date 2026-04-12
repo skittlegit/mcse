@@ -66,8 +66,8 @@ export default function TopNav() {
 
   const initials = userName ? userName.split(" ").map(w => w[0]).join("").slice(0, 2) : "M";
 
-  const desktopTabs = role === "companyAdmin" ? companyAdminDesktopTabs : role === "totalAdmin" ? totalAdminDesktopTabs : userDesktopTabs;
-  const mobileTabs = role === "companyAdmin" ? companyAdminMobileTabs : role === "totalAdmin" ? totalAdminMobileTabs : userMobileTabs;
+  const desktopTabs = role === "company" ? companyAdminDesktopTabs : role === "admin" ? totalAdminDesktopTabs : userDesktopTabs;
+  const mobileTabs = role === "company" ? companyAdminMobileTabs : role === "admin" ? totalAdminMobileTabs : userMobileTabs;
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

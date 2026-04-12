@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, Mail, Phone, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MessageSquare, ChevronDown, ChevronUp, Send, CheckCircle } from "lucide-react";
 
 const faqs = [
   { q: "How do I place a buy/sell order?", a: "Navigate to any stock page and use the BUY or SELL buttons. On desktop, the order panel is on the right sidebar. On mobile, use the bottom action bar." },
@@ -15,6 +15,10 @@ const faqs = [
 
 export default function SupportPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [ticketOpen, setTicketOpen] = useState(false);
+  const [ticketSubject, setTicketSubject] = useState("");
+  const [ticketMessage, setTicketMessage] = useState("");
+  const [ticketSent, setTicketSent] = useState(false);
 
   return (
     <div className="pb-24 md:pb-12 px-5 md:px-8 py-6 md:py-8 max-w-2xl mx-auto">
@@ -118,9 +122,76 @@ export default function SupportPage() {
         <p className="text-[11px] text-white/40 mb-4">
           If your question isn&apos;t answered above, raise a support ticket and our team will get back to you within 24 hours.
         </p>
-        <button className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150">
-          RAISE A TICKET
-        </button>
+
+        <AnimatePresence mode="wait">
+          {ticketSent ? (
+            <motion.div
+              key="sent"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center gap-3 py-3"
+            >
+              <CheckCircle size={16} className="text-[#00D26A]" />
+              <p className="text-[11px] text-white/60">Ticket submitted. We&apos;ll respond within 24 hours.</p>
+            </motion.div>
+          ) : ticketOpen ? (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="space-y-3"
+            >
+              <input
+                type="text"
+                placeholder="Subject"
+                value={ticketSubject}
+                onChange={(e) => setTicketSubject(e.target.value)}
+                className="w-full bg-white/[0.04] border border-white/10 px-4 py-3 text-[12px] placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors"
+              />
+              <textarea
+                placeholder="Describe your issue..."
+                value={ticketMessage}
+                onChange={(e) => setTicketMessage(e.target.value)}
+                rows={4}
+                className="w-full bg-white/[0.04] border border-white/10 px-4 py-3 text-[12px] placeholder:text-white/20 focus:outline-none focus:border-white/30 transition-colors resize-none"
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    if (ticketSubject.trim() && ticketMessage.trim()) {
+                      setTicketSent(true);
+                      setTicketOpen(false);
+                    }
+                  }}
+                  disabled={!ticketSubject.trim() || !ticketMessage.trim()}
+                  className="flex items-center gap-2 px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150 disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <Send size={12} />
+                  SUBMIT TICKET
+                </button>
+                <button
+                  onClick={() => { setTicketOpen(false); setTicketSubject(""); setTicketMessage(""); }}
+                  className="px-6 py-3 text-[10px] tracking-[0.15em] text-white/40 hover:text-white/70 transition-colors"
+                >
+                  CANCEL
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.button
+              key="cta"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setTicketOpen(true)}
+              className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+            >
+              RAISE A TICKET
+            </motion.button>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );

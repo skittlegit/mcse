@@ -401,7 +401,7 @@ function TotalAdminDashboard() {
                 <p className="text-[9px] text-white/40">{user.trades} trades</p>
                 {user.role !== "user" && (
                   <span className="text-[7px] tracking-[0.1em] text-white/25 border border-white/15 px-1 py-0.5">
-                    {user.role === "companyAdmin" ? "CO." : "ADM"}
+                    {user.role === "company" ? "CO." : "ADM"}
                   </span>
                 )}
               </div>
@@ -612,7 +612,7 @@ export default function AdminPage() {
   return (
     <div className="pb-24 md:pb-12 py-6 md:py-8">
       {/* Header (totalAdmin only — companyAdmin has its own header) */}
-      {role === "totalAdmin" && (
+      {role === "admin" && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -627,7 +627,7 @@ export default function AdminPage() {
         </motion.div>
       )}
 
-      {role === "companyAdmin" ? <EnigmaDashboard /> : <TotalAdminDashboard />}
+      {role === "company" ? <EnigmaDashboard /> : <TotalAdminDashboard />}
     </div>
   );
 }

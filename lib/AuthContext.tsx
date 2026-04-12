@@ -2,12 +2,12 @@
 
 import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 
-export type UserRole = "user" | "companyAdmin" | "totalAdmin";
+export type UserRole = "user" | "company" | "admin";
 
 const CREDENTIALS: { email: string; password: string; role: UserRole; name: string }[] = [
   { email: "aeleni@mcse.in", password: "Mcse@25", role: "user", name: "DEEPAK AELENI" },
-  { email: "companyadmin@mcse.in", password: "CompAdmin@25", role: "companyAdmin", name: "ENIGMA ADMIN" },
-  { email: "totaladmin@mcse.in", password: "TotalAdmin@25", role: "totalAdmin", name: "TOTAL ADMIN" },
+  { email: "enigma@mcse.in", password: "Enigma@25", role: "company", name: "ENIGMA ADMIN" },
+  { email: "admin@mcse.in", password: "Admin@25", role: "admin", name: "TOTAL ADMIN" },
 ];
 
 interface AuthState {

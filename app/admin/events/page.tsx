@@ -16,7 +16,7 @@ export default function AdminEventsPage() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
 
-  const isCompanyAdmin = role === "companyAdmin";
+  const isCompanyAdmin = role === "company";
 
   // Sort by date ascending
   const sortedEvents = [...companyEvents].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
