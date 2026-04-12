@@ -39,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased overflow-x-hidden`} suppressHydrationWarning>
-      <body className="min-h-full bg-bg text-white overflow-x-hidden">
+    <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased`} suppressHydrationWarning>
+      <body className="min-h-full bg-bg text-white" style={{ overflowX: 'clip' }}>
         <PreferencesProvider>
           <AuthProvider>
             <TradingProvider>

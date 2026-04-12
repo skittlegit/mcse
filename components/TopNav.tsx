@@ -110,25 +110,20 @@ export default function TopNav() {
           </Link>
 
           {/* Center: Desktop Tabs */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-1">
             {desktopTabs.map((tab) => {
               const active = isActive(tab.href);
               return (
                 <Link
                   key={tab.label}
                   href={tab.href}
-                  className={`relative text-[11px] tracking-[0.2em] font-light py-4 transition-all duration-200 ${
-                    active ? "text-white" : "text-white/50 hover:text-white"
+                  className={`text-[10px] tracking-[0.15em] font-medium px-4 py-1.5 border transition-all duration-200 ${
+                    active
+                      ? "bg-white text-black border-white"
+                      : "bg-transparent text-white/40 border-white/10 hover:text-white hover:border-white/30"
                   }`}
                 >
                   {tab.label}
-                  {active && (
-                    <motion.span
-                      layoutId="nav-underline"
-                      className="absolute bottom-0 left-0 right-0 h-[1px] bg-white"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
                 </Link>
               );
             })}

@@ -89,7 +89,7 @@ export default function ExplorePage() {
           transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
           className="border border-white/10 p-8 md:p-12 mb-8 md:mb-10 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] to-transparent pointer-events-none" />
           <div className="relative z-10">
             <p className="text-[9px] tracking-[0.3em] text-white/30 mb-3">MATH CLUB STOCK EXCHANGE</p>
             <h1 className="font-[var(--font-anton)] text-3xl md:text-5xl tracking-[0.04em] uppercase leading-[1.1] mb-4">

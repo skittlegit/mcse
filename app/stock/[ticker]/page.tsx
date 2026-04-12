@@ -365,19 +365,19 @@ export default function StockDetailPage({
             <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
 
             {/* BUY / SELL tabs */}
-            <div className="flex border-b border-white/8">
+            <div className="flex gap-1">
               <button
                 onClick={() => setBuySellTab("BUY")}
-                className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
-                  buySellTab === "BUY" ? "bg-[#00D26A]/10 text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/40 hover:text-white"
+                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
+                  buySellTab === "BUY" ? "bg-[#00D26A] text-black border-[#00D26A]" : "bg-transparent text-white/40 border-white/10 hover:text-white"
                 }`}
               >
                 BUY
               </button>
               <button
                 onClick={() => setBuySellTab("SELL")}
-                className={`flex-1 py-3 text-[10px] tracking-[0.15em] font-semibold transition-all ${
-                  buySellTab === "SELL" ? "bg-[#FF5252]/10 text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/40 hover:text-white"
+                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
+                  buySellTab === "SELL" ? "bg-[#FF5252] text-white border-[#FF5252]" : "bg-transparent text-white/40 border-white/10 hover:text-white"
                 }`}
               >
                 SELL
@@ -657,19 +657,18 @@ export default function StockDetailPage({
               </div>
 
               {/* Tab bar */}
-              <div className="flex border-b border-white/8 shrink-0">
+              <div className="flex gap-1 p-2 border-b border-white/8 shrink-0">
                 {(["ORDER", "BOOK", "HISTORY"] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setMobileTab(tab)}
-                    className={`flex-1 py-2.5 text-[9px] tracking-[0.15em] font-semibold transition-all relative ${
-                      mobileTab === tab ? "text-white" : "text-white/30"
+                    className={`flex-1 py-2 text-[9px] tracking-[0.15em] font-semibold transition-all border ${
+                      mobileTab === tab
+                        ? "bg-white text-black border-white"
+                        : "bg-transparent text-white/30 border-white/10"
                     }`}
                   >
                     {tab === "BOOK" ? "ORDER BOOK" : tab}
-                    {mobileTab === tab && (
-                      <motion.span layoutId="mobile-tab-underline" className="absolute bottom-0 left-0 right-0 h-[1px] bg-white" />
-                    )}
                   </button>
                 ))}
               </div>
@@ -679,17 +678,17 @@ export default function StockDetailPage({
                 {mobileTab === "ORDER" && (
                   <div className="px-5 py-5 space-y-5">
                     {/* Buy/Sell toggle */}
-                    <div className="flex border border-white/8">
+                    <div className="flex gap-1">
                       <button
                         onClick={() => setBuySellTab("BUY")}
-                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold transition-all ${
-                          buySellTab === "BUY" ? "bg-[#00D26A]/10 text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/40"
+                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
+                          buySellTab === "BUY" ? "bg-[#00D26A] text-black border-[#00D26A]" : "bg-transparent text-white/40 border-white/10"
                         }`}
                       >BUY</button>
                       <button
                         onClick={() => setBuySellTab("SELL")}
-                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold transition-all ${
-                          buySellTab === "SELL" ? "bg-[#FF5252]/10 text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/40"
+                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
+                          buySellTab === "SELL" ? "bg-[#FF5252] text-white border-[#FF5252]" : "bg-transparent text-white/40 border-white/10"
                         }`}
                       >SELL</button>
                     </div>

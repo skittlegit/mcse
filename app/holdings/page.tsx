@@ -13,21 +13,8 @@ import OrderConfirmModal from "@/components/OrderConfirmModal";
 import {
   holdings,
   investments,
-  portfolioAnalysis,
   stockDirectory,
 } from "@/lib/mockData";
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
 
 type SortKey = "ticker" | "currentPrice" | "dayChangePercent" | "returnsPercent" | "currentValue";
 type SortDir = "asc" | "desc";
@@ -39,7 +26,7 @@ export default function HoldingsPage() {
   const [showValues, setShowValues] = useState(true);
   const [sortKey, setSortKey] = useState<SortKey>("currentValue");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [analyseOpen, setAnalyseOpen] = useState(false);
+
   const [sortOpen, setSortOpen] = useState(false);
   const [mobileDisplay, setMobileDisplay] = useState<"market" | "current" | "returns" | "dayChange">("market");
   const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
@@ -127,16 +114,9 @@ export default function HoldingsPage() {
         >
           {showValues ? <Eye size={13} /> : <EyeOff size={13} />}
         </button>
-        <button
-          onClick={() => setAnalyseOpen(true)}
-          className="ml-auto hidden md:flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
-        >
-          <BarChart3 size={13} />
-          ANALYSE
-        </button>
         <Link
           href="/analyse"
-          className="ml-auto flex md:hidden items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
+          className="ml-auto flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
         >
           <BarChart3 size={13} />
           ANALYSE
@@ -426,16 +406,16 @@ export default function HoldingsPage() {
               )}
 
               {/* BUY / SELL tabs */}
-              <div className="flex border-b border-white/10 mb-4">
+              <div className="flex gap-1 mb-4">
                 <button
                   onClick={() => setBuySellTab("BUY")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium transition-colors ${buySellTab === "BUY" ? "text-[#00D26A] border-b-2 border-[#00D26A]" : "text-white/30 hover:text-white/50"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border transition-all ${buySellTab === "BUY" ? "bg-[#00D26A] text-black border-[#00D26A]" : "bg-transparent text-white/30 border-white/10 hover:text-white/50"}`}
                 >
                   BUY
                 </button>
                 <button
                   onClick={() => setBuySellTab("SELL")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium transition-colors ${buySellTab === "SELL" ? "text-[#FF5252] border-b-2 border-[#FF5252]" : "text-white/30 hover:text-white/50"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border transition-all ${buySellTab === "SELL" ? "bg-[#FF5252] text-white border-[#FF5252]" : "bg-transparent text-white/30 border-white/10 hover:text-white/50"}`}
                 >
                   SELL
                 </button>
@@ -573,152 +553,7 @@ export default function HoldingsPage() {
         </aside>
       </div>
 
-      {/* Analyse Modal */}
-      <AnimatePresence>
-        {analyseOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/70 z-50"
-              onClick={() => setAnalyseOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 30, scale: 0.96 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-0 md:inset-4 md:top-auto md:bottom-auto md:left-1/2 md:-translate-x-1/2 md:my-[3vh] md:w-[700px] md:max-h-[94vh] bg-bg border border-white/15 z-50 overflow-y-auto"
-            >
-              <div className="flex items-center justify-between p-5 border-b border-white/10">
-                <h3 className="font-[var(--font-anton)] text-lg tracking-[0.1em]">PORTFOLIO ANALYSIS</h3>
-                <button onClick={() => setAnalyseOpen(false)} className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors">
-                  <X size={14} />
-                </button>
-              </div>
 
-              <div className="p-5 md:p-6">
-                {/* Stats grid */}
-                <div className="grid grid-cols-3 gap-[1px] bg-white/8 mb-6">
-                  <div className="bg-bg p-4">
-                    <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">XIRR</p>
-                    <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">+{portfolioAnalysis.xirr}%</p>
-                  </div>
-                  <div className="bg-bg p-4">
-                    <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">{portfolioAnalysis.benchmarkName}</p>
-                    <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">+{portfolioAnalysis.benchmarkReturn}%</p>
-                  </div>
-                  <div className="bg-bg p-4">
-                    <p className="text-[9px] tracking-[0.15em] text-white/25 mb-1">ALPHA</p>
-                    <p className="font-[var(--font-anton)] text-xl text-[#00D26A]">+{portfolioAnalysis.outperformance}%</p>
-                  </div>
-                </div>
-
-                {/* Chart */}
-                <div className="h-64 md:h-72">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={portfolioAnalysis.performanceChart} margin={{ top: 5, right: 5, bottom: 0, left: -20 }}>
-                      <defs>
-                        <linearGradient id="portfolioGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#ffffff" stopOpacity={0.15} />
-                          <stop offset="100%" stopColor="#ffffff" stopOpacity={0} />
-                        </linearGradient>
-                        <linearGradient id="benchGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#666666" stopOpacity={0.1} />
-                          <stop offset="100%" stopColor="#666666" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid stroke="rgba(255,255,255,0.05)" strokeDasharray="3 3" />
-                      <XAxis dataKey="month" tick={{ fontSize: 9, fill: "rgba(255,255,255,0.3)" }} axisLine={false} tickLine={false} />
-                      <YAxis tick={{ fontSize: 9, fill: "rgba(255,255,255,0.2)" }} axisLine={false} tickLine={false} tickFormatter={(v: number) => `${(v / 1000).toFixed(0)}k`} />
-                      <Tooltip
-                        contentStyle={{ background: "#111", border: "1px solid rgba(255,255,255,0.15)", fontSize: 11, color: "#fff" }}
-                        formatter={(value) => [`\u20B9${Number(value).toLocaleString("en-IN")}`, ""]}
-                        labelStyle={{ color: "rgba(255,255,255,0.5)", fontSize: 10, marginBottom: 4 }}
-                      />
-                      <Area type="monotone" dataKey="portfolio" stroke="#fff" strokeWidth={1.5} fill="url(#portfolioGrad)" name="Portfolio" />
-                      <Area type="monotone" dataKey="benchmark" stroke="#555" strokeWidth={1} fill="url(#benchGrad)" name={portfolioAnalysis.benchmarkName} strokeDasharray="4 2" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="flex items-center gap-6 mt-4 justify-center">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-[2px] bg-white" />
-                    <span className="text-[9px] tracking-[0.1em] text-white/40">PORTFOLIO</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-[2px] bg-white/30" style={{ borderTop: "1px dashed" }} />
-                    <span className="text-[9px] tracking-[0.1em] text-white/40">{portfolioAnalysis.benchmarkName}</span>
-                  </div>
-                </div>
-
-                {/* Sector Allocation */}
-                <div className="mt-8">
-                  <h4 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">SECTOR ALLOCATION</h4>
-                  <div className="flex flex-col md:flex-row items-center gap-4">
-                    <div className="w-48 h-48">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={portfolioAnalysis.sectorAllocation}
-                            dataKey="value"
-                            nameKey="sector"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={70}
-                            innerRadius={35}
-                            strokeWidth={1}
-                            stroke="#0a0a0a"
-                          >
-                            {portfolioAnalysis.sectorAllocation.map((_: { sector: string; value: number }, idx: number) => (
-                              <Cell key={idx} fill={["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][idx % 6]} />
-                            ))}
-                          </Pie>
-                          <Tooltip
-                            contentStyle={{ background: "#111", border: "1px solid rgba(255,255,255,0.15)", fontSize: 11, color: "#fff" }}
-                            formatter={(value) => [`${value}%`, ""]}
-                          />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      {portfolioAnalysis.sectorAllocation.map((s: { sector: string; value: number }, i: number) => (
-                        <div key={s.sector} className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="w-2.5 h-2.5" style={{ backgroundColor: ["#fff", "#888", "#555", "#aaa", "#666", "#ccc"][i % 6] }} />
-                            <span className="text-[10px] text-white/50">{s.sector}</span>
-                          </div>
-                          <span className="text-[11px] font-[var(--font-anton)]">{s.value}%</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Market Cap Allocation */}
-                <div className="mt-8">
-                  <h4 className="font-[var(--font-anton)] text-sm tracking-[0.1em] uppercase mb-4">MARKET CAP ALLOCATION</h4>
-                  <div className="space-y-3">
-                    {portfolioAnalysis.marketCapAllocation.map((m: { cap: string; value: number }) => (
-                      <div key={m.cap}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-[10px] tracking-[0.1em] text-white/50">{m.cap.toUpperCase()}</span>
-                          <span className="text-[11px] font-[var(--font-anton)]">{m.value}%</span>
-                        </div>
-                        <div className="h-1.5 bg-white/8 w-full">
-                          <div className="h-full bg-white/60" style={{ width: `${m.value}%` }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* Order confirm modal */}
       {selectedStock && (
