@@ -29,8 +29,8 @@ export default function NewsPage() {
               <button
                 key={t}
                 onClick={() => setFilter(t)}
-                className={`text-[9px] tracking-[0.1em] px-3 py-1.5 border transition-colors ${
-                  filter === t ? "border-white/50 text-white" : "border-white/8 text-white/30 hover:border-white/20"
+                className={`text-[9px] tracking-[0.1em] px-3 py-1.5 border-b-2 transition-colors ${
+                  filter === t ? "border-white text-white" : "border-transparent text-white/30 hover:text-white/60"
                 }`}
               >
                 {t}

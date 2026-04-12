@@ -212,10 +212,10 @@ export default function StockDetailPage({
               <button
                 key={r}
                 onClick={() => setRange(r)}
-                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border transition-all duration-150 ${
+                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-150 ${
                   range === r
-                    ? "bg-white text-black border-white"
-                    : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+                    ? "text-white border-white"
+                    : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 {r}
@@ -365,19 +365,19 @@ export default function StockDetailPage({
             <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
 
             {/* BUY / SELL tabs */}
-            <div className="flex gap-1">
+            <div className="flex gap-0">
               <button
                 onClick={() => setBuySellTab("BUY")}
-                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                  buySellTab === "BUY" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"
+                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
+                  buySellTab === "BUY" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 BUY
               </button>
               <button
                 onClick={() => setBuySellTab("SELL")}
-                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                  buySellTab === "SELL" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"
+                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
+                  buySellTab === "SELL" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 SELL
@@ -386,13 +386,13 @@ export default function StockDetailPage({
 
             {/* Order type */}
             <div className="pt-4">
-              <div className="flex gap-1 mb-1.5">
+              <div className="flex gap-0 mb-1.5">
                 {(["DELIVERY", "INTRADAY"] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setOrderType(t)}
-                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border transition-all ${
-                      orderType === t ? "bg-white text-black border-white" : "bg-transparent text-white/30 border-white/10 hover:text-white/50"
+                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border-b-2 transition-all ${
+                      orderType === t ? "text-white border-white" : "text-white/30 border-transparent hover:text-white/50"
                     }`}
                   >
                     {t}
@@ -657,15 +657,15 @@ export default function StockDetailPage({
               </div>
 
               {/* Tab bar */}
-              <div className="flex gap-1 p-2 border-b border-white/8 shrink-0">
+              <div className="flex gap-0 p-2 border-b border-white/8 shrink-0">
                 {(["ORDER", "BOOK", "HISTORY"] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setMobileTab(tab)}
-                    className={`flex-1 py-2 text-[9px] tracking-[0.15em] font-semibold transition-all border ${
+                    className={`flex-1 py-2 text-[9px] tracking-[0.15em] font-semibold transition-all border-b-2 ${
                       mobileTab === tab
-                        ? "bg-white text-black border-white"
-                        : "bg-transparent text-white/30 border-white/10"
+                        ? "text-white border-white"
+                        : "text-white/30 border-transparent"
                     }`}
                   >
                     {tab === "BOOK" ? "ORDER BOOK" : tab}
@@ -678,29 +678,29 @@ export default function StockDetailPage({
                 {mobileTab === "ORDER" && (
                   <div className="px-5 py-5 space-y-5">
                     {/* Buy/Sell toggle */}
-                    <div className="flex gap-1">
+                    <div className="flex gap-0">
                       <button
                         onClick={() => setBuySellTab("BUY")}
-                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                          buySellTab === "BUY" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10"
+                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
+                          buySellTab === "BUY" ? "text-white border-white" : "text-white/40 border-transparent"
                         }`}
                       >BUY</button>
                       <button
                         onClick={() => setBuySellTab("SELL")}
-                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                          buySellTab === "SELL" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10"
+                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
+                          buySellTab === "SELL" ? "text-white border-white" : "text-white/40 border-transparent"
                         }`}
                       >SELL</button>
                     </div>
 
                     {/* Order type */}
-                    <div className="flex gap-1">
+                    <div className="flex gap-0">
                       {(["DELIVERY", "INTRADAY"] as const).map((t) => (
                         <button
                           key={t}
                           onClick={() => setOrderType(t)}
-                          className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border transition-all ${
-                            orderType === t ? "bg-white text-black border-white" : "bg-transparent text-white/30 border-white/10"
+                          className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border-b-2 transition-all ${
+                            orderType === t ? "text-white border-white" : "text-white/30 border-transparent"
                           }`}
                         >
                           {t}

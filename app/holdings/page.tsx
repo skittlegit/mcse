@@ -406,28 +406,28 @@ export default function HoldingsPage() {
               )}
 
               {/* BUY / SELL tabs */}
-              <div className="flex gap-1 mb-4">
+              <div className="flex gap-0 mb-4">
                 <button
                   onClick={() => setBuySellTab("BUY")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border transition-all ${buySellTab === "BUY" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all ${buySellTab === "BUY" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"}`}
                 >
                   BUY
                 </button>
                 <button
                   onClick={() => setBuySellTab("SELL")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border transition-all ${buySellTab === "SELL" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all ${buySellTab === "SELL" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"}`}
                 >
                   SELL
                 </button>
               </div>
 
               {/* Order type */}
-              <div className="flex gap-1 mb-4">
+              <div className="flex gap-0 mb-4">
                 {(["DELIVERY", "INTRADAY"] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setOrderType(t)}
-                    className={`px-3 py-1.5 text-[9px] tracking-[0.15em] border transition-all ${orderType === t ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"}`}
+                    className={`px-3 py-1.5 text-[9px] tracking-[0.15em] border-b-2 transition-all ${orderType === t ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"}`}
                   >
                     {t}
                   </button>

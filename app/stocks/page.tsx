@@ -81,10 +81,10 @@ export default function StocksPage() {
             <button
               key={s}
               onClick={() => setSectorFilter(s)}
-              className={`px-3 py-2.5 text-[9px] tracking-[0.12em] border whitespace-nowrap transition-all duration-150 ${
+              className={`px-3 py-2.5 text-[9px] tracking-[0.12em] border-b-2 whitespace-nowrap transition-all duration-150 ${
                 sectorFilter === s
-                  ? "bg-white text-black border-white"
-                  : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+                  ? "text-white border-white"
+                  : "text-white/40 border-transparent hover:text-white/60"
               }`}
             >
               {s}

@@ -106,10 +106,10 @@ export default function ScreenerPage() {
                     <button
                       key={s}
                       onClick={() => setSector(s)}
-                      className={`px-3 py-2 text-[9px] tracking-[0.1em] border transition-all duration-150 ${
+                      className={`px-3 py-2 text-[9px] tracking-[0.1em] border-b-2 transition-all duration-150 ${
                         sector === s
-                          ? "bg-white text-black border-white"
-                          : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+                          ? "text-white border-white"
+                          : "text-white/40 border-transparent hover:text-white/60"
                       }`}
                     >
                       {s}
@@ -150,10 +150,10 @@ export default function ScreenerPage() {
                   <button
                     key={s}
                     onClick={() => setSector(s)}
-                    className={`px-3 py-2 text-[9px] tracking-[0.1em] border transition-all duration-150 ${
+                    className={`px-3 py-2 text-[9px] tracking-[0.1em] border-b-2 transition-all duration-150 ${
                       sector === s
-                        ? "bg-white text-black border-white"
-                        : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
+                        ? "text-white border-white"
+                        : "text-white/40 border-transparent hover:text-white/60"
                     }`}
                   >
                     {s}

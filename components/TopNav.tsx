@@ -117,10 +117,10 @@ export default function TopNav() {
                 <Link
                   key={tab.label}
                   href={tab.href}
-                  className={`text-[10px] tracking-[0.15em] font-medium px-4 py-1.5 border transition-all duration-200 ${
+                  className={`text-[10px] tracking-[0.15em] font-medium px-4 py-2 border-b-2 transition-all duration-200 ${
                     active
-                      ? "bg-white text-black border-white"
-                      : "bg-transparent text-white/40 border-white/10 hover:text-white hover:border-white/30"
+                      ? "text-white border-white"
+                      : "text-white/40 border-transparent hover:text-white/60"
                   }`}
                 >
                   {tab.label}
