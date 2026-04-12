@@ -589,7 +589,7 @@ export default function HoldingsPage() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.96 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[700px] md:max-h-[90vh] bg-bg border border-white/15 z-50 overflow-y-auto"
+              className="fixed inset-0 md:inset-4 md:top-auto md:bottom-auto md:left-1/2 md:-translate-x-1/2 md:my-[3vh] md:w-[700px] md:max-h-[94vh] bg-bg border border-white/15 z-50 overflow-y-auto"
             >
               <div className="flex items-center justify-between p-5 border-b border-white/10">
                 <h3 className="font-[var(--font-anton)] text-lg tracking-[0.1em]">PORTFOLIO ANALYSIS</h3>

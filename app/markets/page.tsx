@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { TrendingUp, TrendingDown, BarChart3, Activity } from "lucide-react";
 import Sparkline from "@/components/Sparkline";
-import { useAuth } from "@/lib/AuthContext";
 import {
   indices,
   topGainers,
@@ -21,8 +20,6 @@ const moversTabsMap = { GAINERS: topGainers, LOSERS: topLosers, VOLUME: volumeSh
 type MoversTab = keyof typeof moversTabsMap;
 
 export default function MarketsPage() {
-  const { role } = useAuth();
-  const isAdmin = role === "company" || role === "admin";
   const [moversTab, setMoversTab] = useState<MoversTab>("GAINERS");
   const activeMovers = moversTabsMap[moversTab];
   const totalBreadth = marketBreadth.advances + marketBreadth.declines + marketBreadth.unchanged;
@@ -47,7 +44,7 @@ export default function MarketsPage() {
 
       {/* Indices — hero cards */}
       <section className="mb-10">
-        <div className={`grid gap-[1px] bg-white/8 ${isAdmin ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2 md:grid-cols-5"}`}>
+        <div className="grid gap-[1px] bg-white/8 grid-cols-2 md:grid-cols-5">
           {indices.map((idx, i) => (
             <motion.div
               key={idx.name}
@@ -117,21 +114,21 @@ export default function MarketsPage() {
       <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-8">
         {/* Left — Tabbed Movers */}
         <div>
-          <div className="flex items-center gap-6 mb-4">
+          <div className="flex items-center gap-0 mb-4">
             {(Object.keys(moversTabsMap) as MoversTab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setMoversTab(tab)}
-                className={`text-[10px] tracking-[0.15em] pb-2 transition-all border-b ${
+                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border transition-all duration-150 whitespace-nowrap ${
                   moversTab === tab
-                    ? "text-white border-white"
-                    : "text-white/30 border-transparent hover:text-white/60"
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-white/40 border-white/15 hover:text-white hover:border-white"
                 }`}
               >
-                {tab === "GAINERS" && <TrendingUp size={11} className="inline mr-1.5 text-[#00D26A]" />}
-                {tab === "LOSERS" && <TrendingDown size={11} className="inline mr-1.5 text-[#FF5252]" />}
-                {tab === "VOLUME" && <BarChart3 size={11} className="inline mr-1.5 text-white/40" />}
-                {tab}
+                {tab === "GAINERS" && <TrendingUp size={11} className="inline mr-1.5" />}
+                {tab === "LOSERS" && <TrendingDown size={11} className="inline mr-1.5" />}
+                {tab === "VOLUME" && <BarChart3 size={11} className="inline mr-1.5" />}
+                {tab === "VOLUME" ? "VOLUME SHOCKERS" : tab}
               </button>
             ))}
           </div>

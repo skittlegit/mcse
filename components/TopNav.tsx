@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, LayoutDashboard, Calendar } from "lucide-react";
+import { Search, Bell, BarChart3, Briefcase, LineChart, Eye, Newspaper, TrendingUp, LayoutDashboard, Calendar, ClipboardCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileDropdown from "./ProfileDropdown";
@@ -30,6 +30,7 @@ const companyAdminDesktopTabs = [
 
 const totalAdminDesktopTabs = [
   { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/admin/news", label: "APPROVALS", icon: ClipboardCheck },
   { href: "/markets", label: "MARKETS", icon: TrendingUp },
   { href: "/news", label: "NEWS", icon: Newspaper },
 ];
@@ -52,6 +53,7 @@ const companyAdminMobileTabs = [
 
 const totalAdminMobileTabs = [
   { href: "/admin", label: "DASHBOARD", icon: LayoutDashboard },
+  { href: "/admin/news", label: "APPROVALS", icon: ClipboardCheck },
   { href: "/markets", label: "MARKETS", icon: TrendingUp },
   { href: "/news", label: "NEWS", icon: Newspaper },
 ];
@@ -89,7 +91,7 @@ export default function TopNav() {
   return (
     <>
       {/* Desktop + Mobile Top Nav */}
-      <nav className="sticky top-0 z-50 bg-bg/95 backdrop-blur-md border-b border-white/10">
+      <nav className="bg-bg/95 backdrop-blur-md border-b border-white/10">
         <div className="max-w-[1280px] mx-auto flex items-center justify-between h-14 px-4 md:px-12">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">

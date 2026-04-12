@@ -614,7 +614,7 @@ export default function StockDetailPage({
             onClick={() => { setBuySellTab("BUY"); setMobileOrderOpen(true); }}
             className="flex-1 py-4 text-[11px] tracking-[0.15em] font-semibold bg-[#00D26A] text-black active:bg-[#00D26A]/80 transition-all"
           >
-            BUY {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 0 })}
+            BUY
           </motion.button>
           <motion.button
             whileTap={{ scale: 0.97 }}
@@ -643,6 +643,7 @@ export default function StockDetailPage({
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 300 }}
               className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-bg border-t border-white/12 max-h-[85vh] overflow-hidden flex flex-col"
+              style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
             >
               {/* Panel header */}
               <div className="flex items-center justify-between px-5 py-3 border-b border-white/8 shrink-0">
@@ -770,18 +771,6 @@ export default function StockDetailPage({
                       <span className="font-[var(--font-anton)] text-sm">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
                     </div>
 
-                    {/* Confirm button */}
-                    <motion.button
-                      whileTap={{ scale: 0.97 }}
-                      onClick={handleOrder}
-                      className={`w-full h-12 text-[11px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
-                        buySellTab === "BUY"
-                          ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
-                          : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
-                      }`}
-                    >
-                      {pricingType === "LIMIT" ? `${buySellTab} LIMIT` : buySellTab} {stock.ticker}
-                    </motion.button>
                   </div>
                 )}
 
@@ -853,6 +842,23 @@ export default function StockDetailPage({
                   </div>
                 )}
               </div>
+
+              {/* Sticky confirm button at bottom of mobile order panel */}
+              {mobileTab === "ORDER" && (
+                <div className="shrink-0 px-5 py-4 border-t border-white/8 bg-bg">
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={handleOrder}
+                    className={`w-full h-12 text-[11px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
+                      buySellTab === "BUY"
+                        ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
+                        : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
+                    }`}
+                  >
+                    {pricingType === "LIMIT" ? `${buySellTab} LIMIT` : buySellTab} {stock.ticker}
+                  </motion.button>
+                </div>
+              )}
             </motion.div>
           </>
         )}

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
 import { usePreferences } from "@/lib/PreferencesContext";
-import { useTrading } from "@/lib/TradingContext";
 import { useAuth } from "@/lib/AuthContext";
 import {
   mostTraded,
@@ -16,6 +15,7 @@ import {
   productsAndTools,
   newsItems,
   formatRelativeTime,
+  investments,
   type MoverStock,
 } from "@/lib/mockData";
 
@@ -46,7 +46,6 @@ export default function ExplorePage() {
   const [moverSort, setMoverSort] = useState<MoverSortKey>("dayChangePercent");
   const [moverSortDir, setMoverSortDir] = useState<SortDir>("desc");
   const { showBalance } = usePreferences();
-  const { balance } = useTrading();
   const { isLoggedIn } = useAuth();
 
   const currentMovers = useMemo(() => {
@@ -82,15 +81,76 @@ export default function ExplorePage() {
 
   return (
     <div className="py-6">
-      {/* Balance strip */}
+      {/* Marketing hero — non-logged-in users */}
+      {!isLoggedIn && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="border border-white/10 p-8 md:p-12 mb-8 md:mb-10 relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none" />
+          <div className="relative z-10">
+            <p className="text-[9px] tracking-[0.3em] text-white/30 mb-3">MATH CLUB STOCK EXCHANGE</p>
+            <h1 className="font-[var(--font-anton)] text-3xl md:text-5xl tracking-[0.04em] uppercase leading-[1.1] mb-4">
+              THE EXCHANGE<br />IS LIVE.
+            </h1>
+            <p className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-8">
+              A simulated trading platform where clubs become companies. Compete, trade, and win up to <span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> in prizes.
+            </p>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.mu-aeon.com/events?event=mcse"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 text-[10px] tracking-[0.15em] font-semibold bg-white text-black border border-white hover:bg-transparent hover:text-white transition-all duration-150"
+              >
+                REGISTER NOW
+              </a>
+              <Link
+                href="/login"
+                className="px-6 py-3 text-[10px] tracking-[0.15em] font-semibold bg-transparent text-white/50 border border-white/15 hover:text-white hover:border-white transition-all duration-150"
+              >
+                LOG IN
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Holdings summary strip — logged-in users */}
       {isLoggedIn && showBalance && (
         <motion.div
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-6 px-1"
         >
-          <span className="text-[9px] tracking-[0.2em] text-white/30 uppercase">AVAILABLE BALANCE</span>
-          <span className="font-[var(--font-anton)] text-lg tracking-tight">{"\u20B9"}{Math.round(balance).toLocaleString("en-IN")}</span>
+          <Link
+            href="/holdings"
+            className="flex items-center justify-between mb-6 px-1 py-3 border border-white/6 hover:border-white/15 transition-colors group"
+          >
+            <div className="flex items-center gap-6 md:gap-10 px-3">
+              <div>
+                <p className="text-[8px] tracking-[0.2em] text-white/25 mb-0.5">CURRENT VALUE</p>
+                <p className="font-[var(--font-anton)] text-base md:text-lg tracking-tight">
+                  {"\u20B9"}{investments.currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+              <div>
+                <p className="text-[8px] tracking-[0.2em] text-white/25 mb-0.5">INVESTED</p>
+                <p className="font-[var(--font-anton)] text-base md:text-lg tracking-tight text-white/60">
+                  {"\u20B9"}{investments.investedValue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                </p>
+              </div>
+              <div>
+                <p className="text-[8px] tracking-[0.2em] text-white/25 mb-0.5">RETURNS</p>
+                <p className={`font-[var(--font-anton)] text-base md:text-lg tracking-tight ${investments.totalReturns >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
+                  {investments.totalReturns >= 0 ? "+" : ""}{"\u20B9"}{investments.totalReturns.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  <span className="text-[10px] ml-1.5 opacity-70">({investments.totalReturnsPercent >= 0 ? "+" : ""}{investments.totalReturnsPercent.toFixed(2)}%)</span>
+                </p>
+              </div>
+            </div>
+            <ChevronRight size={14} className="text-white/15 group-hover:text-white/40 transition-colors mr-2" />
+          </Link>
         </motion.div>
       )}
 

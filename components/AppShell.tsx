@@ -59,8 +59,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </svg>
         </div>
 
-        <TopNav />
-        <TickerTape />
+        <div className="sticky top-0 z-50">
+          <TopNav />
+          <TickerTape />
+        </div>
         <main className="flex-1 relative z-10 max-w-[1280px] mx-auto w-full px-4 md:px-12 pb-20 md:pb-0">
           {children}
         </main>
