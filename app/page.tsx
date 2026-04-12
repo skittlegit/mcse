@@ -89,15 +89,21 @@ export default function ExplorePage() {
           transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
           className="border border-white/10 p-8 md:p-12 mb-8 md:mb-10 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.06] to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.12] to-transparent pointer-events-none" />
           <div className="relative z-10">
-            <p className="text-[9px] tracking-[0.3em] text-white/30 mb-3">MATH CLUB STOCK EXCHANGE</p>
+            <p className="text-[9px] tracking-[0.3em] text-white/30 mb-3">24 – 26 APRIL · MAHINDRA UNIVERSITY</p>
             <h1 className="font-[var(--font-anton)] text-3xl md:text-5xl tracking-[0.04em] uppercase leading-[1.1] mb-4">
               THE EXCHANGE<br />IS LIVE.
             </h1>
-            <p className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-8">
-              A simulated trading platform where clubs become companies. Compete, trade, and win up to <span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> in prizes.
+            <p className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-6">
+              University clubs, listed as equities. Buy shares, trade live across three evenings, and compete for a <span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> prize pool. Entry {"\u20B9"}100 — free for MU students.
             </p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mb-8">
+              <span className="text-[9px] tracking-[0.15em] text-white/25">8:30 PM ONWARDS</span>
+              <span className="text-[9px] tracking-[0.15em] text-white/25">{"\u20B9"}100 ENTRY</span>
+              <span className="text-[9px] tracking-[0.15em] text-white/25">30+ CLUBS</span>
+              <span className="text-[9px] tracking-[0.15em] text-white/25">LIVE TRADING SIM</span>
+            </div>
             <div className="flex items-center gap-4">
               <a
                 href="https://www.mu-aeon.com/events?event=mcse"

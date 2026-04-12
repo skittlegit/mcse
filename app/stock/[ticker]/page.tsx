@@ -369,7 +369,7 @@ export default function StockDetailPage({
               <button
                 onClick={() => setBuySellTab("BUY")}
                 className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                  buySellTab === "BUY" ? "bg-[#00D26A] text-black border-[#00D26A]" : "bg-transparent text-white/40 border-white/10 hover:text-white"
+                  buySellTab === "BUY" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"
                 }`}
               >
                 BUY
@@ -377,7 +377,7 @@ export default function StockDetailPage({
               <button
                 onClick={() => setBuySellTab("SELL")}
                 className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                  buySellTab === "SELL" ? "bg-[#FF5252] text-white border-[#FF5252]" : "bg-transparent text-white/40 border-white/10 hover:text-white"
+                  buySellTab === "SELL" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10 hover:text-white"
                 }`}
               >
                 SELL
@@ -386,13 +386,13 @@ export default function StockDetailPage({
 
             {/* Order type */}
             <div className="pt-4">
-              <div className="flex gap-0 mb-1.5">
+              <div className="flex gap-1 mb-1.5">
                 {(["DELIVERY", "INTRADAY"] as const).map((t) => (
                   <button
                     key={t}
                     onClick={() => setOrderType(t)}
-                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
-                      orderType === t ? "bg-white/5 text-white/60" : "text-white/30 hover:text-white/50"
+                    className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border transition-all ${
+                      orderType === t ? "bg-white text-black border-white" : "bg-transparent text-white/30 border-white/10 hover:text-white/50"
                     }`}
                   >
                     {t}
@@ -607,7 +607,7 @@ export default function StockDetailPage({
       </div>
 
       {/* Mobile fixed bottom buy/sell bar */}
-      <div className="fixed bottom-14 left-0 right-0 z-40 md:hidden border-t border-white/12 bg-bg/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
+      <div className="fixed bottom-14 left-0 right-0 z-50 md:hidden border-t border-white/12 bg-bg/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
         <div className="flex">
           <motion.button
             whileTap={{ scale: 0.97 }}
@@ -682,25 +682,25 @@ export default function StockDetailPage({
                       <button
                         onClick={() => setBuySellTab("BUY")}
                         className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                          buySellTab === "BUY" ? "bg-[#00D26A] text-black border-[#00D26A]" : "bg-transparent text-white/40 border-white/10"
+                          buySellTab === "BUY" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10"
                         }`}
                       >BUY</button>
                       <button
                         onClick={() => setBuySellTab("SELL")}
                         className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border transition-all ${
-                          buySellTab === "SELL" ? "bg-[#FF5252] text-white border-[#FF5252]" : "bg-transparent text-white/40 border-white/10"
+                          buySellTab === "SELL" ? "bg-white text-black border-white" : "bg-transparent text-white/40 border-white/10"
                         }`}
                       >SELL</button>
                     </div>
 
                     {/* Order type */}
-                    <div className="flex gap-0">
+                    <div className="flex gap-1">
                       {(["DELIVERY", "INTRADAY"] as const).map((t) => (
                         <button
                           key={t}
                           onClick={() => setOrderType(t)}
-                          className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border border-white/10 transition-all ${
-                            orderType === t ? "bg-white/5 text-white/60" : "text-white/30"
+                          className={`px-3 py-1.5 text-[8px] tracking-[0.15em] border transition-all ${
+                            orderType === t ? "bg-white text-black border-white" : "bg-transparent text-white/30 border-white/10"
                           }`}
                         >
                           {t}

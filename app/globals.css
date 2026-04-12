@@ -119,7 +119,7 @@
 [data-theme="light"] .border-l-\[\#00D26A\] { border-left-color: #00D26A !important; }
 [data-theme="light"] .bg-\[\#00D26A\]\/30 { background-color: rgba(0,210,106,0.25) !important; }
 [data-theme="light"] .bg-\[\#FF5252\]\/30 { background-color: rgba(255,82,82,0.25) !important; }
-[data-theme="light"] .bg-gradient-to-br { background-image: linear-gradient(to bottom right, rgba(220,38,38,0.06), transparent) !important; }
+[data-theme="light"] .bg-gradient-to-br { background-image: linear-gradient(to bottom right, rgba(220,38,38,0.10), transparent) !important; }
 [data-theme="light"] .bg-white\/15 { background-color: rgba(0,0,0,0.10) !important; }
 [data-theme="light"] .bg-white\/20 { background-color: rgba(0,0,0,0.12) !important; }
 [data-theme="light"] .bg-white\/25 { background-color: rgba(0,0,0,0.15) !important; }
