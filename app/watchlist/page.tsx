@@ -196,7 +196,7 @@ export default function WatchlistPage() {
               <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
               <div className="text-right shrink-0 min-w-[80px]">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  {"â‚¹"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  {"\u20B9"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </p>
                 <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                   {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%

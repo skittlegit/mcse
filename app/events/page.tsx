@@ -174,7 +174,7 @@ export default function EventsPage() {
 
                 <div className="md:hidden mt-4">
                   <p className="text-[9px] tracking-[0.2em] text-white/25 mb-3">
-                    {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS Â· ${MONTH_NAMES[viewMonth]}`}
+                    {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS · ${MONTH_NAMES[viewMonth]}`}
                   </p>
                   {selectedEvents.length === 0 && (
                     <p className="text-[11px] text-white/20 py-8 text-center">No events this month</p>
@@ -192,7 +192,7 @@ export default function EventsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em] mb-0.5">{ev.title}</p>
-                            <p className="text-[10px] text-white/30">{ev.ticker} Â· {ev.impact}</p>
+                            <p className="text-[10px] text-white/30">{ev.ticker} · {ev.impact}</p>
                           </div>
                           <span className={`text-[8px] tracking-[0.15em] px-2 py-1 shrink-0 ${typeBadge[ev.type]}`}>{ev.type}</span>
                         </Link>
@@ -205,7 +205,7 @@ export default function EventsPage() {
               <aside className="hidden md:block space-y-6">
                 <div className="border border-white/10 p-5">
                   <p className="text-[9px] tracking-[0.15em] text-white/30 mb-3">
-                    {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS Â· ${MONTH_NAMES[viewMonth]}`}
+                    {selectedDay ? `EVENTS ON ${MONTH_NAMES[viewMonth]} ${selectedDay}` : `ALL EVENTS · ${MONTH_NAMES[viewMonth]}`}
                   </p>
                   {selectedEvents.length === 0 && (
                     <p className="text-[11px] text-white/20 py-6 text-center">No events this month</p>
@@ -223,7 +223,7 @@ export default function EventsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-[var(--font-anton)] text-[12px] tracking-[0.05em] mb-0.5">{ev.title}</p>
-                            <p className="text-[9px] text-white/30">{ev.ticker} Â· {ev.impact}</p>
+                            <p className="text-[9px] text-white/30">{ev.ticker} · {ev.impact}</p>
                           </div>
                           <span className={`text-[8px] tracking-[0.15em] px-2 py-1 shrink-0 ${typeBadge[ev.type]}`}>{ev.type}</span>
                         </Link>
@@ -294,7 +294,7 @@ export default function EventsPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em] mb-0.5">{ev.title}</p>
-                          <p className="text-[10px] text-white/30">{ev.ticker} Â· {ev.impact}</p>
+                          <p className="text-[10px] text-white/30">{ev.ticker} · {ev.impact}</p>
                         </div>
                         <span className={`text-[8px] tracking-[0.15em] px-2 py-1 shrink-0 ${typeBadge[ev.type]}`}>{ev.type}</span>
                       </Link>

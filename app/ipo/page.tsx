@@ -83,7 +83,7 @@ export default function IPOPage() {
           <button onClick={() => router.back()} className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors"><ArrowLeft size={15} /></button>
           <h1 className="font-[var(--font-anton)] text-xl tracking-[0.1em] uppercase">IPO</h1>
         </div>
-        <span className="text-[9px] tracking-[0.15em] text-white/25">{ipoList.filter(i => i.status === "LIVE").length} LIVE Â· {ipoList.filter(i => i.status === "UPCOMING").length} UPCOMING</span>
+        <span className="text-[9px] tracking-[0.15em] text-white/25">{ipoList.filter(i => i.status === "LIVE").length} LIVE · {ipoList.filter(i => i.status === "UPCOMING").length} UPCOMING</span>
       </div>
 
       {/* Summary strip */}
@@ -136,7 +136,7 @@ export default function IPOPage() {
                   >
                     {ipo.status}
                     {ipo.status === "UPCOMING" && daysLeft > 0 && (
-                      <span className="ml-1 text-white/25">Â· {daysLeft}d</span>
+                      <span className="ml-1 text-white/25">· {daysLeft}d</span>
                     )}
                   </span>
                 </div>
@@ -219,7 +219,7 @@ export default function IPOPage() {
                           onClick={() => handleApply(ipo.name)}
                           className="w-full h-11 bg-[#00D26A] text-black text-[10px] tracking-[0.15em] font-semibold border border-[#00D26A] hover:bg-transparent hover:text-[#00D26A] transition-all duration-300"
                         >
-                          APPLY FOR IPO Â· {"\u20B9"}{minInvestment.toLocaleString("en-IN")}
+                          APPLY FOR IPO · {"\u20B9"}{minInvestment.toLocaleString("en-IN")}
                         </button>
                       )}
 

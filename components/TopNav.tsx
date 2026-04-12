@@ -92,8 +92,8 @@ export default function TopNav() {
   return (
     <>
       {/* Desktop + Mobile Top Nav */}
-      <nav className="relative z-10 bg-bg/95 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-[1280px] mx-auto flex items-center justify-between h-14 px-4 md:px-12">
+      <nav className="relative z-10 bg-bg/95 backdrop-blur-md">
+        <div className="max-w-[1280px] mx-auto flex items-center justify-between h-14 px-4 md:px-12 border-b border-white/10">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <Image
@@ -110,14 +110,14 @@ export default function TopNav() {
           </Link>
 
           {/* Center: Desktop Tabs */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-stretch h-full gap-0">
             {desktopTabs.map((tab) => {
               const active = isActive(tab.href);
               return (
                 <Link
                   key={tab.label}
                   href={tab.href}
-                  className={`text-[10px] tracking-[0.15em] font-medium px-4 py-2 border-b-2 transition-all duration-300 ${
+                  className={`flex items-center text-[11px] tracking-[0.15em] font-medium px-5 border-b-2 transition-all duration-300 ${
                     active
                       ? "text-white border-white"
                       : "text-white/40 border-transparent hover:text-white/60"

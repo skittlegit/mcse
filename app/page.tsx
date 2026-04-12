@@ -98,7 +98,7 @@ export default function ExplorePage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="text-[9px] tracking-[0.3em] text-white/30 mb-4"
-              >24 â€“ 26 APRIL Â· MAHINDRA UNIVERSITY</motion.p>
+              >24 {"\u2014"} 26 APRIL {"\u00B7"} MAHINDRA UNIVERSITY</motion.p>
               <motion.h1
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}

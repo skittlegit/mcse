@@ -52,11 +52,11 @@ const recentUsers = [
 ];
 
 const activityFeed = [
-  { action: "BUY ORDER", detail: "MATHSOC Ã— 10 @ â‚¹2,892", time: "2 min ago", color: "text-[#00D26A]" },
-  { action: "SELL ORDER", detail: "ENIGMA Ã— 5 @ â‚¹3,987", time: "8 min ago", color: "text-[#FF5252]" },
+  { action: "BUY ORDER", detail: "MATHSOC × 10 @ ₹2,892", time: "2 min ago", color: "text-[#00D26A]" },
+  { action: "SELL ORDER", detail: "ENIGMA × 5 @ ₹3,987", time: "8 min ago", color: "text-[#FF5252]" },
   { action: "NEW USER", detail: "vikash@mcse.in registered", time: "15 min ago", color: "text-white/50" },
-  { action: "BUY ORDER", detail: "CELESTE Ã— 20 @ â‚¹1,645", time: "23 min ago", color: "text-[#00D26A]" },
-  { action: "SELL ORDER", detail: "INSIGHT Ã— 15 @ â‚¹468", time: "45 min ago", color: "text-[#FF5252]" },
+  { action: "BUY ORDER", detail: "CELESTE × 20 @ ₹1,645", time: "23 min ago", color: "text-[#00D26A]" },
+  { action: "SELL ORDER", detail: "INSIGHT × 15 @ ₹468", time: "45 min ago", color: "text-[#FF5252]" },
 ];
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -91,7 +91,7 @@ function EnigmaDashboard() {
           </div>
           <div>
             <h1 className="font-[var(--font-anton)] text-2xl md:text-3xl tracking-[0.08em] uppercase">ENIGMA</h1>
-            <p className="text-[10px] text-white/30 tracking-[0.1em] mt-0.5">Enigma Computer Science Â· COMPANY DASHBOARD</p>
+            <p className="text-[10px] text-white/30 tracking-[0.1em] mt-0.5">Enigma Computer Science · COMPANY DASHBOARD</p>
           </div>
         </div>
         <div className="text-right hidden md:block">
@@ -138,7 +138,7 @@ function EnigmaDashboard() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="border border-white/10 p-5"
           >
-            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-4">STOCK PERFORMANCE Â· 1M</p>
+            <p className="text-[9px] tracking-[0.15em] text-white/30 mb-4">STOCK PERFORMANCE · 1M</p>
             <div className="h-48 md:h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
@@ -283,8 +283,8 @@ function EnigmaDashboard() {
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: "P/E RATIO", val: fund.pe },
-                { label: "EPS", val: `â‚¹${fund.eps}` },
-                { label: "BOOK VALUE", val: `â‚¹${fund.bookValue.toLocaleString("en-IN")}` },
+                { label: "EPS", val: `₹${fund.eps}` },
+                { label: "BOOK VALUE", val: `₹${fund.bookValue.toLocaleString("en-IN")}` },
                 { label: "ROE", val: `${fund.roe}%` },
               ].map((s) => (
                 <div key={s.label}>

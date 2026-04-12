@@ -66,6 +66,9 @@ export function PreferencesProvider({ children }: { children: ReactNode }) {
     const theme = prefs.darkMode ? "dark" : "light";
     document.documentElement.setAttribute("data-theme", theme);
     document.documentElement.style.colorScheme = theme;
+    // Update phone status bar / navigation bar color
+    const themeColor = prefs.darkMode ? "#0a0a0a" : "#f5f5f5";
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", themeColor);
   }, [prefs.darkMode, hydrated]);
 
   const setPref = useCallback(<K extends keyof Preferences>(key: K, value: Preferences[K]) => {

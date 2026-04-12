@@ -118,27 +118,22 @@ export default function StockDetailPage({
         initial={{ opacity: 0, y: -4 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-        className="flex items-center justify-between py-4 border-b border-white/8"
+        className="flex flex-wrap items-center justify-between gap-y-3 py-4 border-b border-white/8"
       >
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={() => router.back()}
-            className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-300"
+            className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-300 shrink-0"
           >
             <ArrowLeft size={15} />
           </button>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 border border-white/25 flex items-center justify-center">
-              <span className="text-[9px] tracking-[0.1em] text-white/50">{stock.ticker.slice(0, 3)}</span>
-            </div>
-            <div>
-              <p className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.05em]">{stock.ticker}</p>
-              <p className="text-[10px] text-white/40">{stock.name}</p>
-            </div>
+          <div className="min-w-0">
+            <p className="font-[var(--font-anton)] text-base md:text-lg tracking-[0.05em]">{stock.ticker}</p>
+            <p className="text-[10px] text-white/40 truncate">{stock.name}</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {isHeld && (
             <span className="flex items-center gap-1.5 text-[8px] tracking-[0.15em] text-[#00D26A] border border-[#00D26A]/30 bg-[#00D26A]/10 px-2.5 py-1 cursor-default" title="You hold this stock">
               <Bookmark size={10} fill="currentColor" /> HELD
@@ -369,7 +364,7 @@ export default function StockDetailPage({
               <button
                 onClick={() => setBuySellTab("BUY")}
                 className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
-                  buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A]" : "text-white/40 border-transparent hover:text-white/60"
+                  buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A] bg-[#00D26A]/10" : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 BUY
@@ -377,7 +372,7 @@ export default function StockDetailPage({
               <button
                 onClick={() => setBuySellTab("SELL")}
                 className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
-                  buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252]" : "text-white/40 border-transparent hover:text-white/60"
+                  buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252] bg-[#FF5252]/10" : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 SELL
@@ -682,13 +677,13 @@ export default function StockDetailPage({
                       <button
                         onClick={() => setBuySellTab("BUY")}
                         className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
-                          buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A]" : "text-white/40 border-transparent"
+                          buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A] bg-[#00D26A]/10" : "text-white/40 border-transparent"
                         }`}
                       >BUY</button>
                       <button
                         onClick={() => setBuySellTab("SELL")}
                         className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
-                          buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252]" : "text-white/40 border-transparent"
+                          buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252] bg-[#FF5252]/10" : "text-white/40 border-transparent"
                         }`}
                       >SELL</button>
                     </div>

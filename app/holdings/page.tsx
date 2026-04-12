@@ -409,13 +409,13 @@ export default function HoldingsPage() {
               <div className="flex gap-0 mb-4">
                 <button
                   onClick={() => setBuySellTab("BUY")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all duration-300 ${buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A]" : "text-white/40 border-transparent hover:text-white/60"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all duration-300 ${buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A] bg-[#00D26A]/10" : "text-white/40 border-transparent hover:text-white/60"}`}
                 >
                   BUY
                 </button>
                 <button
                   onClick={() => setBuySellTab("SELL")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all duration-300 ${buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252]" : "text-white/40 border-transparent hover:text-white/60"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all duration-300 ${buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252] bg-[#FF5252]/10" : "text-white/40 border-transparent hover:text-white/60"}`}
                 >
                   SELL
                 </button>

@@ -8,7 +8,7 @@ import { ArrowLeft, Mail, Phone, MessageSquare, ChevronDown, ChevronUp, Send, Ch
 const faqs = [
   { q: "How do I place a buy/sell order?", a: "Navigate to any stock page and use the BUY or SELL buttons. On desktop, the order panel is on the right sidebar. On mobile, use the bottom action bar." },
   { q: "What are DELIVERY and INTRADAY orders?", a: "DELIVERY orders are settled in your demat account (T+1). INTRADAY orders must be squared off the same day â€” positions auto-close at market end." },
-  { q: "How is my portfolio value calculated?", a: "Current Value = sum of (qty Ã— last traded price) for each holding. Returns = Current Value âˆ’ Invested Value." },
+  { q: "How is my portfolio value calculated?", a: "Current Value = sum of (qty × last traded price) for each holding. Returns = Current Value âˆ’ Invested Value." },
   { q: "How do I add funds to my account?", a: "Go to Profile â†’ Available Balance. You can transfer funds from your linked bank account via UPI or net banking." },
   { q: "What happens if my order fails?", a: "If an order fails due to insufficient balance or market conditions, no amount is deducted. You'll see the order status as CANCELLED in your order history." },
 ];
