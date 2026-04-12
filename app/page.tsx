@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar, Landmark, Repeat, TrendingUp as TrendingUpIcon } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import Sparkline from "@/components/Sparkline";
 import { usePreferences } from "@/lib/PreferencesContext";
@@ -112,16 +113,26 @@ export default function ExplorePage() {
           <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 65% 90% at -5% -5%, rgba(0,210,106,0.18), transparent 65%)" }} />
 
           <div className="relative z-10">
-            {/* Top bar — date + live badge */}
+            {/* Top bar — date + logos + live badge */}
             <div className="flex items-center justify-between px-8 md:px-12 pt-8 md:pt-10">
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15, duration: 0.4 }}
-                className="text-[9px] tracking-[0.3em] text-white/30"
+                className="flex items-center gap-3"
               >
-                24 {"\u2014"} 26 APRIL {"\u00B7"} MAHINDRA UNIVERSITY
-              </motion.p>
+                <span className="text-[9px] tracking-[0.3em] text-white/30">
+                  24 {"\u2014"} 26 APRIL {"\u00B7"} MAHINDRA UNIVERSITY
+                </span>
+                <span className="hidden sm:flex items-center gap-2.5 ml-1">
+                  <a href="https://www.mu-aeon.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-100 transition-opacity">
+                    <Image src="/aeon.png" alt="AEON" width={22} height={22} className="object-contain" />
+                  </a>
+                  <a href="https://mathsoc.in" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-100 transition-opacity">
+                    <Image src="/mathsoc.png" alt="MathSoc" width={22} height={22} className="object-contain" />
+                  </a>
+                </span>
+              </motion.div>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -146,7 +157,15 @@ export default function ExplorePage() {
                   transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="font-[MonumentExtended] font-extrabold text-2xl sm:text-3xl md:text-[3rem] leading-[1.05] tracking-tight uppercase mb-6"
                 >
-                  THE EXCHANGE<br />IS LIVE @ AEON '26
+                  THE EXCHANGE<br />IS LIVE @{" "}
+                  <a
+                    href="https://www.mu-aeon.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#A855F7] transition-colors duration-300"
+                  >
+                    AEON &rsquo;26
+                  </a>
                 </motion.h1>
 
                 <motion.p
