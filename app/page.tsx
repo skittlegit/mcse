@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar, Landmark, Repeat, TrendingUp as TrendingUpIcon } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -48,6 +48,24 @@ export default function ExplorePage() {
   const { showBalance } = usePreferences();
   const { isLoggedIn } = useAuth();
 
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  useEffect(() => {
+    const target = new Date("2026-04-24T15:00:00Z"); // 8:30 PM IST
+    function tick() {
+      const diff = target.getTime() - Date.now();
+      if (diff <= 0) { setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor(diff / 3600000) % 24,
+        minutes: Math.floor(diff / 60000) % 60,
+        seconds: Math.floor(diff / 1000) % 60,
+      });
+    }
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
   const currentMovers = useMemo(() => {
     const moverData: Record<MoverTab, MoverStock[]> = {
       GAINERS: topGainers,
@@ -87,10 +105,11 @@ export default function ExplorePage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="border border-white/10 mb-8 md:mb-10 relative overflow-hidden"
+          className="border border-emerald-500/20 mb-8 md:mb-10 relative overflow-hidden"
         >
-          {/* Subtle gradient wash */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.04] via-transparent to-transparent pointer-events-none" />
+          {/* Gradient wash */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-emerald-900/10 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 65% 90% at -5% -5%, rgba(0,210,106,0.18), transparent 65%)" }} />
 
           <div className="relative z-10">
             {/* Top bar — date + live badge */}
@@ -125,21 +144,49 @@ export default function ExplorePage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  className="font-[MonumentExtended] font-extrabold text-3xl sm:text-4xl md:text-[3.5rem] leading-[1.05] tracking-tight uppercase mb-6"
+                  className="font-[MonumentExtended] font-extrabold text-2xl sm:text-3xl md:text-[3rem] leading-[1.05] tracking-tight uppercase mb-6"
                 >
-                  THE EXCHANGE<br />IS LIVE.
+                  THE EXCHANGE<br />IS LIVE @ AEON '26
                 </motion.h1>
 
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.35, duration: 0.4 }}
-                  className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-8"
+                  className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-6"
                 >
-                  University clubs, listed as equities. Buy shares, trade live across three evenings, and compete for a{" "}
-                  <span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> prize pool.
-                  Entry {"\u20B9"}100 {"\u2014"} free for MU students.
+                  University clubs, listed as equities. Buy shares, trade live across three evenings, and compete for a {""
+                  }<span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> prize pool.
+                  Entry {"\u20B9"}100 {"—"} free for MU students.
                 </motion.p>
+
+                {/* Countdown */}
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.42, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="mb-8"
+                >
+                  <p className="text-[8px] tracking-[0.25em] text-white/25 mb-2.5">OPENS APR 24 &#183; 8:30 PM IST</p>
+                  <div className="flex items-baseline gap-0">
+                    {([
+                      { label: "D", value: timeLeft.days },
+                      { label: "H", value: timeLeft.hours },
+                      { label: "M", value: timeLeft.minutes },
+                      { label: "S", value: timeLeft.seconds },
+                    ] as { label: string; value: number }[]).map(({ label, value }, i) => (
+                      <span key={label} className="flex items-baseline">
+                        {i > 0 && <span className="font-[MonumentExtended] text-xl md:text-2xl text-white/20 mx-1.5 leading-none" style={{ lineHeight: 1 }}>:</span>}
+                        <span className="flex items-baseline gap-0.5">
+                          <span className="font-[MonumentExtended] font-extrabold text-2xl md:text-3xl tabular-nums leading-none" style={{ lineHeight: 1 }}>
+                            {String(value).padStart(2, "0")}
+                          </span>
+                          <span className="text-[7px] tracking-[0.1em] text-white/30 self-end mb-0.5">{label}</span>
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 6 }}
