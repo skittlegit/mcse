@@ -342,7 +342,7 @@ export default function WatchlistPage() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 8 }}
             transition={{ duration: 0.2 }}
-            className="border border-white/10 p-5 sticky top-24"
+            className="border border-white/10 p-5 sticky top-0"
           >
             <p className="font-[var(--font-anton)] text-lg tracking-[0.05em] mb-1">{hoveredStock.ticker}</p>
             <p className="text-[11px] text-white/40 mb-4">{hoveredStock.name}</p>

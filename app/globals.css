@@ -183,6 +183,7 @@ body {
   100% { transform: translateX(-50%); }
 }
 .animate-ticker { animation: ticker-scroll 18s linear infinite; }
+.ticker-wrap:hover .animate-ticker { animation-play-state: paused; }
 
 /* Selection */
 ::selection { background: rgba(255, 255, 255, 0.2); color: #fff; }

@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   description: "Mock Capital Stock Exchange trading dashboard",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
       { url: "/favicon.svg", type: "image/svg+xml" },
     ],
@@ -33,6 +34,8 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
   other: {
     "apple-mobile-web-app-title": "MCSE",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
   },
 };
 

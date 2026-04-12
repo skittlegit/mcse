@@ -32,86 +32,74 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
     router.push("/");
   }
 
+  const menuItems = [
+    ...(role === "company" || role === "admin"
+      ? [{ icon: Shield, label: role === "admin" ? "ADMIN DASHBOARD" : "COMPANY DASHBOARD", href: "/admin" }]
+      : []),
+    { icon: Settings, label: "PREFERENCES", href: "/preferences" },
+    { icon: HelpCircle, label: "SUPPORT", href: "/support" },
+  ];
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: -8, scale: 0.96 }}
+      initial={{ opacity: 0, y: -8, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -8, scale: 0.96 }}
+      exit={{ opacity: 0, y: -8, scale: 0.97 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute right-0 top-10 w-80 bg-bg border border-white/15 z-50"
+      className="absolute right-0 top-10 w-[300px] bg-bg border border-white/15 z-50"
     >
-      {/* User header with avatar */}
-      <div className="px-5 py-4 border-b border-white/10">
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 border border-white/40 flex items-center justify-center shrink-0">
-            <span className="font-[var(--font-anton)] text-[10px] tracking-wider">{initials}</span>
+      {/* User Identity */}
+      <div className="px-5 py-5 border-b border-white/10">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 border border-white/30 flex items-center justify-center shrink-0">
+            <span className="font-[var(--font-anton)] text-[11px] tracking-wider">{initials}</span>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <p className="font-[var(--font-anton)] text-sm tracking-[0.1em] truncate">
-                {userName}
-              </p>
+            <div className="flex items-center gap-2 mb-0.5">
+              <p className="font-[var(--font-anton)] text-sm tracking-[0.08em] truncate">{userName}</p>
               {role && role !== "user" && (
-                <span className="text-[7px] tracking-[0.1em] px-1.5 py-0.5 border border-white/20 text-white/50 uppercase shrink-0">
-                  {role === "company" ? "CO. ADMIN" : "ADMIN"}
+                <span className="text-[7px] tracking-[0.1em] px-1.5 py-0.5 border border-white/15 text-white/40 uppercase shrink-0">
+                  {role === "company" ? "CO." : "ADMIN"}
                 </span>
               )}
             </div>
-            <p className="text-[10px] text-white/40 mt-0.5 truncate">{userEmail}</p>
+            <p className="text-[10px] text-white/30 truncate">{userEmail}</p>
           </div>
         </div>
       </div>
 
-      {/* Balance display */}
-      <div className="px-5 py-3 border-b border-white/10">
-        <span className="text-[9px] tracking-[0.15em] text-white/30">BALANCE</span>
-        <p className="font-[var(--font-anton)] text-sm tracking-[0.05em] mt-0.5">
+      {/* Balance */}
+      <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/10">
+        <span className="text-[9px] tracking-[0.15em] text-white/25">BALANCE</span>
+        <span className="font-[var(--font-anton)] text-sm tracking-[0.03em]">
           {"\u20B9"}{balance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-        </p>
+        </span>
       </div>
 
-      {/* Admin dashboard link */}
-      {(role === "company" || role === "admin") && (
-        <Link
-          href="/admin"
-          onClick={onClose}
-          className="flex items-center gap-3 px-5 py-3 border-b border-white/10 hover:bg-white/5 transition-colors"
-        >
-          <Shield size={12} className="text-white/40" />
-          <span className="text-[11px] tracking-[0.1em] text-white/50">
-            {role === "admin" ? "ADMIN DASHBOARD" : "COMPANY DASHBOARD"}
-          </span>
-          <ChevronRight size={12} className="text-white/20 ml-auto" />
-        </Link>
-      )}
-
-      {/* Menu items */}
-      <div className="border-b border-white/10">
-        <Link href="/preferences" onClick={onClose}>
-          <div className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors duration-300">
-            <Settings size={12} className="text-white/40" />
-            <span className="text-[11px] tracking-[0.1em] text-white/50">PREFERENCES</span>
-            <ChevronRight size={12} className="text-white/20 ml-auto" />
-          </div>
-        </Link>
-        <Link href="/support" onClick={onClose}>
-          <div className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors duration-300">
-            <HelpCircle size={12} className="text-white/40" />
-            <span className="text-[11px] tracking-[0.1em] text-white/50">CUSTOMER SUPPORT</span>
-            <ChevronRight size={12} className="text-white/20 ml-auto" />
-          </div>
-        </Link>
+      {/* Menu */}
+      <div className="py-1">
+        {menuItems.map((item) => (
+          <Link key={item.label} href={item.href} onClick={onClose}>
+            <div className="flex items-center gap-3.5 px-5 py-3.5 hover:bg-white/[0.04] transition-colors duration-300">
+              <item.icon size={13} className="text-white/30 shrink-0" />
+              <span className="text-[11px] tracking-[0.08em] text-white/45 flex-1">{item.label}</span>
+              <ChevronRight size={11} className="text-white/15" />
+            </div>
+          </Link>
+        ))}
       </div>
 
       {/* Logout */}
-      <button
-        onClick={handleLogout}
-        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-white/5 transition-colors duration-300"
-      >
-        <LogOut size={12} className="text-white/50" />
-        <span className="text-[10px] tracking-[0.15em] text-white/50">LOG OUT</span>
-      </button>
+      <div className="border-t border-white/10">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3.5 px-5 py-3.5 hover:bg-[#FF5252]/[0.06] transition-colors duration-300 group"
+        >
+          <LogOut size={13} className="text-white/30 group-hover:text-[#FF5252]/60 transition-colors duration-300" />
+          <span className="text-[10px] tracking-[0.12em] text-white/40 group-hover:text-[#FF5252]/70 transition-colors duration-300">LOG OUT</span>
+        </button>
+      </div>
     </motion.div>
   );
 }

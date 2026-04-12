@@ -28,7 +28,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       </AnimatePresence>
 
       <div
-        className={`relative flex flex-col min-h-screen transition-opacity duration-700 ease-out ${loading ? "opacity-0" : "opacity-100"}`}
+        className={`relative flex flex-col h-screen overflow-hidden transition-opacity duration-700 ease-out ${loading ? "opacity-0" : "opacity-100"}`}
       >
         {/* Grain overlay */}
         <div
@@ -56,12 +56,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           </svg>
         </div>
 
-        <div className="sticky top-0 z-50">
+        <div className="shrink-0 z-50">
           <TopNav />
           <TickerTape />
         </div>
-        <main className="flex-1 relative z-10 max-w-[1280px] mx-auto w-full px-4 md:px-12 pb-20 md:pb-0">
-          {children}
+        <main className="flex-1 overflow-y-auto relative z-10">
+          <div className="max-w-[1280px] mx-auto w-full px-4 md:px-12 pb-20 md:pb-0">
+            {children}
+          </div>
         </main>
       </div>
     </>

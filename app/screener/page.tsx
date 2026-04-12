@@ -141,7 +141,7 @@ export default function ScreenerPage() {
 
       <div className="md:grid md:grid-cols-[3fr_7fr] md:gap-8">
         <aside className="hidden md:block">
-          <div className="border border-white/8 p-5 space-y-5 sticky top-24">
+          <div className="border border-white/8 p-5 space-y-5 sticky top-0">
             <p className="text-[9px] tracking-[0.2em] text-white/25">FILTERS</p>
             <div>
               <p className="text-[9px] tracking-[0.15em] text-white/30 mb-2">SECTOR</p>

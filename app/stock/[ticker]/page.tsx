@@ -355,7 +355,7 @@ export default function StockDetailPage({
 
         {/* Right column (desktop): Sticky order panel + order book + news + orders */}
         <aside className="hidden md:block border-l border-white/8 pl-6">
-          <div className="sticky top-[6rem] space-y-6">
+          <div className="sticky top-0 space-y-6">
             <div>
             <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-3">PLACE ORDER</p>
 

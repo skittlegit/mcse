@@ -49,48 +49,35 @@ export default function NotificationDropdown({ onClose }: { onClose: () => void 
   };
 
   const iconFor = (type: string) => {
-    if (type === "gain") return <TrendingUp size={12} className="text-[#00D26A]" />;
-    if (type === "loss") return <TrendingDown size={12} className="text-[#FF5252]" />;
-    return <Info size={12} className="text-white/40" />;
-  };
-
-  const borderColor = (type: string) => {
-    if (type === "gain") return "border-l-[#00D26A]";
-    if (type === "loss") return "border-l-[#FF5252]";
-    return "border-l-white/15";
-  };
-
-  const categoryColor = (cat: NotifCategory) => {
-    if (cat === "PRICE ALERT") return "text-amber-400/70 border-amber-400/20";
-    if (cat === "VOLUME") return "text-blue-400/70 border-blue-400/20";
-    return "text-white/30 border-white/10";
-  };
-
-  const categoryIcon = (cat: NotifCategory) => {
-    if (cat === "VOLUME") return <Activity size={8} className="mr-0.5" />;
-    return null;
+    if (type === "gain") return <TrendingUp size={13} className="text-[#00D26A]" />;
+    if (type === "loss") return <TrendingDown size={13} className="text-[#FF5252]" />;
+    return <Info size={13} className="text-white/30" />;
   };
 
   const renderNotification = (n: Notification, i: number) => {
     const inner = (
       <motion.div
-        initial={{ opacity: 0, x: -6 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.03 * i, duration: 0.18 }}
-        className={`flex items-start gap-3 pl-4 pr-5 py-3 hover:bg-white/[0.03] transition-colors border-l-2 ${borderColor(n.type)} relative`}
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.02 * i, duration: 0.15 }}
+        className={`flex items-start gap-3.5 px-5 py-3.5 hover:bg-white/[0.03] transition-colors duration-300 ${!n.read ? "bg-white/[0.02]" : ""}`}
       >
-        {!n.read && (
-          <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-white/60" />
-        )}
-        <div className="mt-0.5 shrink-0">{iconFor(n.type)}</div>
+        <div className="mt-0.5 shrink-0 w-5 flex justify-center">{iconFor(n.type)}</div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`inline-flex items-center text-[7px] tracking-[0.15em] font-medium px-1.5 py-0.5 border ${categoryColor(n.category)}`}>
-              {categoryIcon(n.category)}{n.category}
+          <div className="flex items-center gap-2 mb-0.5">
+            {n.ticker && (
+              <span className="font-[var(--font-anton)] text-[11px] tracking-[0.05em]">{n.ticker}</span>
+            )}
+            <span className="flex items-center text-[7px] tracking-[0.12em] text-white/25 font-medium">
+              {n.category === "VOLUME" && <Activity size={7} className="mr-0.5" />}
+              {n.category}
             </span>
           </div>
-          <p className={`text-[11px] leading-relaxed ${n.read ? "text-white/35" : "text-white/70"}`}>{n.text}</p>
-          <p className="text-[9px] text-white/20 mt-1">{n.time}</p>
+          <p className={`text-[11px] leading-relaxed ${n.read ? "text-white/30" : "text-white/60"}`}>{n.text}</p>
+        </div>
+        <div className="shrink-0 flex flex-col items-end gap-1.5 pt-0.5">
+          <span className="text-[9px] text-white/20">{n.time}</span>
+          {!n.read && <span className="w-1.5 h-1.5 bg-white/50" />}
         </div>
       </motion.div>
     );
@@ -107,48 +94,51 @@ export default function NotificationDropdown({ onClose }: { onClose: () => void 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: -8, scale: 0.96 }}
+      initial={{ opacity: 0, y: -8, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -8, scale: 0.96 }}
+      exit={{ opacity: 0, y: -8, scale: 0.97 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="absolute right-0 top-10 w-[340px] bg-bg border border-white/15 z-50 max-h-[28rem] flex flex-col"
+      className="absolute right-0 top-10 w-[380px] bg-bg border border-white/15 z-50 max-h-[28rem] flex flex-col"
     >
-      <div className="px-5 py-3 border-b border-white/10 shrink-0">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="text-[10px] tracking-[0.2em] text-white/40 uppercase">NOTIFICATIONS</span>
-            {unreadCount > 0 && (
-              <span className="text-[8px] tracking-[0.1em] bg-white text-black font-semibold px-1.5 py-0.5">
-                {unreadCount}
-              </span>
-            )}
-          </div>
-          <button
-            onClick={markAllRead}
-            className="flex items-center gap-1 text-[8px] tracking-[0.1em] text-white/25 hover:text-white/60 transition-colors"
-            title="Mark all as read"
-          >
-            <CheckCheck size={10} />
-            <span>READ ALL</span>
-          </button>
+      {/* Header */}
+      <div className="px-5 py-3.5 border-b border-white/10 shrink-0 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] tracking-[0.2em] text-white/40">ALERTS</span>
+          {unreadCount > 0 && (
+            <span className="text-[8px] tracking-[0.08em] bg-white/10 text-white/60 font-medium px-2 py-0.5">
+              {unreadCount} NEW
+            </span>
+          )}
         </div>
+        <button
+          onClick={markAllRead}
+          className="flex items-center gap-1.5 text-[8px] tracking-[0.1em] text-white/20 hover:text-white/50 transition-colors duration-300"
+        >
+          <CheckCheck size={10} />
+          MARK READ
+        </button>
       </div>
 
+      {/* Notification list */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
         {todayNotifs.length > 0 && (
           <>
-            <div className="px-5 pt-3 pb-1.5">
-              <span className="text-[8px] tracking-[0.2em] text-white/20">TODAY</span>
+            <div className="sticky top-0 bg-bg/95 backdrop-blur-sm px-5 py-2 border-b border-white/6">
+              <span className="text-[8px] tracking-[0.2em] text-white/15">TODAY</span>
             </div>
-            {todayNotifs.map((n, i) => renderNotification(n, i))}
+            <div className="divide-y divide-white/6">
+              {todayNotifs.map((n, i) => renderNotification(n, i))}
+            </div>
           </>
         )}
         {earlierNotifs.length > 0 && (
           <>
-            <div className="px-5 pt-4 pb-1.5 border-t border-white/6">
-              <span className="text-[8px] tracking-[0.2em] text-white/20">EARLIER</span>
+            <div className="sticky top-0 bg-bg/95 backdrop-blur-sm px-5 py-2 border-b border-white/6">
+              <span className="text-[8px] tracking-[0.2em] text-white/15">EARLIER</span>
             </div>
-            {earlierNotifs.map((n, i) => renderNotification(n, i + todayNotifs.length))}
+            <div className="divide-y divide-white/6">
+              {earlierNotifs.map((n, i) => renderNotification(n, i + todayNotifs.length))}
+            </div>
           </>
         )}
       </div>

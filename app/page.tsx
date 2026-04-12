@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import { ChevronRight, ChevronDown, ChevronUp, Target, Layers, ScanLine, Calendar, Landmark, Repeat, TrendingUp as TrendingUpIcon } from "lucide-react";
@@ -81,101 +81,134 @@ export default function ExplorePage() {
 
   return (
     <div className="py-6">
-      {/* Marketing hero â€” non-logged-in users */}
+      {/* Marketing hero — non-logged-in users */}
       {!isLoggedIn && (
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="border border-white/10 mb-8 md:mb-10 relative overflow-hidden"
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-red-500/[0.08] via-transparent to-white/[0.02] pointer-events-none" />
-          <div className="relative z-10 grid md:grid-cols-2 gap-6 md:gap-0">
-            {/* Left: Main copy */}
-            <div className="p-8 md:p-12 flex flex-col justify-center">
+          {/* Subtle gradient wash */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.04] via-transparent to-transparent pointer-events-none" />
+
+          <div className="relative z-10">
+            {/* Top bar — date + live badge */}
+            <div className="flex items-center justify-between px-8 md:px-12 pt-8 md:pt-10">
               <motion.p
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[9px] tracking-[0.3em] text-white/30 mb-4"
-              >24 {"\u2014"} 26 APRIL {"\u00B7"} MAHINDRA UNIVERSITY</motion.p>
-              <motion.h1
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="font-[var(--font-anton)] text-4xl md:text-6xl tracking-[0.04em] uppercase leading-[1.05] mb-5"
+                transition={{ delay: 0.15, duration: 0.4 }}
+                className="text-[9px] tracking-[0.3em] text-white/30"
               >
-                THE EXCHANGE<br />IS LIVE.
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.35, duration: 0.4 }}
-                className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-8"
-              >
-                University clubs, listed as equities. Buy shares, trade live across three evenings, and compete for a <span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> prize pool. Entry {"\u20B9"}100 â€” free for MU students.
+                24 {"\u2014"} 26 APRIL {"\u00B7"} MAHINDRA UNIVERSITY
               </motion.p>
               <motion.div
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.45, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center gap-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+                className="flex items-center gap-2"
               >
-                <a
-                  href="https://www.mu-aeon.com/events?event=mcse"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 text-[10px] tracking-[0.15em] font-semibold bg-white text-black border border-white hover:bg-transparent hover:text-white transition-all duration-300"
-                >
-                  REGISTER NOW
-                </a>
-                <Link
-                  href="/login"
-                  className="px-6 py-3 text-[10px] tracking-[0.15em] font-semibold bg-transparent text-white/50 border border-white/15 hover:text-white hover:border-white transition-all duration-300"
-                >
-                  LOG IN
-                </Link>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full bg-[#00D26A] opacity-60" />
+                  <span className="relative inline-flex h-2 w-2 bg-[#00D26A]" />
+                </span>
+                <span className="text-[8px] tracking-[0.2em] text-[#00D26A]/70 font-semibold">LIVE</span>
               </motion.div>
             </div>
-            {/* Right: Stats */}
-            <div className="hidden md:flex flex-col justify-center border-l border-white/6 p-12 gap-8">
-              <motion.div
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="space-y-6"
-              >
+
+            {/* Main grid */}
+            <div className="grid md:grid-cols-[3fr_2fr]">
+              {/* Left: Copy */}
+              <div className="px-8 md:px-12 pt-6 pb-8 md:pb-12">
+                <motion.h1
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-[MonumentExtended] font-extrabold text-3xl sm:text-4xl md:text-[3.5rem] leading-[1.05] tracking-tight uppercase mb-6"
+                >
+                  THE EXCHANGE<br />IS LIVE.
+                </motion.h1>
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.35, duration: 0.4 }}
+                  className="text-[12px] md:text-[13px] text-white/40 leading-relaxed max-w-md mb-8"
+                >
+                  University clubs, listed as equities. Buy shares, trade live across three evenings, and compete for a{" "}
+                  <span className="text-white/70 font-semibold">{"\u20B9"}70,000</span> prize pool.
+                  Entry {"\u20B9"}100 {"\u2014"} free for MU students.
+                </motion.p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.45, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-center gap-4"
+                >
+                  <a
+                    href="https://www.mu-aeon.com/events?event=mcse"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 text-[10px] tracking-[0.15em] font-semibold bg-white text-black border border-white hover:bg-transparent hover:text-white transition-all duration-300"
+                  >
+                    REGISTER NOW
+                  </a>
+                  <Link
+                    href="/login"
+                    className="px-6 py-3 text-[10px] tracking-[0.15em] font-semibold bg-transparent text-white/50 border border-white/15 hover:text-white hover:border-white transition-all duration-300"
+                  >
+                    LOG IN
+                  </Link>
+                </motion.div>
+              </div>
+
+              {/* Right: Stats grid (desktop) */}
+              <div className="hidden md:grid grid-cols-2 border-l border-white/6">
                 {[
-                  { label: "SCHEDULE", value: "3 EVENINGS" },
-                  { label: "ENTRY FEE", value: "\u20B9100" },
-                  { label: "CLUBS LISTED", value: "30+" },
-                  { label: "PRIZE POOL", value: "\u20B970,000" },
+                  { label: "SCHEDULE", value: "3 EVENINGS", sub: "8:30 PM onwards" },
+                  { label: "ENTRY FEE", value: "\u20B9100", sub: "Free for MU" },
+                  { label: "CLUBS LISTED", value: "30+", sub: "Across all schools" },
+                  { label: "PRIZE POOL", value: "\u20B970,000", sub: "Top 3 portfolios" },
                 ].map((stat, i) => (
                   <motion.div
                     key={stat.label}
-                    initial={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 + i * 0.08, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex items-baseline justify-between"
+                    transition={{ delay: 0.3 + i * 0.08, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className={`flex flex-col justify-center px-8 py-7 ${i < 2 ? "border-b border-white/6" : ""} ${i % 2 === 0 ? "border-r border-white/6" : ""}`}
                   >
-                    <span className="text-[9px] tracking-[0.2em] text-white/25">{stat.label}</span>
-                    <span className="font-[var(--font-anton)] text-lg tracking-tight">{stat.value}</span>
+                    <span className="text-[8px] tracking-[0.2em] text-white/25 mb-1.5">{stat.label}</span>
+                    <span className="font-[var(--font-anton)] text-xl tracking-tight">{stat.value}</span>
+                    <span className="text-[9px] text-white/20 mt-1">{stat.sub}</span>
                   </motion.div>
                 ))}
-              </motion.div>
+              </div>
             </div>
-            {/* Mobile stats row */}
-            <div className="md:hidden flex flex-wrap gap-x-6 gap-y-2 px-8 pb-8">
-              <span className="text-[9px] tracking-[0.15em] text-white/25">8:30 PM ONWARDS</span>
-              <span className="text-[9px] tracking-[0.15em] text-white/25">{"\u20B9"}100 ENTRY</span>
-              <span className="text-[9px] tracking-[0.15em] text-white/25">30+ CLUBS</span>
-              <span className="text-[9px] tracking-[0.15em] text-white/25">LIVE TRADING SIM</span>
+
+            {/* Mobile stats strip */}
+            <div className="md:hidden grid grid-cols-4 border-t border-white/6">
+              {[
+                { label: "SCHEDULE", value: "3 EVES" },
+                { label: "ENTRY", value: "\u20B9100" },
+                { label: "LISTED", value: "30+" },
+                { label: "PRIZE", value: "\u20B970K" },
+              ].map((stat, i) => (
+                <div
+                  key={stat.label}
+                  className={`text-center py-4 ${i < 3 ? "border-r border-white/6" : ""}`}
+                >
+                  <p className="text-[7px] tracking-[0.15em] text-white/25 mb-0.5">{stat.label}</p>
+                  <p className="font-[var(--font-anton)] text-[13px] tracking-tight">{stat.value}</p>
+                </div>
+              ))}
             </div>
           </div>
-        </motion.div>
+        </motion.section>
       )}
 
-      {/* Holdings summary strip â€” logged-in users */}
+      {/* Holdings summary strip — logged-in users */}
       {isLoggedIn && showBalance && (
         <motion.div
           initial={{ opacity: 0, y: -6 }}
@@ -211,7 +244,7 @@ export default function ExplorePage() {
         </motion.div>
       )}
 
-      {/* Products & Tools â€” full-width feature grid */}
+      {/* Products & Tools — full-width feature grid */}
       <motion.div
         initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
