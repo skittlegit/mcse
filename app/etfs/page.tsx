@@ -88,7 +88,7 @@ export default function ETFsPage() {
           <button
             key={cat}
             onClick={() => setCategory(cat)}
-            className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-150 whitespace-nowrap ${
+            className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-300 whitespace-nowrap ${
               category === cat
                 ? "text-white border-white"
                 : "text-white/40 border-transparent hover:text-white/60"

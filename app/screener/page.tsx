@@ -66,7 +66,7 @@ export default function ScreenerPage() {
         </div>
         <button
           onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-          className="md:hidden px-4 py-2.5 text-[10px] tracking-[0.15em] border border-white/15 text-white/40 hover:text-white hover:border-white transition-all duration-150 flex items-center gap-1.5"
+          className="md:hidden px-4 py-2.5 text-[10px] tracking-[0.15em] border border-white/15 text-white/40 hover:text-white hover:border-white transition-all duration-300 flex items-center gap-1.5"
         >
           <SlidersHorizontal size={12} />
           FILTERS
@@ -106,7 +106,7 @@ export default function ScreenerPage() {
                     <button
                       key={s}
                       onClick={() => setSector(s)}
-                      className={`px-3 py-2 text-[9px] tracking-[0.1em] border-b-2 transition-all duration-150 ${
+                      className={`px-3 py-2 text-[9px] tracking-[0.1em] border-b-2 transition-all duration-300 ${
                         sector === s
                           ? "text-white border-white"
                           : "text-white/40 border-transparent hover:text-white/60"
@@ -150,7 +150,7 @@ export default function ScreenerPage() {
                   <button
                     key={s}
                     onClick={() => setSector(s)}
-                    className={`px-3 py-2 text-[9px] tracking-[0.1em] border-b-2 transition-all duration-150 ${
+                    className={`px-3 py-2 text-[9px] tracking-[0.1em] border-b-2 transition-all duration-300 ${
                       sector === s
                         ? "text-white border-white"
                         : "text-white/40 border-transparent hover:text-white/60"

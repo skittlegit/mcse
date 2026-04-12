@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 
-/* ── Seeded RNG + chart path ── */
+/* â”€â”€ Seeded RNG + chart path â”€â”€ */
 function seededRandom(seed: number) {
   let s = seed;
   return () => {

@@ -20,7 +20,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MCSE — Math Club Stock Exchange",
+  title: "MCSE",
   description: "Mock Capital Stock Exchange trading dashboard",
   icons: {
     icon: [

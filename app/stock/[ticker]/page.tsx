@@ -82,7 +82,7 @@ export default function StockDetailPage({
         <p className="text-[11px] text-white/40 mb-4">{ticker.toUpperCase()}</p>
         <Link
           href="/"
-          className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+          className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
         >
           BACK TO EXPLORE
         </Link>
@@ -123,7 +123,7 @@ export default function StockDetailPage({
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
-            className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-150"
+            className="w-9 h-9 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-300"
           >
             <ArrowLeft size={15} />
           </button>
@@ -212,7 +212,7 @@ export default function StockDetailPage({
               <button
                 key={r}
                 onClick={() => setRange(r)}
-                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-150 ${
+                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-300 ${
                   range === r
                     ? "text-white border-white"
                     : "text-white/40 border-transparent hover:text-white/60"
@@ -223,7 +223,7 @@ export default function StockDetailPage({
             ))}
           </motion.div>
 
-          {/* Your holding info (if held) — uses position data for consistency */}
+          {/* Your holding info (if held) â€” uses position data for consistency */}
           {position && (
             <motion.div
               initial={{ opacity: 0, y: 4 }}
@@ -368,16 +368,16 @@ export default function StockDetailPage({
             <div className="flex gap-0">
               <button
                 onClick={() => setBuySellTab("BUY")}
-                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
-                  buySellTab === "BUY" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"
+                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
+                  buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A]" : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 BUY
               </button>
               <button
                 onClick={() => setBuySellTab("SELL")}
-                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
-                  buySellTab === "SELL" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"
+                className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
+                  buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252]" : "text-white/40 border-transparent hover:text-white/60"
                 }`}
               >
                 SELL
@@ -472,7 +472,7 @@ export default function StockDetailPage({
               <motion.button
                 onClick={handleOrder}
                 whileTap={{ scale: 0.97 }}
-                className={`w-full h-11 mt-5 text-[10px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
+                className={`w-full h-11 mt-5 text-[10px] tracking-[0.15em] font-semibold border transition-all duration-300 ${
                   buySellTab === "BUY"
                     ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
                     : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"
@@ -681,14 +681,14 @@ export default function StockDetailPage({
                     <div className="flex gap-0">
                       <button
                         onClick={() => setBuySellTab("BUY")}
-                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
-                          buySellTab === "BUY" ? "text-white border-white" : "text-white/40 border-transparent"
+                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
+                          buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A]" : "text-white/40 border-transparent"
                         }`}
                       >BUY</button>
                       <button
                         onClick={() => setBuySellTab("SELL")}
-                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all ${
-                          buySellTab === "SELL" ? "text-white border-white" : "text-white/40 border-transparent"
+                        className={`flex-1 py-2.5 text-[10px] tracking-[0.15em] font-semibold border-b-2 transition-all duration-300 ${
+                          buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252]" : "text-white/40 border-transparent"
                         }`}
                       >SELL</button>
                     </div>
@@ -848,7 +848,7 @@ export default function StockDetailPage({
                   <motion.button
                     whileTap={{ scale: 0.97 }}
                     onClick={handleOrder}
-                    className={`w-full h-12 text-[11px] tracking-[0.15em] font-semibold border transition-all duration-150 ${
+                    className={`w-full h-12 text-[11px] tracking-[0.15em] font-semibold border transition-all duration-300 ${
                       buySellTab === "BUY"
                         ? "bg-[#00D26A] text-black border-[#00D26A] hover:bg-transparent hover:text-[#00D26A]"
                         : "bg-[#FF5252] text-white border-[#FF5252] hover:bg-transparent hover:text-[#FF5252]"

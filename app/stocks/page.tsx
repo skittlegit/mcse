@@ -74,14 +74,14 @@ export default function StocksPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="SEARCH BY NAME OR TICKER..."
-          className="flex-1 h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-150"
+          className="flex-1 h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-300"
         />
         <div className="flex items-center gap-0 overflow-x-auto scrollbar-hide">
           {sectors.map((s) => (
             <button
               key={s}
               onClick={() => setSectorFilter(s)}
-              className={`px-3 py-2.5 text-[9px] tracking-[0.12em] border-b-2 whitespace-nowrap transition-all duration-150 ${
+              className={`px-3 py-2.5 text-[9px] tracking-[0.12em] border-b-2 whitespace-nowrap transition-all duration-300 ${
                 sectorFilter === s
                   ? "text-white border-white"
                   : "text-white/40 border-transparent hover:text-white/60"
@@ -149,7 +149,7 @@ export default function StocksPage() {
           <Link
             key={stock.ticker}
             href={`/stock/${stock.ticker}`}
-            className="grid grid-cols-[1fr_100px_120px_80px_100px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+            className="grid grid-cols-[1fr_100px_120px_80px_100px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-300 items-center"
           >
             <div>
               <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{stock.ticker}</p>

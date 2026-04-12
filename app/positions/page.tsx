@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -22,7 +22,7 @@ export default function PositionsPage() {
           <button
             key={tab}
             onClick={() => setPageTab(tab)}
-            className={`px-5 py-2.5 text-[11px] tracking-[0.15em] border-b-2 transition-all duration-150 ${
+            className={`px-5 py-2.5 text-[11px] tracking-[0.15em] border-b-2 transition-all duration-300 ${
               pageTab === tab
                 ? "text-white border-white"
                 : "text-white/40 border-transparent hover:text-white/60"
@@ -104,7 +104,7 @@ export default function PositionsPage() {
                   <Link
                     key={order.id}
                     href={`/stock/${order.ticker}`}
-                    className="grid grid-cols-[60px_1fr_100px_80px_120px_90px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+                    className="grid grid-cols-[60px_1fr_100px_80px_120px_90px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-300 items-center"
                   >
                     <span className={`text-[9px] tracking-[0.15em] font-semibold px-2 py-0.5 border w-fit ${
                       order.type === "BUY"
@@ -159,13 +159,13 @@ export default function PositionsPage() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/"
-                  className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+                  className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
                 >
                   EXPLORE STOCKS
                 </Link>
                 <Link
                   href="/holdings"
-                  className="px-6 py-3 text-[10px] tracking-[0.15em] text-white/50 hover:text-white border border-white/20 hover:border-white transition-all duration-150"
+                  className="px-6 py-3 text-[10px] tracking-[0.15em] text-white/50 hover:text-white border border-white/20 hover:border-white transition-all duration-300"
                 >
                   VIEW HOLDINGS
                 </Link>
@@ -247,7 +247,7 @@ export default function PositionsPage() {
                 <Link
                   key={pos.ticker}
                   href={`/stock/${pos.ticker}`}
-                  className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+                  className="grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-300 items-center"
                 >
                   <div>
                     <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{pos.ticker}</p>
@@ -296,7 +296,7 @@ export default function PositionsPage() {
             </p>
             <Link
               href="/"
-              className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+              className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
             >
               EXPLORE STOCKS
             </Link>

@@ -23,7 +23,7 @@ export default function LoginPrompt({ message }: { message: string }) {
       </p>
       <Link
         href="/login"
-        className="px-8 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+        className="px-8 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
       >
         LOG IN
       </Link>

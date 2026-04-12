@@ -89,14 +89,14 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
       {/* Menu items */}
       <div className="border-b border-white/10">
         <Link href="/preferences" onClick={onClose}>
-          <div className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors duration-150">
+          <div className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors duration-300">
             <Settings size={12} className="text-white/40" />
             <span className="text-[11px] tracking-[0.1em] text-white/50">PREFERENCES</span>
             <ChevronRight size={12} className="text-white/20 ml-auto" />
           </div>
         </Link>
         <Link href="/support" onClick={onClose}>
-          <div className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors duration-150">
+          <div className="flex items-center gap-3 px-5 py-3 hover:bg-white/5 transition-colors duration-300">
             <HelpCircle size={12} className="text-white/40" />
             <span className="text-[11px] tracking-[0.1em] text-white/50">CUSTOMER SUPPORT</span>
             <ChevronRight size={12} className="text-white/20 ml-auto" />
@@ -107,7 +107,7 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
       {/* Logout */}
       <button
         onClick={handleLogout}
-        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-white/5 transition-colors duration-150"
+        className="w-full flex items-center gap-2 px-5 py-3 hover:bg-white/5 transition-colors duration-300"
       >
         <LogOut size={12} className="text-white/50" />
         <span className="text-[10px] tracking-[0.15em] text-white/50">LOG OUT</span>

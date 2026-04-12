@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useMemo } from "react";
 import { Eye, EyeOff, ChevronDown, ChevronUp, BarChart3, X, ArrowUpDown, Minus, Plus } from "lucide-react";
@@ -110,13 +110,13 @@ export default function HoldingsPage() {
         </h1>
         <button
           onClick={() => setShowValues(!showValues)}
-          className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-150"
+          className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white transition-colors duration-300"
         >
           {showValues ? <Eye size={13} /> : <EyeOff size={13} />}
         </button>
         <Link
           href="/analyse"
-          className="ml-auto flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-150"
+          className="ml-auto flex items-center gap-2 px-4 py-2 border border-white/20 text-[10px] tracking-[0.15em] text-white/50 hover:text-white hover:border-white transition-all duration-300"
         >
           <BarChart3 size={13} />
           ANALYSE
@@ -320,7 +320,7 @@ export default function HoldingsPage() {
             <div
               key={h.ticker}
               onClick={() => { setSelectedTicker(h.ticker); setQty(1); setOrderMsg(null); }}
-              className={`grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center cursor-pointer ${selectedTicker === h.ticker ? "bg-white/[0.06]" : ""}`}
+              className={`grid grid-cols-[1fr_80px_100px_100px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-300 items-center cursor-pointer ${selectedTicker === h.ticker ? "bg-white/[0.06]" : ""}`}
             >
               <div>
                 <p className="font-[var(--font-anton)] text-[13px] tracking-[0.05em]">{h.ticker}</p>
@@ -409,13 +409,13 @@ export default function HoldingsPage() {
               <div className="flex gap-0 mb-4">
                 <button
                   onClick={() => setBuySellTab("BUY")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all ${buySellTab === "BUY" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all duration-300 ${buySellTab === "BUY" ? "text-[#00D26A] border-[#00D26A]" : "text-white/40 border-transparent hover:text-white/60"}`}
                 >
                   BUY
                 </button>
                 <button
                   onClick={() => setBuySellTab("SELL")}
-                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all ${buySellTab === "SELL" ? "text-white border-white" : "text-white/40 border-transparent hover:text-white/60"}`}
+                  className={`flex-1 py-2 text-[10px] tracking-[0.15em] font-medium border-b-2 transition-all duration-300 ${buySellTab === "SELL" ? "text-[#FF5252] border-[#FF5252]" : "text-white/40 border-transparent hover:text-white/60"}`}
                 >
                   SELL
                 </button>
@@ -512,7 +512,7 @@ export default function HoldingsPage() {
                 href={`/stock/${selectedStock.ticker}`}
                 className="block mt-3 text-[10px] tracking-[0.1em] text-white/30 hover:text-white transition-colors text-center"
               >
-                VIEW STOCK DETAILS →
+                VIEW STOCK DETAILS ?
               </Link>
             </div>
           )}

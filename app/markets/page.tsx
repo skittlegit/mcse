@@ -42,7 +42,7 @@ export default function MarketsPage() {
         </div>
       </div>
 
-      {/* Indices — hero cards */}
+      {/* Indices â€” hero cards */}
       <section className="mb-10">
         <div className="grid gap-[1px] bg-white/8 grid-cols-2 md:grid-cols-5">
           {indices.map((idx, i) => (
@@ -112,14 +112,14 @@ export default function MarketsPage() {
 
       {/* Main content: 2-col */}
       <div className="md:grid md:grid-cols-[3fr_2fr] md:gap-8">
-        {/* Left — Tabbed Movers */}
+        {/* Left â€” Tabbed Movers */}
         <div>
           <div className="flex items-center gap-0 mb-4">
             {(Object.keys(moversTabsMap) as MoversTab[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setMoversTab(tab)}
-                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-150 whitespace-nowrap ${
+                className={`px-4 py-2.5 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-300 whitespace-nowrap ${
                   moversTab === tab
                     ? "text-white border-white"
                     : "text-white/40 border-transparent hover:text-white/60"
@@ -182,7 +182,7 @@ export default function MarketsPage() {
             ))}
           </div>
 
-          {/* Most Traded — ranked list below movers */}
+          {/* Most Traded â€” ranked list below movers */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -214,7 +214,7 @@ export default function MarketsPage() {
           </motion.div>
         </div>
 
-        {/* Right sidebar — Stocks in News */}
+        {/* Right sidebar â€” Stocks in News */}
         <aside className="hidden md:block mt-8 md:mt-0">
           <h2 className="text-[9px] tracking-[0.2em] text-white/30 uppercase mb-4">STOCKS IN NEWS</h2>
           <div className="space-y-0">

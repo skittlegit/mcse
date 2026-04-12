@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -117,7 +117,7 @@ export default function TopNav() {
                 <Link
                   key={tab.label}
                   href={tab.href}
-                  className={`text-[10px] tracking-[0.15em] font-medium px-4 py-2 border-b-2 transition-all duration-200 ${
+                  className={`text-[10px] tracking-[0.15em] font-medium px-4 py-2 border-b-2 transition-all duration-300 ${
                     active
                       ? "text-white border-white"
                       : "text-white/40 border-transparent hover:text-white/60"
@@ -134,11 +134,11 @@ export default function TopNav() {
             <motion.button
               whileTap={{ scale: 0.98 }}
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 h-8 px-3 border border-white/20 hover:border-white/60 transition-colors duration-200"
+              className="flex items-center gap-2 h-8 px-3 border border-white/20 hover:border-white/60 transition-colors duration-300"
             >
               <Search size={14} strokeWidth={1.5} />
               <span className="hidden sm:block text-[10px] tracking-[0.1em] text-white/30">
-                Search stocks, news, events… <span className="text-white/15">⌘K</span>
+                Search stocks, news, events… <span className="text-white/15">?K</span>
               </span>
             </motion.button>
 
@@ -146,7 +146,7 @@ export default function TopNav() {
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={() => { setNotifOpen(!notifOpen); setProfileOpen(false); }}
-                className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white/60 transition-colors duration-200 relative"
+                className="w-8 h-8 border border-white/20 flex items-center justify-center hover:border-white/60 transition-colors duration-300 relative"
               >
                 <Bell size={14} strokeWidth={1.5} />
                 <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-white" />
@@ -162,7 +162,7 @@ export default function TopNav() {
                   <motion.button
                     whileTap={{ scale: 0.98 }}
                     onClick={() => { setProfileOpen(!profileOpen); setNotifOpen(false); }}
-                    className="w-8 h-8 border border-white flex items-center justify-center text-[10px] font-[var(--font-anton)] tracking-wider hover:bg-white hover:text-black transition-all duration-200"
+                    className="w-8 h-8 border border-white flex items-center justify-center text-[10px] font-[var(--font-anton)] tracking-wider hover:bg-white hover:text-black transition-all duration-300"
                   >
                     {initials}
                   </motion.button>
@@ -173,7 +173,7 @@ export default function TopNav() {
               ) : (
                 <Link
                   href="/login"
-                  className="h-8 px-4 bg-white text-black flex items-center justify-center text-[10px] tracking-[0.12em] font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-200"
+                  className="h-8 px-4 bg-white text-black flex items-center justify-center text-[10px] tracking-[0.12em] font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
                 >
                   LOG IN
                 </Link>

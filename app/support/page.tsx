@@ -7,9 +7,9 @@ import { ArrowLeft, Mail, Phone, MessageSquare, ChevronDown, ChevronUp, Send, Ch
 
 const faqs = [
   { q: "How do I place a buy/sell order?", a: "Navigate to any stock page and use the BUY or SELL buttons. On desktop, the order panel is on the right sidebar. On mobile, use the bottom action bar." },
-  { q: "What are DELIVERY and INTRADAY orders?", a: "DELIVERY orders are settled in your demat account (T+1). INTRADAY orders must be squared off the same day — positions auto-close at market end." },
-  { q: "How is my portfolio value calculated?", a: "Current Value = sum of (qty × last traded price) for each holding. Returns = Current Value − Invested Value." },
-  { q: "How do I add funds to my account?", a: "Go to Profile → Available Balance. You can transfer funds from your linked bank account via UPI or net banking." },
+  { q: "What are DELIVERY and INTRADAY orders?", a: "DELIVERY orders are settled in your demat account (T+1). INTRADAY orders must be squared off the same day â€” positions auto-close at market end." },
+  { q: "How is my portfolio value calculated?", a: "Current Value = sum of (qty Ã— last traded price) for each holding. Returns = Current Value âˆ’ Invested Value." },
+  { q: "How do I add funds to my account?", a: "Go to Profile â†’ Available Balance. You can transfer funds from your linked bank account via UPI or net banking." },
   { q: "What happens if my order fails?", a: "If an order fails due to insufficient balance or market conditions, no amount is deducted. You'll see the order status as CANCELLED in your order history." },
 ];
 
@@ -71,7 +71,7 @@ export default function SupportPage() {
           </div>
           <div>
             <p className="text-[9px] tracking-[0.2em] text-white/30 mb-1">LIVE CHAT</p>
-            <p className="text-[12px] text-white/70">Mon–Sat, 9AM–6PM</p>
+            <p className="text-[12px] text-white/70">Monâ€“Sat, 9AMâ€“6PM</p>
           </div>
         </div>
       </motion.div>
@@ -166,7 +166,7 @@ export default function SupportPage() {
                     }
                   }}
                   disabled={!ticketSubject.trim() || !ticketMessage.trim()}
-                  className="flex items-center gap-2 px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150 disabled:opacity-30 disabled:pointer-events-none"
+                  className="flex items-center gap-2 px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300 disabled:opacity-30 disabled:pointer-events-none"
                 >
                   <Send size={12} />
                   SUBMIT TICKET
@@ -186,7 +186,7 @@ export default function SupportPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setTicketOpen(true)}
-              className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+              className="px-6 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
             >
               RAISE A TICKET
             </motion.button>

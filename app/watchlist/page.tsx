@@ -90,7 +90,7 @@ export default function WatchlistPage() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="SEARCH STOCKS..."
-        className="w-full h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-150 mb-4"
+        className="w-full h-11 bg-transparent border border-white/15 px-4 text-[16px] tracking-[0.1em] text-white placeholder:text-white/20 outline-none focus:border-white transition-colors duration-300 mb-4"
       />
 
       {/* Watchlist tabs */}
@@ -99,7 +99,7 @@ export default function WatchlistPage() {
           <button
             key={i}
             onClick={() => setActiveList(i)}
-            className={`px-4 py-2 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-150 whitespace-nowrap flex items-center gap-2 ${
+            className={`px-4 py-2 text-[10px] tracking-[0.15em] border-b-2 transition-all duration-300 whitespace-nowrap flex items-center gap-2 ${
               activeList === i
                 ? "text-white border-white"
                 : "text-white/40 border-transparent hover:text-white/60"
@@ -196,7 +196,7 @@ export default function WatchlistPage() {
               <Sparkline data={stock.sparkline} width={52} height={22} positive={stock.dayChangePercent >= 0} />
               <div className="text-right shrink-0 min-w-[80px]">
                 <p className="font-[var(--font-anton)] text-[13px]">
-                  {"₹"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                  {"â‚¹"}{stock.price.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </p>
                 <p className={`text-[11px] font-medium ${stock.dayChangePercent >= 0 ? "text-[#00D26A]" : "text-[#FF5252]"}`}>
                   {stock.dayChangePercent >= 0 ? "+" : ""}{stock.dayChangePercent.toFixed(2)}%
@@ -238,7 +238,7 @@ export default function WatchlistPage() {
             <Link
               key={stock.ticker}
               href={`/stock/${stock.ticker}`}
-              className="grid grid-cols-[1fr_80px_100px_90px_80px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-150 items-center"
+              className="grid grid-cols-[1fr_80px_100px_90px_80px_120px] gap-4 px-4 py-3 border-b border-white/6 hover:bg-white/[0.04] transition-colors duration-300 items-center"
               onMouseEnter={() => handleMouseEnter(stock.ticker)}
               onMouseLeave={handleMouseLeave}
             >
@@ -324,7 +324,7 @@ export default function WatchlistPage() {
           </p>
           <Link
             href="/"
-            className="px-8 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-150"
+            className="px-8 py-3 text-[10px] tracking-[0.15em] bg-white text-black font-semibold hover:bg-transparent hover:text-white border border-white transition-all duration-300"
           >
             EXPLORE STOCKS
           </Link>
