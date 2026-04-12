@@ -94,7 +94,7 @@ export default function StockDetailPage({
   const chartValues = chartData.map((d) => d.price);
 
   return (
-    <div className="pb-32 md:pb-0">
+    <div className="pb-40 md:pb-0">
       {/* Order feedback toast */}
       <AnimatePresence>
         {orderMsg && (
@@ -602,7 +602,7 @@ export default function StockDetailPage({
       </div>
 
       {/* Mobile fixed bottom buy/sell bar */}
-      <div className="fixed bottom-14 left-0 right-0 z-50 md:hidden border-t border-white/12 bg-bg/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
+      <div className="fixed left-0 right-0 z-50 md:hidden border-t border-white/12 bg-bg/95 backdrop-blur-md" style={{ bottom: 'calc(3.5rem + env(safe-area-inset-bottom))' }}>
         <div className="flex">
           <motion.button
             whileTap={{ scale: 0.97 }}

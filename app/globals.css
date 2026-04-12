@@ -114,6 +114,7 @@
 /* Light theme — missing utility overrides */
 [data-theme="light"] .text-white\/15 { color: rgba(17,17,17,0.30); }
 [data-theme="light"] .text-white\/35 { color: rgba(17,17,17,0.50); }
+[data-theme="light"] .text-white\/45 { color: rgba(17,17,17,0.55); }
 [data-theme="light"] .text-\[\#666\] { color: rgba(17,17,17,0.50); }
 [data-theme="light"] .bg-bg\/95 { background-color: rgba(245,245,245,0.95) !important; }
 [data-theme="light"] .group:hover .group-hover\:text-white\/60 { color: rgba(17,17,17,0.60); }
@@ -176,6 +177,16 @@ body {
 /* Hide scrollbar */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Thin scrollbar for main content area */
+main::-webkit-scrollbar { width: 6px; }
+main::-webkit-scrollbar-track { background: transparent; }
+main::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); }
+main::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+main { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent; }
+[data-theme="light"] main::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
+[data-theme="light"] main::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+[data-theme="light"] main { scrollbar-color: rgba(0,0,0,0.12) transparent; }
 
 /* Ticker tape scroll */
 @keyframes ticker-scroll {
@@ -319,4 +330,33 @@ body {
   font-family: "MonumentExtended", monospace;
   font-size: 10px; letter-spacing: 0.1em;
   color: rgba(255,255,255,0.35); min-width: 32px; text-align: right;
+}
+
+/* Loading screen — light mode */
+.ld-light { background: #f0f0ee !important; }
+.ld-light .ld-grid {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px) !important;
+}
+.ld-light .ld-scanline {
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06) 20%, rgba(0,0,0,0.06) 80%, transparent) !important;
+  box-shadow: 0 0 20px 8px rgba(0,0,0,0.02) !important;
+}
+.ld-light .ld-grain { mix-blend-mode: multiply !important; opacity: 0.03 !important; }
+.ld-light .ld-dataline { color: rgba(0,0,0,0.35) !important; }
+.ld-light .ld-dataline-prefix { color: rgba(0,0,0,0.2) !important; }
+.ld-light .ld-dataline-ok { color: rgba(0,140,60,0.7) !important; }
+.ld-light .ld-chart-line { stroke: rgba(0,0,0,0.5) !important; }
+.ld-light .ld-chart-area { fill: url(#chartGradLight) !important; }
+.ld-light .ld-mcse { color: rgba(17,17,17,0.95) !important; }
+.ld-light .ld-subtitle { color: rgba(17,17,17,0.45) !important; }
+.ld-light .ld-progress-track { background: rgba(0,0,0,0.08) !important; }
+.ld-light .ld-progress-bar { background: rgba(0,0,0,0.45) !important; }
+.ld-light .ld-progress-pct { color: rgba(0,0,0,0.35) !important; }
+.ld-light.ld-exit { animation: ld-fade-exit-light 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+@keyframes ld-fade-exit-light {
+  0%   { opacity: 1; filter: brightness(1); }
+  40%  { opacity: 1; filter: brightness(1.2); }
+  100% { opacity: 0; filter: brightness(1.5); }
 }

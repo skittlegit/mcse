@@ -36,8 +36,19 @@ export default function LoadingScreen({ onDone }: { onDone: () => void }) {
   const [progress, setProgress] = useState(0);
   const [phase, setPhase] = useState(0); // 0=boot 1=chart 2=text 3=exit
   const [scrambledText, setScrambledText] = useState("MCSE");
+  const [isLight, setIsLight] = useState(false);
   const rafRef = useRef<number>(0);
   const scrambleRef = useRef<number>(0);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("mcse-preferences");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.darkMode === false) setIsLight(true);
+      }
+    } catch { /* ignore */ }
+  }, []);
 
   const chartPath = useMemo(() => generateChartPath(600, 120, 30), []);
 
@@ -97,7 +108,7 @@ export default function LoadingScreen({ onDone }: { onDone: () => void }) {
   }, [phase, stableOnDone]);
 
   return (
-    <div className={`ld-screen${phase === 3 ? " ld-exit" : ""}`}>
+    <div className={`ld-screen${phase === 3 ? " ld-exit" : ""}${isLight ? " ld-light" : ""}`}>
       <div className="ld-grain" />
       <div className="ld-scanline" />
       <div className="ld-grid" />
@@ -130,6 +141,10 @@ export default function LoadingScreen({ onDone }: { onDone: () => void }) {
             <defs>
               <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
+                <stop offset="100%" stopColor="transparent" />
+              </linearGradient>
+              <linearGradient id="chartGradLight" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(0,0,0,0.06)" />
                 <stop offset="100%" stopColor="transparent" />
               </linearGradient>
             </defs>

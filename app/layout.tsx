@@ -58,7 +58,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${anton.variable} ${inter.variable} h-full antialiased`} suppressHydrationWarning>
-      <body className="min-h-full bg-bg text-white" style={{ overflowX: 'clip' }}>
+      <body className="min-h-full bg-bg text-white overflow-hidden" style={{ overflowX: 'clip' }}>
         <PreferencesProvider>
           <AuthProvider>
             <TradingProvider>
