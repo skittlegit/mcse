@@ -1,0 +1,2489 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 16777216 bytes. Error detail: Failed to reserve memory for metaspace
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   In 32 bit mode, the process size limit was hit
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Use 64 bit Java on a 64 bit OS
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (virtualSpaceNode.cpp:249), pid=18632, tid=2488
+#
+# JRE version: OpenJDK Runtime Environment Temurin-17.0.11+9 (17.0.11+9) (build 17.0.11+9)
+# Java VM: OpenJDK Client VM Temurin-17.0.11+9 (17.0.11+9, mixed mode, emulated-client, serial gc, windows-x86)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED -Xmx1536m -Dfile.encoding=windows-1252 -Duser.country=US -Duser.language=en -Duser.variant -javaagent:C:\Users\ASUS\.gradle\wrapper\dists\gradle-8.11.1-bin\bpt9gzteqjrbo1mjrsomdt32c\gradle-8.11.1\lib\agents\gradle-instrumentation-agent-8.11.1.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.11.1
+
+Host: Intel(R) Core(TM) Ultra 7 155H, 22 cores, 15G,  Windows 11 , 64 bit Build 26100 (10.0.26100.7920)
+Time: Mon Apr 13 18:18:44 2026 India Standard Time elapsed time: 78.142532 seconds (0d 0h 1m 18s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x6be345e8):  JavaThread "Execution worker Thread 6" [_thread_in_vm, id=2488, stack(0x70870000,0x708c0000)]
+
+Stack: [0x70870000,0x708c0000]
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 14086  java.lang.ClassLoader.defineClass2(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/nio/ByteBuffer;IILjava/security/ProtectionDomain;Ljava/lang/String;)Ljava/lang/Class; java.base@17.0.11 (0 bytes) @ 0x044e0e57 [0x044e0da0+0x000000b7]
+J 14085 c1 java.lang.ClassLoader.defineClass(Ljava/lang/String;Ljava/nio/ByteBuffer;Ljava/security/ProtectionDomain;)Ljava/lang/Class; java.base@17.0.11 (108 bytes) @ 0x044e0150 [0x044dffe0+0x00000170]
+J 14081 c1 jdk.internal.loader.BuiltinClassLoader.defineClass(Ljava/lang/String;Ljdk/internal/loader/BuiltinClassLoader$LoadedModule;)Ljava/lang/Class; java.base@17.0.11 (162 bytes) @ 0x044e2200 [0x044e1cb0+0x00000550]
+J 628 c1 jdk.internal.loader.BuiltinClassLoader.loadClassOrNull(Ljava/lang/String;Z)Ljava/lang/Class; java.base@17.0.11 (143 bytes) @ 0x03689da8 [0x03689bc0+0x000001e8]
+J 14075 c1 jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(Ljava/lang/String;Z)Ljava/lang/Class; java.base@17.0.11 (40 bytes) @ 0x04608430 [0x04608330+0x00000100]
+J 658 c1 java.lang.ClassLoader.loadClass(Ljava/lang/String;)Ljava/lang/Class; java.base@17.0.11 (7 bytes) @ 0x036936cc [0x036936a0+0x0000002c]
+v  ~StubRoutines::call_stub
+j  com.sun.tools.javac.tree.DocTreeMaker.<init>(Lcom/sun/tools/javac/util/Context;)V+32 jdk.compiler@17.0.11
+j  com.sun.tools.javac.tree.DocTreeMaker.instance(Lcom/sun/tools/javac/util/Context;)Lcom/sun/tools/javac/tree/DocTreeMaker;+20 jdk.compiler@17.0.11
+j  com.sun.tools.javac.parser.ParserFactory.<init>(Lcom/sun/tools/javac/util/Context;)V+22 jdk.compiler@17.0.11
+j  com.sun.tools.javac.parser.ParserFactory.instance(Lcom/sun/tools/javac/util/Context;)Lcom/sun/tools/javac/parser/ParserFactory;+20 jdk.compiler@17.0.11
+j  com.sun.tools.javac.main.JavaCompiler.<init>(Lcom/sun/tools/javac/util/Context;)V+199 jdk.compiler@17.0.11
+j  com.sun.tools.javac.main.JavaCompiler.instance(Lcom/sun/tools/javac/util/Context;)Lcom/sun/tools/javac/main/JavaCompiler;+20 jdk.compiler@17.0.11
+j  com.sun.tools.javac.model.JavacElements.<init>(Lcom/sun/tools/javac/util/Context;)V+35 jdk.compiler@17.0.11
+j  com.sun.tools.javac.model.JavacElements.instance(Lcom/sun/tools/javac/util/Context;)Lcom/sun/tools/javac/model/JavacElements;+19 jdk.compiler@17.0.11
+j  com.sun.tools.javac.api.BasicJavacTask.getElements()Ljavax/lang/model/util/Elements;+19 jdk.compiler@17.0.11
+j  org.gradle.internal.compiler.java.IncrementalCompileTask.call()Ljava/lang/Boolean;+16
+j  org.gradle.api.internal.tasks.compile.AnnotationProcessingCompileTask.call()Ljava/lang/Boolean;+30
+j  org.gradle.api.internal.tasks.compile.ResourceCleaningCompilationTask.call()Ljava/lang/Boolean;+4
+j  org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+53
+j  org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.delegateAndHandleErrors(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+22
+j  org.gradle.api.internal.tasks.compile.NormalizingJavaCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.AnnotationProcessorDiscoveringCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+18
+j  org.gradle.api.internal.tasks.compile.AnnotationProcessorDiscoveringCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.ModuleApplicationNameWritingCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.ModuleApplicationNameWritingCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.jvm.toolchain.internal.DefaultToolchainJavaCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+33
+j  org.gradle.api.tasks.compile.JavaCompile.lambda$createToolchainCompiler$3(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+15
+j  org.gradle.api.tasks.compile.JavaCompile$$Lambda$2269+0x79c6a468.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.CleaningJavaCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+72
+j  org.gradle.api.internal.tasks.compile.incremental.IncrementalCompilerFactory.lambda$createRebuildAllCompiler$0(Lorg/gradle/api/file/FileTree;Lorg/gradle/api/internal/tasks/compile/CleaningJavaCompiler;Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+9
+j  org.gradle.api.internal.tasks.compile.incremental.IncrementalCompilerFactory$$Lambda$2272+0x79c73660.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+12
+j  org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+27
+j  org.gradle.api.internal.tasks.compile.incremental.SelectiveCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.incremental.IncrementalResultStoringCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.incremental.IncrementalResultStoringCompiler.execute(Lorg/gradle/language/base/internal/compile/CompileSpec;)Lorg/gradle/api/tasks/WorkResult;+5
+j  org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler$1.call(Lorg/gradle/internal/operations/BuildOperationContext;)Lorg/gradle/api/tasks/WorkResult;+11
+j  org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler$1.call(Lorg/gradle/internal/operations/BuildOperationContext;)Ljava/lang/Object;+2
+J 5588 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(Lorg/gradle/internal/operations/BuildOperation;Lorg/gradle/internal/operations/BuildOperationContext;)V (10 bytes) @ 0x03cd87e4 [0x03cd8770+0x00000074]
+J 5578 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Lorg/gradle/internal/operations/BuildOperation; (110 bytes) @ 0x03cd5160 [0x03cd5100+0x00000060]
+J 10032 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Ljava/lang/Object; (12 bytes) @ 0x041fad20 [0x041face0+0x00000040]
+J 10024 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor$Builder;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecution;)Ljava/lang/Object; (147 bytes) @ 0x041f9508 [0x041f9120+0x000003e8]
+J 5587 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.call(Lorg/gradle/internal/operations/CallableBuildOperation;)Ljava/lang/Object; (24 bytes) @ 0x03cd8388 [0x03cd8210+0x00000178]
+j  org.gradle.api.internal.tasks.compile.CompileJavaBuildOperationReportingCompiler.execute(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;)Lorg/gradle/api/tasks/WorkResult;+13
+j  org.gradle.api.tasks.compile.JavaCompile.performCompilation(Lorg/gradle/api/internal/tasks/compile/JavaCompileSpec;Lorg/gradle/language/base/internal/compile/Compiler;)V+24
+j  org.gradle.api.tasks.compile.JavaCompile.performIncrementalCompilation(Lorg/gradle/work/InputChanges;Lorg/gradle/api/internal/tasks/compile/DefaultJavaCompileSpec;)V+87
+j  org.gradle.api.tasks.compile.JavaCompile.compile(Lorg/gradle/work/InputChanges;)V+26
+v  ~StubRoutines::call_stub
+J 2203  jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; java.base@17.0.11 (0 bytes) @ 0x038897dd [0x03889760+0x0000007d]
+J 2202 c1 jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; java.base@17.0.11 (137 bytes) @ 0x03889cd8 [0x03889ab0+0x00000228]
+J 1712 c1 jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; java.base@17.0.11 (10 bytes) @ 0x037e8810 [0x037e87e0+0x00000030]
+J 2422 c1 org.gradle.internal.reflect.JavaMethod.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object; (74 bytes) @ 0x038bf8bc [0x038bf7f0+0x000000cc]
+j  org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.doExecute(Lorg/gradle/api/Task;Ljava/lang/String;)V+28
+j  org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(Lorg/gradle/api/Task;)V+32
+j  org.gradle.api.internal.project.taskfactory.IncrementalTaskAction.execute(Lorg/gradle/api/Task;)V+2
+j  org.gradle.api.internal.project.taskfactory.StandardTaskAction.execute(Ljava/lang/Object;)V+5
+j  org.gradle.api.internal.tasks.execution.TaskExecution$3.run(Lorg/gradle/internal/operations/BuildOperationContext;)V+23
+J 8500 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$1.execute(Lorg/gradle/internal/operations/BuildOperation;Lorg/gradle/internal/operations/BuildOperationContext;)V (10 bytes) @ 0x0407ffa0 [0x0407ff30+0x00000070]
+J 5578 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Lorg/gradle/internal/operations/BuildOperation; (110 bytes) @ 0x03cd5160 [0x03cd5100+0x00000060]
+J 10032 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Ljava/lang/Object; (12 bytes) @ 0x041fad20 [0x041face0+0x00000040]
+J 10024 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor$Builder;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecution;)Ljava/lang/Object; (147 bytes) @ 0x041f9508 [0x041f9120+0x000003e8]
+J 8220 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.run(Lorg/gradle/internal/operations/RunnableBuildOperation;)V (13 bytes) @ 0x0402afc8 [0x0402ae90+0x00000138]
+j  org.gradle.api.internal.tasks.execution.TaskExecution.executeAction(Ljava/lang/String;Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/InputChangesAwareTaskAction;Lorg/gradle/internal/execution/history/changes/InputChangesInternal;Z)V+30
+j  org.gradle.api.internal.tasks.execution.TaskExecution.executeActions(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/internal/execution/history/changes/InputChangesInternal;)V+131
+j  org.gradle.api.internal.tasks.execution.TaskExecution.executeWithPreviousOutputFiles(Lorg/gradle/internal/execution/history/changes/InputChangesInternal;)Lorg/gradle/internal/execution/UnitOfWork$WorkResult;+46
+j  org.gradle.api.internal.tasks.execution.TaskExecution.execute(Lorg/gradle/internal/execution/UnitOfWork$ExecutionRequest;)Lorg/gradle/internal/execution/UnitOfWork$WorkOutput;+61
+j  org.gradle.internal.execution.steps.ExecuteStep.executeInternal(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/InputChangesContext;)Lorg/gradle/internal/execution/steps/Result;+16
+j  org.gradle.internal.execution.steps.ExecuteStep.access$000(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/InputChangesContext;)Lorg/gradle/internal/execution/steps/Result;+2
+j  org.gradle.internal.execution.steps.ExecuteStep$1.call(Lorg/gradle/internal/operations/BuildOperationContext;)Lorg/gradle/internal/execution/steps/Result;+8
+j  org.gradle.internal.execution.steps.ExecuteStep$1.call(Lorg/gradle/internal/operations/BuildOperationContext;)Ljava/lang/Object;+2
+J 5588 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(Lorg/gradle/internal/operations/BuildOperation;Lorg/gradle/internal/operations/BuildOperationContext;)V (10 bytes) @ 0x03cd87e4 [0x03cd8770+0x00000074]
+J 5578 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Lorg/gradle/internal/operations/BuildOperation; (110 bytes) @ 0x03cd5160 [0x03cd5100+0x00000060]
+J 10032 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Ljava/lang/Object; (12 bytes) @ 0x041fad20 [0x041face0+0x00000040]
+J 10024 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor$Builder;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecution;)Ljava/lang/Object; (147 bytes) @ 0x041f9508 [0x041f9120+0x000003e8]
+J 5587 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.call(Lorg/gradle/internal/operations/CallableBuildOperation;)Ljava/lang/Object; (24 bytes) @ 0x03cd8388 [0x03cd8210+0x00000178]
+j  org.gradle.internal.execution.steps.ExecuteStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ChangingOutputsContext;)Lorg/gradle/internal/execution/steps/Result;+28
+j  org.gradle.internal.execution.steps.ExecuteStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.CancelExecutionStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+35
+j  org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.TimeoutStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+92
+j  org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ChangingOutputsContext;)Lorg/gradle/internal/execution/steps/Result;+24
+j  org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ChangingOutputsContext;)Lorg/gradle/internal/execution/steps/Result;+57
+j  org.gradle.internal.execution.steps.RemovePreviousOutputsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/InputChangesContext;)Lorg/gradle/internal/execution/steps/Result;+53
+j  org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+6
+j  org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IncrementalCachingContext;)Lorg/gradle/internal/execution/steps/Result;+22
+j  org.gradle.internal.execution.steps.ResolveInputChangesStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+6
+j  org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;Lorg/gradle/internal/execution/caching/CachingState$Disabled;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+3
+j  org.gradle.internal.execution.steps.BuildCacheStep$$Lambda$1218+0x6c4a5dc8.apply(Ljava/lang/Object;)Ljava/lang/Object;+16
+j  org.gradle.internal.Either$Right.fold(Ljava/util/function/Function;Ljava/util/function/Function;)Ljava/lang/Object;+5
+j  org.gradle.internal.execution.caching.CachingState.fold(Ljava/util/function/Function;Ljava/util/function/Function;)Ljava/lang/Object;+6
+j  org.gradle.internal.execution.steps.BuildCacheStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+25
+j  org.gradle.internal.execution.steps.BuildCacheStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/PreviousExecutionContext;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+6
+j  org.gradle.internal.execution.steps.StoreExecutionStateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(Lorg/gradle/internal/execution/UnitOfWork;Lcom/google/common/collect/ImmutableList;Lorg/gradle/internal/execution/steps/IncrementalChangesContext;)Lorg/gradle/internal/execution/steps/UpToDateResult;+11
+j  org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(Lorg/gradle/internal/execution/UnitOfWork;Lcom/google/common/collect/ImmutableList;Lorg/gradle/internal/execution/steps/IncrementalChangesContext;)Lorg/gradle/internal/execution/steps/UpToDateResult;+4
+j  org.gradle.internal.execution.steps.SkipUpToDateStep$$Lambda$1950+0x78d6e358.get()Ljava/lang/Object;+16
+J 4946 c1 java.util.Optional.orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object; java.base@17.0.11 (21 bytes) @ 0x03c28394 [0x03c28360+0x00000034]
+j  org.gradle.internal.execution.steps.SkipUpToDateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IncrementalChangesContext;)Lorg/gradle/internal/execution/steps/UpToDateResult;+65
+j  org.gradle.internal.execution.steps.SkipUpToDateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/CachingContext;)Lorg/gradle/internal/execution/steps/Result;+18
+j  org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IncrementalChangesContext;Lorg/gradle/internal/execution/caching/CachingState;)Lorg/gradle/internal/execution/steps/UpToDateResult;+14
+j  org.gradle.internal.execution.steps.ResolveIncrementalCachingStateStep.executeDelegate(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ValidationFinishedContext;Lorg/gradle/internal/execution/caching/CachingState;)Lorg/gradle/internal/execution/steps/UpToDateResult;+7
+j  org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ValidationFinishedContext;)Lorg/gradle/internal/execution/steps/CachingResult;+51
+j  org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.ResolveChangesStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ValidationFinishedContext;)Lorg/gradle/internal/execution/steps/Result;+43
+j  org.gradle.internal.execution.steps.ResolveChangesStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.ValidateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/BeforeExecutionContext;)Lorg/gradle/internal/execution/steps/Result;+255
+j  org.gradle.internal.execution.steps.ValidateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/PreviousExecutionContext;)Lorg/gradle/internal/execution/steps/CachingResult;+32
+j  org.gradle.internal.execution.steps.AbstractCaptureStateBeforeExecutionStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.executeWithNonEmptySources(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/CachingResult;+12
+j  org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/CachingResult;+83
+j  org.gradle.internal.execution.steps.AbstractSkipEmptyWorkStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+12
+j  org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+42
+j  org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/WorkspaceContext;)Lorg/gradle/internal/execution/steps/AfterExecutionResult;+21
+j  org.gradle.internal.execution.steps.HandleStaleOutputsStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$execute$0(Lorg/gradle/internal/execution/steps/IdentityContext;Lorg/gradle/internal/execution/UnitOfWork;Ljava/io/File;Lorg/gradle/internal/execution/history/ExecutionHistoryStore;)Lorg/gradle/internal/execution/steps/WorkspaceResult;+30
+j  org.gradle.internal.execution.steps.AssignMutableWorkspaceStep$$Lambda$1911+0x78d4fd48.executeInWorkspace(Ljava/io/File;Lorg/gradle/internal/execution/history/ExecutionHistoryStore;)Ljava/lang/Object;+14
+j  org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(Ljava/lang/String;Lorg/gradle/internal/execution/workspace/MutableWorkspaceProvider$WorkspaceAction;)Ljava/lang/Object;+33
+j  org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IdentityContext;)Lorg/gradle/internal/execution/steps/WorkspaceResult;+26
+j  org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+J 6037 c1 org.gradle.internal.execution.steps.ChoosePipelineStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IdentityContext;)Lorg/gradle/internal/execution/steps/Result; (71 bytes) @ 0x03d52538 [0x03d522b0+0x00000288]
+J 5941 c1 org.gradle.internal.execution.steps.ChoosePipelineStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result; (10 bytes) @ 0x03d384e8 [0x03d384a0+0x00000048]
+j  org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IdentityContext;)Lorg/gradle/internal/execution/steps/CachingResult;+6
+j  org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep$$Lambda$530+0x6aa46228.get()Ljava/lang/Object;+12
+J 5818 c1 org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result; (10 bytes) @ 0x03d15acc [0x03d15900+0x000001cc]
+J 5817 c1 org.gradle.internal.execution.steps.IdentityCacheStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/IdentityContext;)Lorg/gradle/internal/execution/steps/WorkspaceResult; (15 bytes) @ 0x03d15010 [0x03d14fe0+0x00000030]
+j  org.gradle.internal.execution.steps.IdentityCacheStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.steps.IdentifyStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/ExecutionRequestContext;)Lorg/gradle/internal/execution/steps/Result;+11
+j  org.gradle.internal.execution.steps.IdentifyStep.execute(Lorg/gradle/internal/execution/UnitOfWork;Lorg/gradle/internal/execution/steps/Context;)Lorg/gradle/internal/execution/steps/Result;+6
+j  org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute()Lorg/gradle/internal/execution/ExecutionEngine$Result;+15
+j  org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;Lorg/gradle/api/internal/tasks/execution/TaskExecution;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+54
+j  org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+65
+j  org.gradle.api.internal.tasks.execution.FinalizePropertiesTaskExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+61
+j  org.gradle.api.internal.tasks.execution.ResolveTaskExecutionModeExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+56
+j  org.gradle.api.internal.tasks.execution.SkipTaskWithNoActionsExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+120
+j  org.gradle.api.internal.tasks.execution.SkipOnlyIfTaskExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+199
+j  org.gradle.api.internal.tasks.execution.CatchExceptionTaskExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+7
+j  org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.executeTask(Lorg/gradle/internal/operations/BuildOperationContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+136
+j  org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(Lorg/gradle/internal/operations/BuildOperationContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+2
+j  org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter$1.call(Lorg/gradle/internal/operations/BuildOperationContext;)Ljava/lang/Object;+2
+J 5588 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$CallableBuildOperationWorker.execute(Lorg/gradle/internal/operations/BuildOperation;Lorg/gradle/internal/operations/BuildOperationContext;)V (10 bytes) @ 0x03cd87e4 [0x03cd8770+0x00000074]
+J 5578 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Lorg/gradle/internal/operations/BuildOperation; (110 bytes) @ 0x03cd5160 [0x03cd5100+0x00000060]
+J 10032 c1 org.gradle.internal.operations.DefaultBuildOperationRunner$2.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$ReadableBuildOperationContext;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecutionListener;)Ljava/lang/Object; (12 bytes) @ 0x041fad20 [0x041face0+0x00000040]
+J 10024 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.execute(Lorg/gradle/internal/operations/BuildOperationDescriptor$Builder;Lorg/gradle/internal/operations/BuildOperationState;Lorg/gradle/internal/operations/DefaultBuildOperationRunner$BuildOperationExecution;)Ljava/lang/Object; (147 bytes) @ 0x041f9508 [0x041f9120+0x000003e8]
+J 5587 c1 org.gradle.internal.operations.DefaultBuildOperationRunner.call(Lorg/gradle/internal/operations/CallableBuildOperation;)Ljava/lang/Object; (24 bytes) @ 0x03cd8388 [0x03cd8210+0x00000178]
+j  org.gradle.api.internal.tasks.execution.EventFiringTaskExecuter.execute(Lorg/gradle/api/internal/TaskInternal;Lorg/gradle/api/internal/tasks/TaskStateInternal;Lorg/gradle/api/internal/tasks/TaskExecutionContext;)Lorg/gradle/api/internal/tasks/TaskExecuterResult;+15
+j  org.gradle.execution.plan.LocalTaskNodeExecutor.execute(Lorg/gradle/execution/plan/Node;Lorg/gradle/api/internal/tasks/NodeExecutionContext;)Z+87
+j  org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(Lorg/gradle/execution/plan/Node;)V+46
+j  org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$InvokeNodeExecutorsAction.execute(Ljava/lang/Object;)V+5
+j  org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.lambda$execute$0(Lorg/gradle/execution/plan/Node;)V+5
+j  org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction$$Lambda$1869+0x78cfb4e0.run()V+8
+j  org.gradle.internal.operations.CurrentBuildOperationRef.with(Lorg/gradle/internal/operations/BuildOperationRef;Ljava/lang/Runnable;)V+11
+j  org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(Lorg/gradle/execution/plan/Node;)V+14
+j  org.gradle.execution.taskgraph.DefaultTaskExecutionGraph$BuildOperationAwareExecutionAction.execute(Ljava/lang/Object;)V+5
+j  org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.execute(Ljava/lang/Object;Lorg/gradle/execution/plan/WorkSource;Lorg/gradle/api/Action;)V+14
+j  org.gradle.execution.plan.DefaultPlanExecutor$ExecutorWorker.run()V+75
+J 5196 c1 org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(Ljava/lang/Runnable;)V (29 bytes) @ 0x03c6c298 [0x03c6c260+0x00000038]
+j  org.gradle.internal.concurrent.AbstractManagedExecutor$1.run()V+25
+j  java.util.concurrent.ThreadPoolExecutor.runWorker(Ljava/util/concurrent/ThreadPoolExecutor$Worker;)V+92 java.base@17.0.11
+j  java.util.concurrent.ThreadPoolExecutor$Worker.run()V+5 java.base@17.0.11
+j  java.lang.Thread.run()V+11 java.base@17.0.11
+v  ~StubRoutines::call_stub
+
+Compiled method (n/a)   78160 14086     n       java.lang.ClassLoader::defineClass2 (native)
+ total in heap  [0x044e0c88,0x044e0f90] = 776
+ relocation     [0x044e0d6c,0x044e0d94] = 40
+ main code      [0x044e0da0,0x044e0f90] = 496
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x6601ba7c} 'defineClass2' '(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/nio/ByteBuffer;IILjava/security/ProtectionDomain;Ljava/lang/String;)Ljava/lang/Class;' in 'java/lang/ClassLoader'
+  # parm0:    ecx       = 'java/lang/ClassLoader'
+  # parm1:    edx       = 'java/lang/String'
+  # parm2:    [sp+0x40]   = 'java/nio/ByteBuffer'  (sp of caller)
+  # parm3:    [sp+0x44]   = int
+  # parm4:    [sp+0x48]   = int
+  # parm5:    [sp+0x4c]   = 'java/security/ProtectionDomain'
+  # parm6:    [sp+0x50]   = 'java/lang/String'
+  0x044e0da0: 3b41 040f | 8407 0000 
+
+  0x044e0da8: ;   {runtime_call ic_miss_stub}
+  0x044e0da8: 00e9 22fa | 0bff 6690 
+[Verified Entry Point]
+  0x044e0db0: 8984 2400 | c0ff ff55 | 8bec 83ec | 3864 8b3c | 2500 0000 | 008b 7ff4 | 894c 2424 | 33c0 83f9 
+  0x044e0dd0: 000f 8404 | 0000 008d | 4424 2489 | 4424 0889 | 5424 2833 | c083 fa00 | 0f84 0400 | 0000 8d44 
+  0x044e0df0: 2428 8944 | 240c 33c0 | 817d 0800 | 0000 000f | 8403 0000 | 008d 4508 | 8944 2410 | 8b45 0c89 
+  0x044e0e10: 4424 148b | 4510 8944 | 2418 33c0 | 817d 1400 | 0000 000f | 8403 0000 | 008d 4514 | 8944 241c 
+  0x044e0e30: 33c0 817d | 1800 0000 | 000f 8403 | 0000 008d | 4518 8944 
+
+  0x044e0e44: ;   {oop(a 'java/lang/Class'{0x2565e730} = 'java/lang/ClassLoader')}
+  0x044e0e44: 2420 be30 | e765 2589 | 7424 2c8d | 7424 2c89 | 7424 04c5 
+
+  0x044e0e58: ;   {internal_word}
+  0x044e0e58: f877 c787 | f401 0000 | 570e 4e04 | 89a7 f001 
+
+  0x044e0e68: ;   {external_word}
+  0x044e0e68: 0000 803d | dc54 8572 | 000f 840f 
+
+  0x044e0e74: ;   {metadata({method} {0x6601ba7c} 'defineClass2' '(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/nio/ByteBuffer;IILjava/security/ProtectionDomain;Ljava/lang/String;)Ljava/lang/Class;' in 'java/lang/ClassLoader')}
+  0x044e0e74: 0000 00b8 | 78ba 0166 
+
+  0x044e0e7c: ;   {runtime_call}
+  0x044e0e7c: 5057 e89d | dd17 6e83 | c408 8d97 | 0002 0000 | 8914 24c7 | 874c 0200 | 0004 0000 
+
+  0x044e0e98: ;   {runtime_call}
+  0x044e0e98: 00e8 3d09 | b66d c5f8 | 77c7 874c | 0200 0005 | 0000 00f0 | 8344 24c0 | 003b af50 | 0200 000f 
+  0x044e0eb8: 8710 0000 | 0081 bf40 | 0200 0000 | 0000 000f | 8412 0000 | 00c5 f877 | 8945 fc57 
+
+  0x044e0ed4: ;   {runtime_call}
+  0x044e0ed4: e847 8b21 | 6e83 c404 | 8b45 fcc7 | 874c 0200 | 0008 0000 | 0081 bf70 | 0200 0002 | 0000 000f 
+  0x044e0ef4: 8478 0000 
+
+  0x044e0ef8: ;   {external_word}
+  0x044e0ef8: 0080 3ddc | 5485 7200 | 0f84 1500 | 0000 8945 
+
+  0x044e0f08: ;   {metadata({method} {0x6601ba7c} 'defineClass2' '(Ljava/lang/ClassLoader;Ljava/lang/String;Ljava/nio/ByteBuffer;IILjava/security/ProtectionDomain;Ljava/lang/String;)Ljava/lang/Class;' in 'java/lang/ClassLoader')}
+  0x044e0f08: fcb8 78ba | 0166 5057 
+
+  0x044e0f10: ;   {runtime_call}
+  0x044e0f10: e80b dd17 | 6e83 c408 | 8b45 fcc7 | 87f0 0100 | 0000 0000 | 00c7 87f4 | 0100 0000 | 0000 00c5 
+  0x044e0f30: f877 85c0 | 0f84 1600 | 0000 f7c0 | 0100 0000 | 0f84 0800 | 0000 8b40 | ffe9 0200 | 0000 8b00 
+  0x044e0f50: 8b8f b800 | 0000 c781 | 8000 0000 | 0000 0000 | 817f 0400 | 0000 000f | 8517 0000 | 008b e55d 
+  0x044e0f70: c3c5 f877 
+
+  0x044e0f74: ;   {runtime_call}
+  0x044e0f74: 8945 fce8 | b404 186e | 8b45 fce9 | 75ff ffff | 0f77 8be5 
+
+  0x044e0f88: ;   {runtime_call StubRoutines (1)}
+  0x044e0f88: 5de9 82f9 | 07ff f4f4 
+[/MachCode]
+
+
+Compiled method (c1)   78190 14085             java.lang.ClassLoader::defineClass (108 bytes)
+ total in heap  [0x044dfe08,0x044e0984] = 2940
+ relocation     [0x044dfeec,0x044dffe0] = 244
+ main code      [0x044dffe0,0x044e0500] = 1312
+ stub code      [0x044e0500,0x044e05b0] = 176
+ metadata       [0x044e05b0,0x044e05d8] = 40
+ scopes data    [0x044e05d8,0x044e077c] = 420
+ scopes pcs     [0x044e077c,0x044e093c] = 448
+ dependencies   [0x044e093c,0x044e0948] = 12
+ nul chk table  [0x044e0948,0x044e0984] = 60
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x6601b9a4} 'defineClass' '(Ljava/lang/String;Ljava/nio/ByteBuffer;Ljava/security/ProtectionDomain;)Ljava/lang/Class;' in 'java/lang/ClassLoader'
+  # this:     ecx       = 'java/lang/ClassLoader'
+  # parm0:    edx       = 'java/lang/String'
+  # parm1:    [sp+0x80]   = 'java/nio/ByteBuffer'  (sp of caller)
+  # parm2:    [sp+0x84]   = 'java/security/ProtectionDomain'
+  0x044dffe0: 0f1f 8000 | 0000 003b 
+
+  0x044dffe8: ;   {runtime_call ic_miss_stub}
+  0x044dffe8: 4104 0f85 | e007 0cff 
+[Verified Entry Point]
+  0x044dfff0: 8984 2400 | c0ff ff55 | 83ec 7889 | 4c24 4489 | 5424 408b | b424 8000 | 0000 8b7e | 188b 5e14 
+  0x044e0010: 2bfb 83ff | 00bb 0000 | 0000 0f4f | df89 5c24 | 488b ce66 | 6690 b8d0 
+
+  0x044e0028: ;   {virtual_call}
+  0x044e0028: cf3d 66e8 
+
+  0x044e002c: ; ImmutableOopMap {[132]=Oop [68]=Oop [128]=Oop [64]=Oop }
+              ;*invokevirtual isDirect {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@7 (line 1093)
+  0x044e002c: a055 e2ff | 83f8 000f | 8578 0000 | 008b b424 | 8000 0000 | 8b7e 2c89 | 7c24 6083 | ff00 0f84 
+  0x044e004c: 1c00 0000 | 0fbe 5628 | 83fa 00ba | 0000 0000 | 0f85 0500 | 0000 ba01 | 0000 00e9 | 0500 0000 
+  0x044e006c: ba00 0000 | 0083 e201 | 83fa 000f | 8457 0100 | 0083 ff00 | 0f84 fb02 | 0000 0fbe | 5628 83fa 
+  0x044e008c: 000f 85c6 | 0200 008b | 5e14 895c | 2464 83ff | 000f 844e | 0200 0083 | fa00 0f84 | dc00 0000 
+  0x044e00ac: e91f 0200 | 008b b424 | 8400 0000 | 8b54 2440 | 8934 248b 
+
+  0x044e00c0: ;   {optimized virtual_call}
+  0x044e00c0: 4c24 44e8 
+
+  0x044e00c4: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop }
+              ;*invokevirtual preDefineClass {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@70 (line 1106)
+  0x044e00c4: 6803 27ff | 8944 244c 
+
+  0x044e00cc: ; implicit exception: dispatches to 0x044e03ee
+  0x044e00cc: 8b50 0c83 | fa00 0f85 | 1000 0000 
+
+  0x044e00d8: ;   {oop(NULL)}
+  0x044e00d8: be00 0000 | 0089 7424 | 508b f8e9 | 3200 0000 
+
+  0x044e00e8: ; implicit exception: dispatches to 0x044e03f3
+  0x044e00e8: 8b52 0883 | fa00 0f85 | 1000 0000 
+
+  0x044e00f4: ;   {oop(NULL)}
+  0x044e00f4: be00 0000 | 0089 7424 | 508b f8e9 | 1600 0000 
+
+  0x044e0104: ; implicit exception: dispatches to 0x044e03f8
+  0x044e0104: 8b4a 343b 
+
+  0x044e0108: ;   {optimized virtual_call}
+  0x044e0108: 0166 90e8 
+
+  0x044e010c: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop [76]=Oop }
+              ;*invokevirtual toExternalForm {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.net.URL::toExternalForm@5 (line 1039)
+              ; - java.net.URL::toString@1 (line 1025)
+              ; - java.lang.ClassLoader::defineClassSourceLocation@22 (line 917)
+              ; - java.lang.ClassLoader::defineClass@76 (line 1107)
+  0x044e010c: f0b3 1bff | 8bf0 8974 | 2450 8b7c | 244c 8b5c | 2448 8b84 | 2480 0000 | 008b 5014 | 8b4c 2444 
+  0x044e012c: 8bf2 8b54 | 2440 8904 | 2489 7424 | 0489 5c24 | 0889 7c24 | 0c8b 7424 | 5089 7424 
+
+  0x044e0148: ;   {static_call}
+  0x044e0148: 1066 90e8 
+
+  0x044e014c: ; ImmutableOopMap {[68]=Oop [76]=Oop }
+              ;*invokestatic defineClass2 {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@93 (line 1108)
+  0x044e014c: 600c 0000 | 8bd0 8b4c | 244c 890c | 248b 4c24 | 4489 4424 
+
+  0x044e0160: ;   {optimized virtual_call}
+  0x044e0160: 5466 90e8 
+
+  0x044e0164: ; ImmutableOopMap {[84]=Oop }
+              ;*invokevirtual postDefineClass {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@102 (line 1109)
+  0x044e0164: b822 27ff | 8b44 2454 | 83c4 785d | 648b 1c25 | 0000 0000 
+
+  0x044e0178: ;   {poll_return}
+  0x044e0178: 8b5b f43b | a350 0200 | 000f 877b | 0200 00c3 | 8b4c 2448 | 8bc6 8bb4 | 2484 0000 | 008b 5024 
+  0x044e0198: 8bc2 03c3 | 8b54 2440 | 893c 2489 | 4424 0489 | 4c24 0889 | 7424 0c8b 
+
+  0x044e01b0: ;   {optimized virtual_call}
+  0x044e01b0: 4c24 44e8 
+
+  0x044e01b4: ; ImmutableOopMap {}
+              ;*invokevirtual defineClass {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@38 (line 1095)
+  0x044e01b4: 5808 0cff | 83c4 785d | 648b 1c25 | 0000 0000 
+
+  0x044e01c4: ;   {poll_return}
+  0x044e01c4: 8b5b f43b | a350 0200 | 000f 874e | 0200 00c3 | 8b4c 2448 
+
+  0x044e01d8: ;   {metadata({type array byte})}
+  0x044e01d8: 8bd9 bac0 | 0400 668b | fb81 fbff | ffff 000f | 8753 0200 | 00be 1300 | 0000 8d34 | 1e83 e6f8 
+  0x044e01f8: 648b 0c25 | 0000 0000 | 8b49 f48b | 81d0 0000 | 008d 3430 | 3bb1 d800 | 0000 0f87 | 2802 0000 
+  0x044e0218: 89b1 d000 | 0000 2bf0 | c700 0100 | 0000 8950 | 0489 5808 | 83ee 0c0f | 8428 0000 | 0085 f60f 
+  0x044e0238: 8420 0000 | 0033 dbc1 | ee03 0f83 | 0a00 0000 | 895c f00c | 0f84 0b00 | 0000 895c | f008 895c 
+  0x044e0258: f004 4e75 | f58b 4808 | 8bd0 c704 | 2400 0000 | 0089 4c24 | 048b 8c24 | 8000 0000 | 8944 2458 
+  0x044e0278: 6690 b8ff 
+
+  0x044e027c: ;   {virtual_call}
+  0x044e027c: ffff ffe8 
+
+  0x044e0280: ; ImmutableOopMap {[68]=Oop [64]=Oop [132]=Oop [88]=Oop }
+              ;*invokevirtual get {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::get@5 (line 826)
+              ; - java.lang.ClassLoader::defineClass@51 (line 1101)
+  0x044e0280: cc09 0cff | 8b54 2440 | 8b44 2458 | 8904 24c7 | 4424 0400 | 0000 008b | 5c24 4889 | 5c24 088b 
+  0x044e02a0: b424 8400 | 0000 8974 | 240c 8b4c 
+
+  0x044e02ac: ;   {optimized virtual_call}
+  0x044e02ac: 2444 90e8 
+
+  0x044e02b0: ; ImmutableOopMap {}
+              ;*invokevirtual defineClass {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@63 (line 1102)
+  0x044e02b0: 5c07 0cff | 83c4 785d | 648b 1c25 | 0000 0000 
+
+  0x044e02c0: ;   {poll_return}
+  0x044e02c0: 8b5b f43b | a350 0200 | 000f 877b | 0100 00c3 
+
+  0x044e02d0: ;   {no_reloc}
+  0x044e02d0: e99e 0100 | 00e9 a301 | 0000 8bc8 | 8944 245c 
+
+  0x044e02e0: ;   {optimized virtual_call}
+  0x044e02e0: 6666 90e8 
+
+  0x044e02e4: ; ImmutableOopMap {[64]=Oop [68]=Oop [132]=Oop [92]=Oop [96]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::arrayOffset@26 (line 1501)
+              ; - java.lang.ClassLoader::defineClass@31 (line 1096)
+  0x044e02e4: 2807 0cff | 8b44 245c | e901 0200 
+
+  0x044e02f0: ;   {metadata('java/lang/UnsupportedOperationException')}
+  0x044e02f0: 00ba 00a1 | 5e66 80ba | c300 0000 | 040f 858b | 0100 0064 | 8b0c 2500 | 0000 008b | 49f4 8b81 
+  0x044e0310: d000 0000 | 8d78 203b | b9d8 0000 | 000f 876b | 0100 0089 | b9d0 0000 | 00c7 0001 | 0000 0089 
+  0x044e0330: 5004 33c9 | bf03 0000 | 0089 4cf8 | 0489 0cf8 | 4f75 f68b | c889 4424 
+
+  0x044e0348: ;   {optimized virtual_call}
+  0x044e0348: 6866 90e8 
+
+  0x044e034c: ; ImmutableOopMap {[132]=Oop [68]=Oop [64]=Oop [96]=Oop [104]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::arrayOffset@11 (line 1499)
+              ; - java.lang.ClassLoader::defineClass@31 (line 1096)
+  0x044e034c: c006 0cff | 8b44 2468 | e999 0100 | 000f 1f80 | 0000 0000 
+
+  0x044e0360: ;   {no_reloc}
+  0x044e0360: e93f 0100 | 00e9 4401 | 0000 8bc8 | 8944 246c 
+
+  0x044e0370: ;   {optimized virtual_call}
+  0x044e0370: 6666 90e8 
+
+  0x044e0374: ; ImmutableOopMap {[128]=Oop [64]=Oop [68]=Oop [132]=Oop [108]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::array@26 (line 1473)
+              ; - java.lang.ClassLoader::defineClass@23 (line 1095)
+  0x044e0374: 9806 0cff | 8b44 246c | e971 0100 
+
+  0x044e0380: ;   {metadata('java/lang/UnsupportedOperationException')}
+  0x044e0380: 00ba 00a1 | 5e66 80ba | c300 0000 | 040f 852c | 0100 0064 | 8b0c 2500 | 0000 008b | 49f4 8b81 
+  0x044e03a0: d000 0000 | 8d78 203b | b9d8 0000 | 000f 870c | 0100 0089 | b9d0 0000 | 00c7 0001 | 0000 0089 
+  0x044e03c0: 5004 33c9 | bf03 0000 | 0089 4cf8 | 0489 0cf8 | 4f75 f68b | c889 4424 
+
+  0x044e03d8: ;   {optimized virtual_call}
+  0x044e03d8: 7066 90e8 
+
+  0x044e03dc: ; ImmutableOopMap {[132]=Oop [64]=Oop [68]=Oop [128]=Oop [112]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::array@11 (line 1471)
+              ; - java.lang.ClassLoader::defineClass@23 (line 1095)
+  0x044e03dc: 3006 0cff | 8b44 2470 | e909 0100 
+
+  0x044e03e8: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e03e8: 00e8 f235 
+
+  0x044e03ec: ; ImmutableOopMap {[132]=Oop [68]=Oop esi=Oop [128]=Oop [64]=Oop }
+              ;*invokevirtual remaining {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@1 (line 1090)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e03ec: 0aff e8ed 
+
+  0x044e03f0: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop eax=Oop [76]=Oop }
+              ;*invokevirtual getCodeSource {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClassSourceLocation@1 (line 914)
+              ; - java.lang.ClassLoader::defineClass@76 (line 1107)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e03f0: 350a ffe8 
+
+  0x044e03f4: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop eax=Oop [76]=Oop }
+              ;*invokevirtual getLocation {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClassSourceLocation@12 (line 916)
+              ; - java.lang.ClassLoader::defineClass@76 (line 1107)
+  0x044e03f4: e835 0aff 
+
+  0x044e03f8: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e03f8: e8e3 350a 
+
+  0x044e03fc: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop [76]=Oop edx=Oop }
+              ;*invokevirtual toString {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClassSourceLocation@22 (line 917)
+              ; - java.lang.ClassLoader::defineClass@76 (line 1107)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e03fc: ffe8 de35 
+
+  0x044e0400: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop [76]=Oop edx=Oop ecx=Oop }
+              ;*invokevirtual toExternalForm {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.net.URL::toExternalForm@5 (line 1039)
+              ; - java.net.URL::toString@1 (line 1025)
+              ; - java.lang.ClassLoader::defineClassSourceLocation@22 (line 917)
+              ; - java.lang.ClassLoader::defineClass@76 (line 1107)
+  0x044e0400: 0aff 5152 
+
+  0x044e0404: ;   {internal_word}
+  0x044e0404: b97b 014e | 0464 8b14 | 2500 0000 | 008b 52f4 | 898a 5c02 | 0000 5a59 
+
+  0x044e041c: ;   {runtime_call SafepointBlob}
+  0x044e041c: e97f 540c 
+
+  0x044e0420: ;   {internal_word}
+  0x044e0420: ff51 52b9 | c701 4e04 | 648b 1425 | 0000 0000 | 8b52 f489 | 8a5c 0200 
+
+  0x044e0438: ;   {runtime_call SafepointBlob}
+  0x044e0438: 005a 59e9 | 6054 0cff 
+
+  0x044e0440: ;   {runtime_call new_type_array Runtime1 stub}
+  0x044e0440: e80b 2f0a 
+
+  0x044e0444: ; ImmutableOopMap {[68]=Oop [64]=Oop [128]=Oop [132]=Oop }
+              ;*newarray {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.ClassLoader::defineClass@44 (line 1100)
+  0x044e0444: ffe9 13fe | ffff 5152 
+
+  0x044e044c: ;   {internal_word}
+  0x044e044c: b9c3 024e | 0464 8b14 | 2500 0000 | 008b 52f4 | 898a 5c02 | 0000 5a59 
+
+  0x044e0464: ;   {runtime_call SafepointBlob}
+  0x044e0464: e937 540c 
+
+  0x044e0468: ;   {metadata(NULL)}
+  0x044e0468: ffba 0000 | 0000 b800 
+
+  0x044e0470: ;   {runtime_call load_klass_patching Runtime1 stub}
+  0x044e0470: 0a05 05e8 
+
+  0x044e0474: ; ImmutableOopMap {[132]=Oop [96]=Oop [64]=Oop [68]=Oop }
+              ;*new {reexecute=1 rethrow=0 return_oop=0}
+              ; - (reexecute) java.nio.ByteBuffer::arrayOffset@22 (line 1501)
+              ; - java.lang.ClassLoader::defineClass@31 (line 1096)
+  0x044e0474: 581a 0aff | e953 feff 
+
+  0x044e047c: ;   {runtime_call new_instance Runtime1 stub}
+  0x044e047c: ff8b d2e8 
+
+  0x044e0480: ; ImmutableOopMap {[132]=Oop [96]=Oop [64]=Oop [68]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::arrayOffset@22 (line 1501)
+              ; - java.lang.ClassLoader::defineClass@31 (line 1096)
+  0x044e0480: cc32 0aff | e951 feff 
+
+  0x044e0488: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e0488: ffe8 5235 
+
+  0x044e048c: ; ImmutableOopMap {[132]=Oop [68]=Oop [64]=Oop [96]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::arrayOffset@7 (line 1499)
+              ; - java.lang.ClassLoader::defineClass@31 (line 1096)
+  0x044e048c: 0aff 8bd2 
+
+  0x044e0490: ;   {runtime_call fast_new_instance_init_check Runtime1 stub}
+  0x044e0490: e83b 300a 
+
+  0x044e0494: ; ImmutableOopMap {[132]=Oop [68]=Oop [64]=Oop [96]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::arrayOffset@7 (line 1499)
+              ; - java.lang.ClassLoader::defineClass@31 (line 1096)
+  0x044e0494: ffe9 a9fe 
+
+  0x044e0498: ;   {metadata(NULL)}
+  0x044e0498: ffff ba00 | 0000 00b8 | 000a 0505 
+
+  0x044e04a4: ;   {runtime_call load_klass_patching Runtime1 stub}
+  0x044e04a4: e827 1a0a 
+
+  0x044e04a8: ; ImmutableOopMap {[128]=Oop [64]=Oop [68]=Oop [132]=Oop }
+              ;*new {reexecute=1 rethrow=0 return_oop=0}
+              ; - (reexecute) java.nio.ByteBuffer::array@22 (line 1473)
+              ; - java.lang.ClassLoader::defineClass@23 (line 1095)
+  0x044e04a8: ffe9 b2fe | ffff 8bd2 
+
+  0x044e04b0: ;   {runtime_call new_instance Runtime1 stub}
+  0x044e04b0: e89b 320a 
+
+  0x044e04b4: ; ImmutableOopMap {[128]=Oop [64]=Oop [68]=Oop [132]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::array@22 (line 1473)
+              ; - java.lang.ClassLoader::defineClass@23 (line 1095)
+  0x044e04b4: ffe9 b0fe 
+
+  0x044e04b8: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e04b8: ffff e821 
+
+  0x044e04bc: ; ImmutableOopMap {[132]=Oop [64]=Oop [68]=Oop [128]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::array@7 (line 1471)
+              ; - java.lang.ClassLoader::defineClass@23 (line 1095)
+  0x044e04bc: 350a ff8b 
+
+  0x044e04c0: ;   {runtime_call fast_new_instance_init_check Runtime1 stub}
+  0x044e04c0: d2e8 0a30 
+
+  0x044e04c4: ; ImmutableOopMap {[132]=Oop [64]=Oop [68]=Oop [128]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.nio.ByteBuffer::array@7 (line 1471)
+              ; - java.lang.ClassLoader::defineClass@23 (line 1095)
+  0x044e04c4: 0aff e908 | ffff ff90 | 9064 8b34 | 2500 0000 | 008b 76f4 | 8b86 8402 | 0000 c786 | 8402 0000 
+  0x044e04e4: 0000 0000 | c786 8802 | 0000 0000 | 0000 83c4 
+
+  0x044e04f4: ;   {runtime_call unwind_exception Runtime1 stub}
+  0x044e04f4: 785d e915 | 3b0a fff4 | f4f4 f4f4 
+[Stub Code]
+  0x044e0500: ;   {no_reloc}
+  0x044e0500: 6690 bb00 
+
+  0x044e0504: ;   {runtime_call}
+  0x044e0504: 0000 00e9 | fbff ffff 
+
+  0x044e050c: ;   {static_stub}
+  0x044e050c: 6690 bb00 
+
+  0x044e0510: ;   {runtime_call}
+  0x044e0510: 0000 00e9 | fbff ffff 
+
+  0x044e0518: ;   {static_stub}
+  0x044e0518: 6690 bb00 
+
+  0x044e051c: ;   {runtime_call}
+  0x044e051c: 0000 00e9 | fbff ffff 
+
+  0x044e0524: ;   {static_stub}
+  0x044e0524: 6690 bb00 
+
+  0x044e0528: ;   {runtime_call}
+  0x044e0528: 0000 00e9 | fbff ffff 
+
+  0x044e0530: ;   {static_stub}
+  0x044e0530: 6690 bb00 
+
+  0x044e0534: ;   {runtime_call}
+  0x044e0534: 0000 00e9 | fbff ffff 
+
+  0x044e053c: ;   {static_stub}
+  0x044e053c: 6690 bb00 
+
+  0x044e0540: ;   {runtime_call}
+  0x044e0540: 0000 00e9 | fbff ffff 
+
+  0x044e0548: ;   {static_stub}
+  0x044e0548: 6690 bb00 
+
+  0x044e054c: ;   {runtime_call}
+  0x044e054c: 0000 00e9 | fbff ffff 
+
+  0x044e0554: ;   {static_stub}
+  0x044e0554: 6690 bb00 
+
+  0x044e0558: ;   {runtime_call}
+  0x044e0558: 0000 00e9 | fbff ffff 
+
+  0x044e0560: ;   {static_stub}
+  0x044e0560: 6690 bb00 
+
+  0x044e0564: ;   {runtime_call}
+  0x044e0564: 0000 00e9 | fbff ffff 
+
+  0x044e056c: ;   {static_stub}
+  0x044e056c: 6690 bb00 
+
+  0x044e0570: ;   {runtime_call}
+  0x044e0570: 0000 00e9 | fbff ffff 
+
+  0x044e0578: ;   {static_stub}
+  0x044e0578: 6690 bb00 
+
+  0x044e057c: ;   {runtime_call}
+  0x044e057c: 0000 00e9 | fbff ffff 
+
+  0x044e0584: ;   {static_stub}
+  0x044e0584: 6690 bb00 
+
+  0x044e0588: ;   {runtime_call}
+  0x044e0588: 0000 00e9 | fbff ffff 
+[Exception Handler]
+  0x044e0590: ;   {runtime_call handle_exception_from_callee Runtime1 stub}
+  0x044e0590: e87b 270a 
+
+  0x044e0594: ;   {external_word}
+  0x044e0594: ff68 30b7 | 7572 e800 | 0000 0060 
+
+  0x044e05a0: ;   {runtime_call}
+  0x044e05a0: e8bb 890d 
+
+  0x044e05a4: ;   {section_word}
+  0x044e05a4: 6ef4 68a6 
+
+  0x044e05a8: ;   {runtime_call DeoptimizationBlob}
+  0x044e05a8: 054e 04e9 | 904c 0cff 
+[/MachCode]
+
+
+Compiled method (c1)   78272 14081   !         jdk.internal.loader.BuiltinClassLoader::defineClass (162 bytes)
+ total in heap  [0x044e1a08,0x044e3204] = 6140
+ relocation     [0x044e1aec,0x044e1ca4] = 440
+ main code      [0x044e1cb0,0x044e25d0] = 2336
+ stub code      [0x044e25d0,0x044e26ec] = 284
+ oops           [0x044e26ec,0x044e26f0] = 4
+ metadata       [0x044e26f0,0x044e2730] = 64
+ scopes data    [0x044e2730,0x044e2b5c] = 1068
+ scopes pcs     [0x044e2b5c,0x044e2e0c] = 688
+ dependencies   [0x044e2e0c,0x044e2e18] = 12
+ handler table  [0x044e2e18,0x044e31c0] = 936
+ nul chk table  [0x044e31c0,0x044e3204] = 68
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x660b1b9c} 'defineClass' '(Ljava/lang/String;Ljdk/internal/loader/BuiltinClassLoader$LoadedModule;)Ljava/lang/Class;' in 'jdk/internal/loader/BuiltinClassLoader'
+  # this:     ecx       = 'jdk/internal/loader/BuiltinClassLoader'
+  # parm0:    edx       = 'java/lang/String'
+  # parm1:    [sp+0xc0]   = 'jdk/internal/loader/BuiltinClassLoader$LoadedModule'  (sp of caller)
+  0x044e1cb0: 0f1f 8000 | 0000 003b 
+
+  0x044e1cb8: ;   {runtime_call ic_miss_stub}
+  0x044e1cb8: 4104 0f85 | 10eb 0bff 
+[Verified Entry Point]
+  0x044e1cc0: 8984 2400 | c0ff ff55 | 81ec b800 | 0000 8954 | 2460 8bb4 | 24c0 0000 | 008b 7e0c | 8bd7 8bf9 
+  0x044e1ce0: 8bcf 897c 
+
+  0x044e1ce4: ;   {optimized virtual_call}
+  0x044e1ce4: 2464 90e8 
+
+  0x044e1ce8: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop }
+              ;*invokevirtual moduleReaderFor {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@7 (line 793)
+  0x044e1ce8: b46b 24ff | 8944 2468 | 8b54 2460 
+
+  0x044e1cf4: ; implicit exception: dispatches to 0x044e2466
+  0x044e1cf4: 3b02 8bf2 | ba2e 0000 | 00c7 0424 | 2f00 0000 
+
+  0x044e1d04: ;   {optimized virtual_call}
+  0x044e1d04: 8bce 90e8 
+
+  0x044e1d08: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop }
+              ;*invokevirtual replace {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@23 (line 801)
+  0x044e1d08: f440 13ff 
+
+  0x044e1d0c: ; implicit exception: dispatches to 0x044e246b
+  0x044e1d0c: 3b00 83f8 | 000f 8413 | 0000 0083 | f800 0f85 | 0500 0000 
+
+  0x044e1d20: ;   {oop("null"{0x2565f5f8})}
+  0x044e1d20: b8f8 f565 | 25e9 0500 
+
+  0x044e1d28: ;   {oop("null"{0x2565f5f8})}
+  0x044e1d28: 0000 b8f8 | f565 258b | 5010 8b72 | 0883 fe00 | ba00 0000 | 000f 8505 | 0000 00ba | 0100 0000 
+  0x044e1d48: 83e2 0183 | fa00 0f84 | 5d00 0000 
+
+  0x044e1d54: ;   {metadata('java/lang/String')}
+  0x044e1d54: ba18 d100 | 6664 8b0c | 2500 0000 | 008b 49f4 | 8b81 d000 | 0000 8d78 | 183b b9d8 | 0000 000f 
+  0x044e1d74: 8701 0700 | 0089 b9d0 | 0000 00c7 | 0001 0000 | 0089 5004 | 33c9 8948 | 0889 480c | 8948 1089 
+  0x044e1d94: ;   {oop(".class"{0x25674350})}
+  0x044e1d94: 4814 ba50 | 4367 258b | c889 4424 
+
+  0x044e1da0: ;   {optimized virtual_call}
+  0x044e1da0: 6c66 90e8 
+
+  0x044e1da4: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop [108]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::simpleConcat@22 (line 411)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e1da4: 68ec 0bff | 8b44 246c | e9f7 0000 | 000f be48 | 0cc1 e118 | 8bd1 c1fa | 188b cad3 | fe8b cec1 
+  0x044e1dc4: f91f 83fa | 010f 8506 | 0000 0083 | ce00 83c9 | 018b d683 | fa00 0f8c | 2c05 0000 | 83c6 0683 
+  0x044e1de4: d100 8974 | 2478 894c | 247c 8bd6 | 83fa 0089 | 4424 700f | 8cab 0400 | 008b f9b9 | 2000 0000 
+  0x044e1e04: 8bde 8bc7 | 83e1 3f83 | f920 0f8c | 0500 0000 | 8bd8 c1f8 | 1f0f adc3 | d3f8 0fbe | db8b cb8b 
+  0x044e1e24: dad3 e383 | fb00 0f8c | 1204 0000 
+
+  0x044e1e30: ;   {oop(a 'java/lang/Class'{0x2565f418} = byte)}
+  0x044e1e30: ba18 f465 | 2589 1c24 
+
+  0x044e1e38: ;   {oop(a 'jdk/internal/misc/Unsafe'{0x25660bd0})}
+  0x044e1e38: b9d0 0b66 
+
+  0x044e1e3c: ;   {optimized virtual_call}
+  0x044e1e3c: 2566 90e8 
+
+  0x044e1e40: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop [112]=Oop }
+              ;*invokevirtual allocateUninitializedArray {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::newArray@33 (line 497)
+              ; - java.lang.StringConcatHelper::simpleConcat@61 (line 421)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e1e40: ac79 12ff | 83f8 000f | 8415 0000 | 008b 4804 
+
+  0x044e1e50: ;   {metadata({type array byte})}
+  0x044e1e50: 8179 24c0 | 0400 660f | 8529 0600 | 00e9 0000 | 0000 8bf0 
+
+  0x044e1e64: ;   {oop(".class"{0x25674350})}
+  0x044e1e64: ba50 4367 | 258b 5c24 | 788b 4c24 | 7c89 1c24 | 894c 2404 | 8bce 8974 
+
+  0x044e1e7c: ;   {static_call}
+  0x044e1e7c: 2474 90e8 
+
+  0x044e1e80: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop [112]=Oop [116]=Oop }
+              ;*invokestatic prepend {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::simpleConcat@71 (line 424)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e1e80: acd3 19ff | 8904 2489 | 5424 048b | 4c24 748b 
+
+  0x044e1e90: ;   {static_call}
+  0x044e1e90: 5424 70e8 
+
+  0x044e1e94: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop [116]=Oop }
+              ;*invokestatic prepend {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::simpleConcat@81 (line 425)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e1e94: 98d3 19ff | 8b4c 2474 | 8904 2489 
+
+  0x044e1ea0: ;   {static_call}
+  0x044e1ea0: 5424 04e8 
+
+  0x044e1ea4: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop }
+              ;*invokestatic newString {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::simpleConcat@90 (line 426)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e1ea4: 28c9 1aff | 8b74 2468 | 83fe 000f | 8412 0000 
+
+  0x044e1eb4: ;   {metadata('jdk/internal/module/ModulePatcher$PatchedModuleReader')}
+  0x044e1eb4: 0081 7e04 | a046 7766 | 0f85 0500 | 0000 e904 | 0000 0033 | d2eb 05ba | 0100 0000 | 83fa 000f 
+  0x044e1ed4: 849b 0100 | 0083 fe00 | 0f84 1200 
+
+  0x044e1ee0: ;   {metadata('jdk/internal/module/ModulePatcher$PatchedModuleReader')}
+  0x044e1ee0: 0000 817e | 04a0 4677 | 660f 859f | 0500 00e9 | 0000 0000 | 8bce 8bd0 | 6690 b8ff 
+
+  0x044e1efc: ;   {virtual_call}
+  0x044e1efc: ffff ffe8 
+
+  0x044e1f00: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop }
+              ;*invokevirtual findResource {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@48 (line 803)
+  0x044e1f00: 4ced 0bff | 8984 2480 | 0000 0083 | f800 0f85 | 0f00 0000 
+
+  0x044e1f14: ;   {oop(NULL)}
+  0x044e1f14: be00 0000 
+
+  0x044e1f18: ;   {oop(NULL)}
+  0x044e1f18: 00bf 0000 | 0000 e94a | 0100 003b | 008d 8c24 | a800 0000 | 8bf0 8971 | 048b 0683 | c801 8901 
+  0x044e1f38: f00f b10e | 0f84 1000 | 0000 2bc4 | 81e0 03f0 | ffff 8901 | 0f85 4905 | 0000 8b4e | 0883 f900 
+  0x044e1f58: 0f85 2400 | 0000 8bce | 6690 b8ff 
+
+  0x044e1f64: ;   {virtual_call}
+  0x044e1f64: ffff ffe8 
+
+  0x044e1f68: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [128]=Oop [172]=Oop }
+              ;*invokevirtual getInputStream {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.Resource::cachedInputStream@9 (line 77)
+              ; - jdk.internal.loader.Resource::getByteBuffer@1 (line 163)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@60 (line 805)
+  0x044e1f68: e4ec 0bff | 8bb4 2480 | 0000 0089 | 4608 8bc6 | c1e8 09c6 | 8000 50e2 | 0200 8b4e | 088d 8424 
+  0x044e1f88: a800 0000 | 8b38 85ff | 0f84 0d00 | 0000 8b58 | 04f0 0fb1 | 3b0f 8509 | 0500 0083 | f900 0f84 
+  0x044e1fa8: 3700 0000 
+
+  0x044e1fac: ;   {metadata('sun/nio/ByteBuffered')}
+  0x044e1fac: 8b59 0481 | 7b18 4097 | 5066 0f84 | 2b00 0000 
+
+  0x044e1fbc: ;   {metadata('sun/nio/ByteBuffered')}
+  0x044e1fbc: 81fb 4097 | 5066 0f84 | 1f00 0000 
+
+  0x044e1fc8: ;   {metadata('sun/nio/ByteBuffered')}
+  0x044e1fc8: 5368 4097 
+
+  0x044e1fcc: ;   {runtime_call slow_subtype_check Runtime1 stub}
+  0x044e1fcc: 5066 e8bd | 080a ff5b | 5b83 fb00 | 0f84 0500 | 0000 e904 | 0000 0033 | ffeb 05bf | 0100 0000 
+  0x044e1fec: 83ff 000f | 8450 0000 | 0083 f900 | 0f84 3700 | 0000 8b71 
+
+  0x044e2000: ;   {metadata('sun/nio/ByteBuffered')}
+  0x044e2000: 0481 7e18 | 4097 5066 | 0f84 2700 
+
+  0x044e200c: ;   {metadata('sun/nio/ByteBuffered')}
+  0x044e200c: 0000 81fe | 4097 5066 | 0f84 1b00 
+
+  0x044e2018: ;   {metadata('sun/nio/ByteBuffered')}
+  0x044e2018: 0000 5668 | 4097 5066 
+
+  0x044e2020: ;   {runtime_call slow_subtype_check Runtime1 stub}
+  0x044e2020: e86b 080a | ff5e 5e83 | fe00 0f84 | 9004 0000 | e900 0000 | 0090 b8ff 
+
+  0x044e2038: ;   {virtual_call}
+  0x044e2038: ffff ffe8 
+
+  0x044e203c: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [128]=Oop }
+              ;*invokeinterface getByteBuffer {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.Resource::getByteBuffer@16 (line 165)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@60 (line 805)
+  0x044e203c: 10ec 0bff | e905 0000 
+
+  0x044e2044: ;   {oop(NULL)}
+  0x044e2044: 00b8 0000 | 0000 8984 | 2484 0000 | 008b 8c24 | 8000 0000 | 6690 b8ff 
+
+  0x044e205c: ;   {virtual_call}
+  0x044e205c: ffff ffe8 
+
+  0x044e2060: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [132]=Oop }
+              ;*invokevirtual getCodeSourceURL {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@67 (line 806)
+  0x044e2060: eceb 0bff | 8bf0 8bbc | 2484 0000 | 008b dee9 | c600 0000 | 8bd0 8b4c | 2468 b8d0 
+
+  0x044e207c: ;   {virtual_call}
+  0x044e207c: 2a55 66e8 
+
+  0x044e2080: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [192]=Oop }
+              ;*invokeinterface read {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@79 (line 809)
+  0x044e2080: 5c34 ebff 
+
+  0x044e2084: ; implicit exception: dispatches to 0x044e24c8
+  0x044e2084: 8b48 0883 | f900 0f84 | 0500 0000 | e905 0000 
+
+  0x044e2094: ;   {oop(NULL)}
+  0x044e2094: 00b9 0000 | 0000 8bb4 | 24c0 0000 | 0083 f900 | 0f84 1500 | 0000 8b79 
+
+  0x044e20ac: ;   {metadata('java/nio/ByteBuffer')}
+  0x044e20ac: 0481 7f28 | 688f 1a66 | 0f85 1304 | 0000 e900 | 0000 008b | f98b 4e14 | 83f9 000f | 856b 0000 
+  0x044e20cc: 008b 5e10 | 83fb 000f | 845f 0000 | 0089 bc24 | 8800 0000 
+
+  0x044e20e0: ; implicit exception: dispatches to 0x044e24d5
+  0x044e20e0: 3b03 8bcb 
+
+  0x044e20e4: ;   {static_call}
+  0x044e20e4: 6666 90e8 
+
+  0x044e20e8: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [192]=Oop [136]=Oop }
+              ;*invokestatic fromURI {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.net.URI::toURL@1 (line 1139)
+              ; - jdk.internal.loader.BuiltinClassLoader$LoadedModule::createURL@3 (line 151)
+              ; - jdk.internal.loader.BuiltinClassLoader$LoadedModule::codeSourceURL@22 (line 143)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@94 (line 810)
+  0x044e20e8: 9438 25ff | e92a 0000 | 0064 8b14 | 2500 0000 | 008b 52f4 | 8b82 8402 | 0000 c782 | 8402 0000 
+  0x044e2108: 0000 0000 | c782 8802 | 0000 0000 
+
+  0x044e2114: ;   {oop(NULL)}
+  0x044e2114: 0000 b800 | 0000 008b | b424 c000 | 0000 8946 | 14c1 ee09 | c686 0050 | e202 008b | c88b bc24 
+  0x044e2134: 8800 0000 | 8bd9 83ff | 000f 8524 
+
+  0x044e2140: ;   {oop(NULL)}
+  0x044e2140: 0000 00b8 | 0000 0000 | 81c4 b800 | 0000 5d64 | 8b1c 2500 | 0000 008b 
+
+  0x044e2158: ;   {poll_return}
+  0x044e2158: 5bf4 3ba3 | 5002 0000 | 0f87 7403 | 0000 c389 | bc24 8c00 
+
+  0x044e216c: ;   {metadata('java/security/CodeSource')}
+  0x044e216c: 0000 ba70 | 5e0b 6664 | 8b0c 2500 | 0000 008b | 49f4 8b81 | d000 0000 | 8d78 203b | b9d8 0000 
+  0x044e218c: 000f 8766 | 0300 0089 | b9d0 0000 | 00c7 0001 | 0000 0089 | 5004 33c9 | bf03 0000 | 0089 4cf8 
+  0x044e21ac: 0489 0cf8 | 4f75 f68b | d3c7 0424 | 0000 0000 | 8bc8 8984 | 2490 0000 
+
+  0x044e21c4: ;   {optimized virtual_call}
+  0x044e21c4: 0066 90e8 
+
+  0x044e21c8: ; ImmutableOopMap {[104]=Oop [96]=Oop [100]=Oop [140]=Oop [144]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@116 (line 818)
+  0x044e21c8: 34ce 26ff | 8b94 2490 | 0000 008b 
+
+  0x044e21d4: ;   {optimized virtual_call}
+  0x044e21d4: 4c24 64e8 
+
+  0x044e21d8: ; ImmutableOopMap {[104]=Oop [96]=Oop [100]=Oop [140]=Oop }
+              ;*invokevirtual getProtectionDomain {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.security.SecureClassLoader::defineClass@5 (line 182)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@127 (line 821)
+  0x044e21d8: 74d1 26ff | 8b54 2460 | 8bbc 248c | 0000 0089 | 3c24 8944 | 2404 8b4c | 2464 89bc | 248c 0000 
+  0x044e21f8: ;   {optimized virtual_call}
+  0x044e21f8: 0066 90e8 
+
+  0x044e21fc: ; ImmutableOopMap {[104]=Oop [140]=Oop }
+              ;*invokevirtual defineClass {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.security.SecureClassLoader::defineClass@8 (line 182)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@127 (line 821)
+  0x044e21fc: f0dd ffff | 8b94 248c | 0000 008b | 4c24 6889 | 8424 9400 | 0000 b8d0 
+
+  0x044e2214: ;   {virtual_call}
+  0x044e2214: 2a55 66e8 
+
+  0x044e2218: ; ImmutableOopMap {[104]=Oop [140]=Oop [148]=Oop }
+              ;*invokeinterface release {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@136 (line 824)
+  0x044e2218: e4f1 ffff | 8b84 2494 | 0000 0081 | c4b8 0000 | 005d 648b | 1c25 0000 | 0000 8b5b 
+
+  0x044e2234: ;   {poll_return}
+  0x044e2234: f43b a350 | 0200 000f | 87c4 0200 
+
+  0x044e2240: ;   {metadata('java/lang/OutOfMemoryError')}
+  0x044e2240: 00c3 ba28 | 0e03 6664 | 8b0c 2500 | 0000 008b | 49f4 8b81 | d000 0000 | 8d78 203b | b9d8 0000 
+  0x044e2260: 000f 87bd | 0200 0089 | b9d0 0000 | 00c7 0001 | 0000 0089 | 5004 33c9 | bf03 0000 | 0089 4cf8 
+  0x044e2280: 0489 0cf8 
+
+  0x044e2284: ;   {oop("Overflow: String length out of range"{0x25660610})}
+  0x044e2284: 4f75 f6ba | 1006 6625 | 8bc8 8984 | 2498 0000 
+
+  0x044e2294: ;   {optimized virtual_call}
+  0x044e2294: 0066 90e8 
+
+  0x044e2298: ; ImmutableOopMap {[104]=Oop [112]=Oop [96]=Oop [100]=Oop [152]=Oop [192]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::newArray@22 (line 495)
+              ; - java.lang.StringConcatHelper::simpleConcat@61 (line 421)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2298: 74e7 0bff | 8b84 2498 | 0000 00e9 | 1b03 0000 
+
+  0x044e22a8: ;   {metadata('java/lang/OutOfMemoryError')}
+  0x044e22a8: ba28 0e03 | 6664 8b0c | 2500 0000 | 008b 49f4 | 8b81 d000 | 0000 8d78 | 203b b9d8 | 0000 000f 
+  0x044e22c8: 8763 0200 | 0089 b9d0 | 0000 00c7 | 0001 0000 | 0089 5004 | 33c9 bf03 | 0000 0089 | 4cf8 0489 
+  0x044e22e8: 0cf8 4f75 
+
+  0x044e22ec: ;   {oop("Overflow: String length out of range"{0x25660610})}
+  0x044e22ec: f6ba 1006 | 6625 8bc8 | 8984 249c 
+
+  0x044e22f8: ;   {optimized virtual_call}
+  0x044e22f8: 0000 00e8 
+
+  0x044e22fc: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [112]=Oop [104]=Oop [156]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::checkOverflow@13 (line 57)
+              ; - java.lang.StringConcatHelper::mix@23 (line 138)
+              ; - java.lang.StringConcatHelper::simpleConcat@54 (line 420)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e22fc: 10e7 0bff | 8b84 249c | 0000 00e9 | b702 0000 | 8944 2470 
+
+  0x044e2310: ;   {metadata('java/lang/OutOfMemoryError')}
+  0x044e2310: ba28 0e03 | 6664 8b0c | 2500 0000 | 008b 49f4 | 8b81 d000 | 0000 8d78 | 203b b9d8 | 0000 000f 
+  0x044e2330: 8707 0200 | 0089 b9d0 | 0000 00c7 | 0001 0000 | 0089 5004 | 33c9 bf03 | 0000 0089 | 4cf8 0489 
+  0x044e2350: 0cf8 4f75 
+
+  0x044e2354: ;   {oop("Overflow: String length out of range"{0x25660610})}
+  0x044e2354: f6ba 1006 | 6625 8bc8 | 8984 24a0 
+
+  0x044e2360: ;   {optimized virtual_call}
+  0x044e2360: 0000 00e8 
+
+  0x044e2364: ; ImmutableOopMap {[104]=Oop [96]=Oop [100]=Oop [192]=Oop [160]=Oop [112]=Oop }
+              ;*invokespecial <init> {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::checkOverflow@13 (line 57)
+              ; - java.lang.StringConcatHelper::mix@23 (line 138)
+              ; - java.lang.StringConcatHelper::simpleConcat@46 (line 419)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2364: a8e6 0bff | 8b84 24a0 | 0000 00e9 | 4f02 0000 | 648b 1425 | 0000 0000 | 8b52 f48b | 8284 0200 
+  0x044e2384: 00c7 8284 | 0200 0000 | 0000 00c7 | 8288 0200 | 0000 0000 | 008b d78b | 4c24 6889 | 8424 a400 
+  0x044e23a4: 0000 b8ff 
+
+  0x044e23a8: ;   {virtual_call}
+  0x044e23a8: ffff ffe8 
+
+  0x044e23ac: ; ImmutableOopMap {[164]=Oop }
+              ;*invokeinterface release {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@150 (line 824)
+  0x044e23ac: a0e8 0bff | 8b84 24a4 
+
+  0x044e23b4: ; ImmutableOopMap {eax=Oop }
+              ;*athrow {reexecute=1 rethrow=0 return_oop=0}
+              ; - (reexecute) jdk.internal.loader.BuiltinClassLoader::defineClass@157 (line 825)
+              ;   {section_word}
+  0x044e23b4: 0000 00ba | b723 4e04 
+
+  0x044e23bc: ;   {runtime_call handle_exception_nofpu Runtime1 stub}
+  0x044e23bc: e88f 0b0a | ff90 8b5c | 2460 648b | 1425 0000 | 0000 8b52 | f48b 8284 | 0200 00c7 | 8284 0200 
+  0x044e23dc: 0000 0000 | 00c7 8288 | 0200 0000 | 0000 008b | d08d 8424 | a800 0000 | 8b30 85f6 | 0f84 0d00 
+  0x044e23fc: 0000 8b78 | 04f0 0fb1 | 370f 853d | 0100 008b 
+
+  0x044e240c: ; ImmutableOopMap {[128]=Oop ecx=Oop [104]=Oop ebx=Oop [96]=Oop eax=Oop }
+              ;*invokevirtual cachedInputStream {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.Resource::getByteBuffer@1 (line 163)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@60 (line 805)
+              ;   {section_word}
+  0x044e240c: c2ba 0d24 
+
+  0x044e2410: ;   {runtime_call handle_exception_nofpu Runtime1 stub}
+  0x044e2410: 4e04 e839 | 0b0a ff90 | 648b 3425 | 0000 0000 | 8b76 f48b | 8684 0200 | 00c7 8684 | 0200 0000 
+  0x044e2430: 0000 00c7 | 8688 0200 | 0000 0000 
+
+  0x044e243c: ;   {oop(NULL)}
+  0x044e243c: 00b8 0000 | 0000 81c4 | b800 0000 | 5d64 8b1c | 2500 0000 | 008b 5bf4 
+
+  0x044e2454: ;   {poll_return}
+  0x044e2454: 3ba3 5002 | 0000 0f87 | fc00 0000 
+
+  0x044e2460: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e2460: c3e8 7a15 
+
+  0x044e2464: ; ImmutableOopMap {ecx=Oop esi=Oop [192]=Oop [96]=Oop }
+              ;*invokevirtual mref {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@1 (line 792)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e2464: 0aff e875 
+
+  0x044e2468: ; ImmutableOopMap {[192]=Oop [100]=Oop eax=Oop [104]=Oop edx=Oop [96]=Oop }
+              ;*invokevirtual replace {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@23 (line 801)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e2468: 150a ffe8 
+
+  0x044e246c: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop eax=Oop }
+              ;*invokevirtual concat {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e246c: 7015 0aff 
+
+  0x044e2470: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e2470: e86b 150a 
+
+  0x044e2474: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop eax=Oop }
+              ;*invokevirtual isEmpty {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::simpleConcat@11 (line 409)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e2474: ffe8 6615 
+
+  0x044e2478: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop eax=Oop }
+              ;*arraylength {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.String::isEmpty@4 (line 1494)
+              ; - java.lang.StringConcatHelper::simpleConcat@11 (line 409)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2478: 0aff 8bd2 
+
+  0x044e247c: ;   {runtime_call fast_new_instance Runtime1 stub}
+  0x044e247c: e88f 110a 
+
+  0x044e2480: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::simpleConcat@17 (line 411)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2480: ffe9 10f9 | ffff 8904 
+
+  0x044e2488: ;   {runtime_call throw_class_cast_exception Runtime1 stub}
+  0x044e2488: 24e8 1206 
+
+  0x044e248c: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [104]=Oop [112]=Oop }
+              ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::newArray@36 (line 497)
+              ; - java.lang.StringConcatHelper::simpleConcat@61 (line 421)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e248c: 0aff 8934 
+
+  0x044e2490: ;   {runtime_call throw_class_cast_exception Runtime1 stub}
+  0x044e2490: 24e8 0a06 
+
+  0x044e2494: ; ImmutableOopMap {[100]=Oop [96]=Oop eax=Oop esi=Oop [104]=Oop }
+              ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@43 (line 803)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e2494: 0aff e845 
+
+  0x044e2498: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop eax=Oop [128]=Oop }
+              ;*invokevirtual getByteBuffer {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@60 (line 805)
+  0x044e2498: 150a ff89 | 7424 0489 
+
+  0x044e24a0: ;   {runtime_call monitorenter_nofpu Runtime1 stub}
+  0x044e24a0: 0c24 e8a9 
+
+  0x044e24a4: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop esi=Oop [128]=Oop [172]=Oop }
+              ;*synchronization entry
+              ; - jdk.internal.loader.Resource::cachedInputStream@-1 (line 76)
+              ; - jdk.internal.loader.Resource::getByteBuffer@1 (line 163)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@60 (line 805)
+  0x044e24a4: 010a ffe9 | a6fa ffff | 8d84 24a8 | 0000 0089 
+
+  0x044e24b4: ;   {runtime_call monitorexit_nofpu Runtime1 stub}
+  0x044e24b4: 0424 e855 | ff09 ffe9 | e3fa ffff 
+
+  0x044e24c0: ;   {runtime_call throw_class_cast_exception Runtime1 stub}
+  0x044e24c0: 890c 24e8 
+
+  0x044e24c4: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [128]=Oop }
+              ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.Resource::getByteBuffer@13 (line 165)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@60 (line 805)
+  0x044e24c4: d805 0aff 
+
+  0x044e24c8: ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e24c8: e813 150a 
+
+  0x044e24cc: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [192]=Oop }
+              ;*invokevirtual orElse {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@85 (line 809)
+  0x044e24cc: ff89 0c24 
+
+  0x044e24d0: ;   {runtime_call throw_class_cast_exception Runtime1 stub}
+  0x044e24d0: e8cb 050a 
+
+  0x044e24d4: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop esi=Oop [192]=Oop }
+              ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@88 (line 809)
+              ;   {runtime_call throw_null_pointer_exception Runtime1 stub}
+  0x044e24d4: ffe8 0615 
+
+  0x044e24d8: ; ImmutableOopMap {[100]=Oop [96]=Oop [104]=Oop [136]=Oop [192]=Oop ebx=Oop }
+              ;*invokevirtual toURL {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader$LoadedModule::createURL@3 (line 151)
+              ; - jdk.internal.loader.BuiltinClassLoader$LoadedModule::codeSourceURL@22 (line 143)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@94 (line 810)
+  0x044e24d8: 0aff 5152 
+
+  0x044e24dc: ;   {internal_word}
+  0x044e24dc: b95a 214e | 0464 8b14 | 2500 0000 | 008b 52f4 | 898a 5c02 | 0000 5a59 
+
+  0x044e24f4: ;   {runtime_call SafepointBlob}
+  0x044e24f4: e9a7 330c 
+
+  0x044e24f8: ;   {runtime_call fast_new_instance Runtime1 stub}
+  0x044e24f8: ff8b d2e8 
+
+  0x044e24fc: ; ImmutableOopMap {ebx=Oop [104]=Oop [96]=Oop [100]=Oop [140]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@106 (line 818)
+  0x044e24fc: 1011 0aff | e9ae fcff 
+
+  0x044e2504: ;   {internal_word}
+  0x044e2504: ff51 52b9 | 3522 4e04 | 648b 1425 | 0000 0000 | 8b52 f489 | 8a5c 0200 
+
+  0x044e251c: ;   {runtime_call SafepointBlob}
+  0x044e251c: 005a 59e9 | 7c33 0cff 
+
+  0x044e2524: ;   {runtime_call fast_new_instance Runtime1 stub}
+  0x044e2524: 8bd2 e8e5 
+
+  0x044e2528: ; ImmutableOopMap {[104]=Oop [112]=Oop [96]=Oop [100]=Oop [192]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::newArray@16 (line 495)
+              ; - java.lang.StringConcatHelper::simpleConcat@61 (line 421)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2528: 100a ffe9 | 57fd ffff 
+
+  0x044e2530: ;   {runtime_call fast_new_instance Runtime1 stub}
+  0x044e2530: 8bd2 e8d9 
+
+  0x044e2534: ; ImmutableOopMap {[192]=Oop [100]=Oop [96]=Oop [112]=Oop [104]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::checkOverflow@7 (line 57)
+              ; - java.lang.StringConcatHelper::mix@23 (line 138)
+              ; - java.lang.StringConcatHelper::simpleConcat@54 (line 420)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2534: 100a ffe9 | b1fd ffff 
+
+  0x044e253c: ;   {runtime_call fast_new_instance Runtime1 stub}
+  0x044e253c: 8bd2 e8cd 
+
+  0x044e2540: ; ImmutableOopMap {[104]=Oop [96]=Oop [100]=Oop [112]=Oop [192]=Oop }
+              ;*new {reexecute=0 rethrow=0 return_oop=0}
+              ; - java.lang.StringConcatHelper::checkOverflow@7 (line 57)
+              ; - java.lang.StringConcatHelper::mix@23 (line 138)
+              ; - java.lang.StringConcatHelper::simpleConcat@46 (line 419)
+              ; - java.lang.String::concat@11 (line 2774)
+              ; - jdk.internal.loader.BuiltinClassLoader::defineClass@28 (line 801)
+  0x044e2540: 100a ffe9 | 0dfe ffff | 8d84 24a8 | 0000 0089 
+
+  0x044e2550: ;   {runtime_call monitorexit_nofpu Runtime1 stub}
+  0x044e2550: 0424 e8b9 | fe09 ffe9 | affe ffff 
+
+  0x044e255c: ;   {internal_word}
+  0x044e255c: 5152 b954 | 244e 0464 | 8b14 2500 | 0000 008b | 52f4 898a | 5c02 0000 
+
+  0x044e2574: ;   {runtime_call SafepointBlob}
+  0x044e2574: 5a59 e925 | 330c ff8b | 4c24 64e9 | 3efe ffff | 8bbc 248c | 0000 00e9 | e4fd ffff | 8bbc 248c 
+  0x044e2594: 0000 00e9 | d8fd ffff | 9090 648b | 3425 0000 | 0000 8b76 | f48b 8684 | 0200 00c7 | 8684 0200 
+  0x044e25b4: 0000 0000 | 00c7 8688 | 0200 0000 | 0000 0081 | c4b8 0000 
+
+  0x044e25c8: ;   {runtime_call unwind_exception Runtime1 stub}
+  0x044e25c8: 005d e941 | 1a0a fff4 
+[Stub Code]
+  0x044e25d0: ;   {no_reloc}
+  0x044e25d0: 6690 bb00 
+
+  0x044e25d4: ;   {runtime_call}
+  0x044e25d4: 0000 00e9 | fbff ffff 
+
+  0x044e25dc: ;   {static_stub}
+  0x044e25dc: 6690 bb00 
+
+  0x044e25e0: ;   {runtime_call}
+  0x044e25e0: 0000 00e9 | fbff ffff 
+
+  0x044e25e8: ;   {static_stub}
+  0x044e25e8: 6690 bb00 
+
+  0x044e25ec: ;   {runtime_call}
+  0x044e25ec: 0000 00e9 | fbff ffff 
+
+  0x044e25f4: ;   {static_stub}
+  0x044e25f4: 6690 bb00 
+
+  0x044e25f8: ;   {runtime_call}
+  0x044e25f8: 0000 00e9 | fbff ffff 
+
+  0x044e2600: ;   {static_stub}
+  0x044e2600: 6690 bb00 
+
+  0x044e2604: ;   {runtime_call}
+  0x044e2604: 0000 00e9 | fbff ffff 
+
+  0x044e260c: ;   {static_stub}
+  0x044e260c: 6690 bb00 
+
+  0x044e2610: ;   {runtime_call}
+  0x044e2610: 0000 00e9 | fbff ffff 
+
+  0x044e2618: ;   {static_stub}
+  0x044e2618: 6690 bb00 
+
+  0x044e261c: ;   {runtime_call}
+  0x044e261c: 0000 00e9 | fbff ffff 
+
+  0x044e2624: ;   {static_stub}
+  0x044e2624: 6690 bb00 
+
+  0x044e2628: ;   {runtime_call}
+  0x044e2628: 0000 00e9 | fbff ffff 
+
+  0x044e2630: ;   {static_stub}
+  0x044e2630: 6690 bb00 
+
+  0x044e2634: ;   {runtime_call}
+  0x044e2634: 0000 00e9 | fbff ffff 
+
+  0x044e263c: ;   {static_stub}
+  0x044e263c: 6690 bb00 
+
+  0x044e2640: ;   {runtime_call}
+  0x044e2640: 0000 00e9 | fbff ffff 
+
+  0x044e2648: ;   {static_stub}
+  0x044e2648: 6690 bb00 
+
+  0x044e264c: ;   {runtime_call}
+  0x044e264c: 0000 00e9 | fbff ffff 
+
+  0x044e2654: ;   {static_stub}
+  0x044e2654: 6690 bb00 
+
+  0x044e2658: ;   {runtime_call}
+  0x044e2658: 0000 00e9 | fbff ffff 
+
+  0x044e2660: ;   {static_stub}
+  0x044e2660: 6690 bb00 
+
+  0x044e2664: ;   {runtime_call}
+  0x044e2664: 0000 00e9 | fbff ffff 
+
+  0x044e266c: ;   {static_stub}
+  0x044e266c: 6690 bb00 
+
+  0x044e2670: ;   {runtime_call}
+  0x044e2670: 0000 00e9 | fbff ffff 
+
+  0x044e2678: ;   {static_stub}
+  0x044e2678: 6690 bb00 
+
+  0x044e267c: ;   {runtime_call}
+  0x044e267c: 0000 00e9 | fbff ffff 
+
+  0x044e2684: ;   {static_stub}
+  0x044e2684: 6690 bba0 
+
+  0x044e2688: ;   {runtime_call I2C/C2I adapters}
+  0x044e2688: b901 66e9 | 5aa3 0bff 
+
+  0x044e2690: ;   {static_stub}
+  0x044e2690: 6690 bb00 
+
+  0x044e2694: ;   {runtime_call}
+  0x044e2694: 0000 00e9 | fbff ffff 
+
+  0x044e269c: ;   {static_stub}
+  0x044e269c: 6690 bb00 
+
+  0x044e26a0: ;   {runtime_call}
+  0x044e26a0: 0000 00e9 | fbff ffff 
+
+  0x044e26a8: ;   {static_stub}
+  0x044e26a8: 6690 bb00 
+
+  0x044e26ac: ;   {runtime_call}
+  0x044e26ac: 0000 00e9 | fbff ffff 
+
+  0x044e26b4: ;   {static_stub}
+  0x044e26b4: 6690 bb00 
+
+  0x044e26b8: ;   {runtime_call}
+  0x044e26b8: 0000 00e9 | fbff ffff 
+
+  0x044e26c0: ;   {static_stub}
+  0x044e26c0: 6690 bb00 
+
+  0x044e26c4: ;   {runtime_call}
+  0x044e26c4: 0000 00e9 | fbff ffff 
+[Exception Handler]
+  0x044e26cc: ;   {runtime_call handle_exception_from_callee Runtime1 stub}
+  0x044e26cc: e83f 060a 
+
+  0x044e26d0: ;   {external_word}
+  0x044e26d0: ff68 30b7 | 7572 e800 | 0000 0060 
+
+  0x044e26dc: ;   {runtime_call}
+  0x044e26dc: e87f 680d 
+
+  0x044e26e0: ;   {section_word}
+  0x044e26e0: 6ef4 68e2 
+
+  0x044e26e4: ;   {runtime_call DeoptimizationBlob}
+  0x044e26e4: 264e 04e9 | 542b 0cff 
+[/MachCode]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x7ec10718, length=323, elements={
+0x03494cf8, 0x6561f618, 0x656201b8, 0x65651a60,
+0x65652600, 0x656538c8, 0x65654468, 0x65639a18,
+0x6563d8b0, 0x656c07e0, 0x657e9748, 0x681f9028,
+0x682c3268, 0x6830e9e8, 0x681a1970, 0x681a1c88,
+0x683e5438, 0x683e5dc8, 0x683e70b8, 0x683e5778,
+0x683e5aa0, 0x683e6a68, 0x683e73e0, 0x683e60f0,
+0x683e6418, 0x6877a6b8, 0x6877a068, 0x6877b030,
+0x6877b9a8, 0x6877ad08, 0x6877b358, 0x6877a390,
+0x6b080308, 0x6b07f668, 0x6b07f990, 0x6b0815f8,
+0x6b080630, 0x6b080c80, 0x6b07fcb8, 0x6b080958,
+0x6b081920, 0x6b080fa8, 0x6b081c48, 0x6b081f70,
+0x6b07e378, 0x6b07e6a0, 0x6b07e9c8, 0x6b07ecf0,
+0x6b07ffe0, 0x6b07f018, 0x6b2e38c0, 0x6b2e1f80,
+0x6b2e5b78, 0x6b2e22a8, 0x6b2e4560, 0x6b2e5200,
+0x6b2e2f48, 0x6b2e4238, 0x6b2e4bb0, 0x6b2e4888,
+0x6b2e25d0, 0x6b2e3be8, 0x6b2e4ed8, 0x6b2e5528,
+0x6b2e3f10, 0x6b2e5850, 0x6b2e28f8, 0x6b2e2c20,
+0x6b2e3270, 0x6b2e3598, 0x6b419a18, 0x6b417a88,
+0x6b418400, 0x6b418728, 0x6b419d40, 0x6b417760,
+0x6b418a50, 0x6b4180d8, 0x6b417db0, 0x6b41a068,
+0x6b418d78, 0x6b4190a0, 0x6b4193c8, 0x6b416470,
+0x6b4196f0, 0x6b416ac0, 0x6b416798, 0x6b416de8,
+0x6b417110, 0x6b417438, 0x6b45b220, 0x6b4598e0,
+0x6b45c510, 0x6b45a258, 0x6b45a580, 0x6b45d1b0,
+0x6b45a8a8, 0x6b459c08, 0x6b45abd0, 0x6b45cb60,
+0x6b45aef8, 0x6b45bec0, 0x6be34c38, 0x6be33948,
+0x6be33f98, 0x6be31690, 0x6be319b8, 0x6be32658,
+0x6be33c70, 0x6be345e8, 0x6b45c838, 0x6f6c2ff8,
+0x6f6c3970, 0x6f6c5c28, 0x6f6c3c98, 0x6f6c52b0,
+0x6f6c3648, 0x6f6c3fc0, 0x6f6c2680, 0x6f6c55d8,
+0x6f6c29a8, 0x6f6c5900, 0x6f6c4c60, 0x6f6c4610,
+0x6f6c4938, 0x6f6c2030, 0x6f6c4f88, 0x6f6c2358,
+0x6f6c42e8, 0x6f6c2cd0, 0x6f6c3320, 0x6fdc8a50,
+0x6fdc57d0, 0x6fdc6de8, 0x6fdc8d78, 0x6fdc6148,
+0x6fdc5af8, 0x6fdc93c8, 0x6fdc90a0, 0x6fdc6470,
+0x6fdc6ac0, 0x6fdc8728, 0x6fdc5e20, 0x6fdc7438,
+0x6fdc80d8, 0x6fdc7760, 0x6fdc6798, 0x6fdc7110,
+0x6fdc7a88, 0x6fdc8400, 0x6fe69610, 0x6fe6a900,
+0x6fe68fc0, 0x6fe69938, 0x6fe67358, 0x6fe679a8,
+0x6fe68970, 0x6fe6a2b0, 0x6fe67680, 0x6fe67ff8,
+0x6fe68c98, 0x6fe6ac28, 0x6fe67cd0, 0x6fe68320,
+0x6fe692e8, 0x6fe69c60, 0x6fe67030, 0x6fe68648,
+0x6fe69f88, 0x6fe6a5d8, 0x6bc819c8, 0x6bc81cf0,
+0x6bc84c48, 0x6bc85298, 0x6bc82018, 0x6bc82340,
+0x6bc816a0, 0x6bc82cb8, 0x6bc855c0, 0x6bc83630,
+0x6bc86260, 0x6bc858e8, 0x6bc84920, 0x6bc83958,
+0x6bc83c80, 0x6bc85c10, 0x6bc82fe0, 0x6bc83308,
+0x6bc83fa8, 0x6bc842d0, 0x6bc845f8, 0x6bc84f70,
+0x6bc82668, 0x6bc85f38, 0x6bc86588, 0x6bc82990,
+0x6bc868b0, 0x6bc86bd8, 0x6bc87228, 0x6bc87878,
+0x6bc86f00, 0x6bc87550, 0x6bc88518, 0x6bc88e90,
+0x6bc88840, 0x6bc88b68, 0x6bc891b8, 0x6bc87ba0,
+0x6bc87ec8, 0x6bc881f0, 0x682aa958, 0x682a9668,
+0x682aa308, 0x682a9cb8, 0x682aafa8, 0x682a89c8,
+0x682aac80, 0x682a8378, 0x682abc48, 0x682a86a0,
+0x682abf70, 0x682ab2d0, 0x682a9018, 0x682a8cf0,
+0x682ab5f8, 0x682a9340, 0x7008eaf0, 0x7008c838,
+0x7008cb60, 0x7008bb98, 0x7008b548, 0x7008bec0,
+0x7008e4a0, 0x7008c1e8, 0x7008d800, 0x7008db28,
+0x7008c510, 0x7008ce88, 0x7008b870, 0x7008d1b0,
+0x7008ee18, 0x7008d4d8, 0x7008e178, 0x7008b220,
+0x70090a80, 0x700913f8, 0x7008f140, 0x7008f790,
+0x7008fab8, 0x7008f468, 0x70090108, 0x7008fde0,
+0x70090430, 0x70090da8, 0x70090758, 0x700910d0,
+0x700923c0, 0x700926e8, 0x70092a10, 0x70092d38,
+0x70091d70, 0x70091720, 0x70091a48, 0x70092098,
+0x7b514340, 0x7b5162d0, 0x7b5165f8, 0x7b514668,
+0x7b514990, 0x7b516920, 0x7b514cb8, 0x7b516c48,
+0x7b517298, 0x7b513cf0, 0x7b515308, 0x7b5178e8,
+0x7b517c10, 0x7b515958, 0x7b514018, 0x7b517f38,
+0x7b518260, 0x7b518588, 0x7b515fa8, 0x7b5188b0,
+0x7b518bd8, 0x7b518f00, 0x7b519228, 0x7b515630,
+0x7b519550, 0x7b519878, 0x7b515c80, 0x7b519ba0,
+0x7b519ec8, 0x7b51ab68, 0x7b51b4e0, 0x7b51a518,
+0x7b51b1b8, 0x7b51b808, 0x7b51a1f0, 0x7b76bb18,
+0x7b76ae78, 0x7b76a828, 0x7b76b1a0, 0x7b76b7f0,
+0x7b76be40, 0x7b76b4c8, 0x7b76ab50, 0x7b76c168,
+0x7b76c490, 0x7b76daa8, 0x7b76d458, 0x7b76c7b8,
+0x7b76cae0, 0x7b76ce08, 0x7b76d780, 0x7b76ddd0,
+0x7b76e0f8, 0x7b76a500, 0x7b76f0c0, 0x7b76e420,
+0x7b7706d8, 0x7b76ea70, 0x7b76f710
+}
+
+Java Threads: ( => current thread )
+  0x03494cf8 JavaThread "main" [_thread_blocked, id=22440, stack(0x01430000,0x01480000)]
+  0x6561f618 JavaThread "Reference Handler" daemon [_thread_blocked, id=5692, stack(0x05560000,0x055b0000)]
+  0x656201b8 JavaThread "Finalizer" daemon [_thread_blocked, id=9276, stack(0x65800000,0x65850000)]
+  0x65651a60 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=16976, stack(0x659a0000,0x659f0000)]
+  0x65652600 JavaThread "Attach Listener" daemon [_thread_blocked, id=22904, stack(0x65a30000,0x65a80000)]
+  0x656538c8 JavaThread "Service Thread" daemon [_thread_blocked, id=14484, stack(0x65ac0000,0x65b10000)]
+  0x65654468 JavaThread "Monitor Deflation Thread" daemon [_thread_blocked, id=12040, stack(0x65b50000,0x65ba0000)]
+  0x65639a18 JavaThread "C1 CompilerThread0" daemon [_thread_blocked, id=16228, stack(0x65be0000,0x65c30000)]
+  0x6563d8b0 JavaThread "Sweeper thread" daemon [_thread_blocked, id=13772, stack(0x65c70000,0x65cc0000)]
+  0x656c07e0 JavaThread "Common-Cleaner" daemon [_thread_blocked, id=20928, stack(0x65d00000,0x65d50000)]
+  0x657e9748 JavaThread "Notification Thread" daemon [_thread_blocked, id=15636, stack(0x65d90000,0x65de0000)]
+  0x681f9028 JavaThread "Daemon health stats" [_thread_blocked, id=18996, stack(0x65eb0000,0x65f00000)]
+  0x682c3268 JavaThread "Incoming local TCP Connector on port 65102" [_thread_in_native, id=19608, stack(0x65f40000,0x65f90000)]
+  0x6830e9e8 JavaThread "Daemon periodic checks" [_thread_blocked, id=10160, stack(0x69070000,0x690c0000)]
+  0x681a1970 JavaThread "Daemon" [_thread_blocked, id=23508, stack(0x69100000,0x69150000)]
+  0x681a1c88 JavaThread "Handler for socket connection from /127.0.0.1:65102 to /127.0.0.1:65103" [_thread_in_native, id=860, stack(0x69200000,0x69250000)]
+  0x683e5438 JavaThread "Cancel handler" [_thread_blocked, id=3400, stack(0x69290000,0x692e0000)]
+  0x683e5dc8 JavaThread "Daemon worker" [_thread_blocked, id=17600, stack(0x69320000,0x69370000)]
+  0x683e70b8 JavaThread "Asynchronous log dispatcher for DefaultDaemonConnection: socket connection from /127.0.0.1:65102 to /127.0.0.1:65103" [_thread_blocked, id=3168, stack(0x693b0000,0x69400000)]
+  0x683e5778 JavaThread "Stdin handler" [_thread_blocked, id=15220, stack(0x69440000,0x69490000)]
+  0x683e5aa0 JavaThread "Daemon client event forwarder" [_thread_blocked, id=6216, stack(0x694d0000,0x69520000)]
+  0x683e6a68 JavaThread "Cache worker for journal cache (C:\Users\ASUS\.gradle\caches\journal-1)" [_thread_blocked, id=9772, stack(0x69560000,0x695b0000)]
+  0x683e73e0 JavaThread "File lock request listener" [_thread_in_native, id=22104, stack(0x695f0000,0x69640000)]
+  0x683e60f0 JavaThread "Cache worker for file hash cache (C:\Users\ASUS\.gradle\caches\8.11.1\fileHashes)" [_thread_blocked, id=20852, stack(0x69680000,0x696d0000)]
+  0x683e6418 JavaThread "Cache worker for file content cache (C:\Users\ASUS\.gradle\caches\8.11.1\fileContent)" [_thread_blocked, id=8508, stack(0x69710000,0x69760000)]
+  0x6877a6b8 JavaThread "Cache worker for file hash cache (C:\Users\ASUS\github\mcse\android-app\.gradle\8.11.1\fileHashes)" [_thread_blocked, id=17504, stack(0x697a0000,0x697f0000)]
+  0x6877a068 JavaThread "Cache worker for Build Output Cleanup Cache (C:\Users\ASUS\github\mcse\android-app\.gradle\buildOutputCleanup)" [_thread_blocked, id=9956, stack(0x69830000,0x69880000)]
+  0x6877b030 JavaThread "File watcher server" daemon [_thread_blocked, id=8224, stack(0x698c0000,0x69910000)]
+  0x6877b9a8 JavaThread "File watcher consumer" daemon [_thread_blocked, id=7108, stack(0x69950000,0x699a0000)]
+  0x6877ad08 JavaThread "Cache worker for checksums cache (C:\Users\ASUS\github\mcse\android-app\.gradle\8.11.1\checksums)" [_thread_blocked, id=6088, stack(0x699e0000,0x69a30000)]
+  0x6877b358 JavaThread "Cache worker for cache directory md-rule (C:\Users\ASUS\.gradle\caches\8.11.1\md-rule)" [_thread_blocked, id=9468, stack(0x69a70000,0x69ac0000)]
+  0x6877a390 JavaThread "Cache worker for cache directory md-supplier (C:\Users\ASUS\.gradle\caches\8.11.1\md-supplier)" [_thread_blocked, id=11044, stack(0x69b00000,0x69b50000)]
+  0x6b080308 JavaThread "jar transforms" [_thread_blocked, id=2852, stack(0x69b90000,0x69be0000)]
+  0x6b07f668 JavaThread "jar transforms Thread 2" [_thread_blocked, id=9912, stack(0x69c20000,0x69c70000)]
+  0x6b07f990 JavaThread "jar transforms Thread 3" [_thread_blocked, id=12804, stack(0x69cb0000,0x69d00000)]
+  0x6b0815f8 JavaThread "Problems report writer" [_thread_blocked, id=16164, stack(0x69d40000,0x69d90000)]
+  0x6b080630 JavaThread "Unconstrained build operations" [_thread_blocked, id=23520, stack(0x69dd0000,0x69e20000)]
+  0x6b080c80 JavaThread "Unconstrained build operations Thread 2" [_thread_blocked, id=12308, stack(0x69e60000,0x69eb0000)]
+  0x6b07fcb8 JavaThread "Unconstrained build operations Thread 3" [_thread_blocked, id=11428, stack(0x69ef0000,0x69f40000)]
+  0x6b080958 JavaThread "Unconstrained build operations Thread 4" [_thread_blocked, id=16016, stack(0x69f80000,0x69fd0000)]
+  0x6b081920 JavaThread "Unconstrained build operations Thread 5" [_thread_blocked, id=22236, stack(0x6d040000,0x6d090000)]
+  0x6b080fa8 JavaThread "Unconstrained build operations Thread 6" [_thread_blocked, id=19256, stack(0x6d0d0000,0x6d120000)]
+  0x6b081c48 JavaThread "Unconstrained build operations Thread 7" [_thread_blocked, id=18752, stack(0x6d160000,0x6d1b0000)]
+  0x6b081f70 JavaThread "Unconstrained build operations Thread 8" [_thread_blocked, id=15772, stack(0x6d1f0000,0x6d240000)]
+  0x6b07e378 JavaThread "Unconstrained build operations Thread 9" [_thread_blocked, id=20636, stack(0x6d280000,0x6d2d0000)]
+  0x6b07e6a0 JavaThread "Unconstrained build operations Thread 10" [_thread_blocked, id=17440, stack(0x6d310000,0x6d360000)]
+  0x6b07e9c8 JavaThread "Unconstrained build operations Thread 11" [_thread_blocked, id=21664, stack(0x6d3a0000,0x6d3f0000)]
+  0x6b07ecf0 JavaThread "Unconstrained build operations Thread 12" [_thread_blocked, id=19036, stack(0x6d430000,0x6d480000)]
+  0x6b07ffe0 JavaThread "Unconstrained build operations Thread 13" [_thread_blocked, id=22960, stack(0x6d4c0000,0x6d510000)]
+  0x6b07f018 JavaThread "Unconstrained build operations Thread 14" [_thread_blocked, id=22504, stack(0x6d550000,0x6d5a0000)]
+  0x6b2e38c0 JavaThread "Unconstrained build operations Thread 15" [_thread_blocked, id=16252, stack(0x6d5e0000,0x6d630000)]
+  0x6b2e1f80 JavaThread "Unconstrained build operations Thread 16" [_thread_blocked, id=20940, stack(0x6d670000,0x6d6c0000)]
+  0x6b2e5b78 JavaThread "Unconstrained build operations Thread 17" [_thread_blocked, id=11952, stack(0x6d700000,0x6d750000)]
+  0x6b2e22a8 JavaThread "Unconstrained build operations Thread 18" [_thread_blocked, id=6792, stack(0x6d790000,0x6d7e0000)]
+  0x6b2e4560 JavaThread "Unconstrained build operations Thread 19" [_thread_blocked, id=2092, stack(0x6d820000,0x6d870000)]
+  0x6b2e5200 JavaThread "Unconstrained build operations Thread 20" [_thread_blocked, id=22744, stack(0x6d8b0000,0x6d900000)]
+  0x6b2e2f48 JavaThread "Unconstrained build operations Thread 21" [_thread_blocked, id=16352, stack(0x6d940000,0x6d990000)]
+  0x6b2e4238 JavaThread "Unconstrained build operations Thread 22" [_thread_blocked, id=3936, stack(0x6d9d0000,0x6da20000)]
+  0x6b2e4bb0 JavaThread "Unconstrained build operations Thread 23" [_thread_blocked, id=13288, stack(0x6da60000,0x6dab0000)]
+  0x6b2e4888 JavaThread "Unconstrained build operations Thread 24" [_thread_blocked, id=2244, stack(0x6dbf0000,0x6dc40000)]
+  0x6b2e25d0 JavaThread "Unconstrained build operations Thread 25" [_thread_blocked, id=2180, stack(0x6dc80000,0x6dcd0000)]
+  0x6b2e3be8 JavaThread "Unconstrained build operations Thread 26" [_thread_blocked, id=23232, stack(0x6dd10000,0x6dd60000)]
+  0x6b2e4ed8 JavaThread "Unconstrained build operations Thread 27" [_thread_blocked, id=20708, stack(0x6dda0000,0x6ddf0000)]
+  0x6b2e5528 JavaThread "Unconstrained build operations Thread 28" [_thread_blocked, id=6204, stack(0x6de30000,0x6de80000)]
+  0x6b2e3f10 JavaThread "Unconstrained build operations Thread 29" [_thread_blocked, id=21988, stack(0x6dec0000,0x6df10000)]
+  0x6b2e5850 JavaThread "Unconstrained build operations Thread 30" [_thread_blocked, id=17308, stack(0x6df50000,0x6dfa0000)]
+  0x6b2e28f8 JavaThread "Unconstrained build operations Thread 31" [_thread_blocked, id=3796, stack(0x6dfe0000,0x6e030000)]
+  0x6b2e2c20 JavaThread "Unconstrained build operations Thread 32" [_thread_blocked, id=19508, stack(0x6e070000,0x6e0c0000)]
+  0x6b2e3270 JavaThread "Unconstrained build operations Thread 33" [_thread_blocked, id=22888, stack(0x6e100000,0x6e150000)]
+  0x6b2e3598 JavaThread "Unconstrained build operations Thread 34" [_thread_blocked, id=22512, stack(0x6e190000,0x6e1e0000)]
+  0x6b419a18 JavaThread "Unconstrained build operations Thread 35" [_thread_blocked, id=17960, stack(0x6e220000,0x6e270000)]
+  0x6b417a88 JavaThread "Unconstrained build operations Thread 36" [_thread_blocked, id=23148, stack(0x6e2b0000,0x6e300000)]
+  0x6b418400 JavaThread "Unconstrained build operations Thread 37" [_thread_blocked, id=23368, stack(0x6e340000,0x6e390000)]
+  0x6b418728 JavaThread "Unconstrained build operations Thread 38" [_thread_blocked, id=8036, stack(0x6e3d0000,0x6e420000)]
+  0x6b419d40 JavaThread "Unconstrained build operations Thread 39" [_thread_blocked, id=3548, stack(0x6e460000,0x6e4b0000)]
+  0x6b417760 JavaThread "Unconstrained build operations Thread 40" [_thread_blocked, id=21236, stack(0x6e4f0000,0x6e540000)]
+  0x6b418a50 JavaThread "Unconstrained build operations Thread 41" [_thread_blocked, id=17856, stack(0x6e580000,0x6e5d0000)]
+  0x6b4180d8 JavaThread "Unconstrained build operations Thread 42" [_thread_blocked, id=12240, stack(0x6e610000,0x6e660000)]
+  0x6b417db0 JavaThread "Unconstrained build operations Thread 43" [_thread_blocked, id=880, stack(0x6e6a0000,0x6e6f0000)]
+  0x6b41a068 JavaThread "Unconstrained build operations Thread 44" [_thread_blocked, id=4508, stack(0x6e730000,0x6e780000)]
+  0x6b418d78 JavaThread "Unconstrained build operations Thread 45" [_thread_blocked, id=17016, stack(0x6e7c0000,0x6e810000)]
+  0x6b4190a0 JavaThread "Unconstrained build operations Thread 46" [_thread_blocked, id=6132, stack(0x6e850000,0x6e8a0000)]
+  0x6b4193c8 JavaThread "Unconstrained build operations Thread 47" [_thread_blocked, id=876, stack(0x6e8e0000,0x6e930000)]
+  0x6b416470 JavaThread "Unconstrained build operations Thread 48" [_thread_blocked, id=21800, stack(0x6e970000,0x6e9c0000)]
+  0x6b4196f0 JavaThread "Unconstrained build operations Thread 49" [_thread_blocked, id=1008, stack(0x6ea00000,0x6ea50000)]
+  0x6b416ac0 JavaThread "Unconstrained build operations Thread 50" [_thread_blocked, id=18456, stack(0x6ea90000,0x6eae0000)]
+  0x6b416798 JavaThread "Unconstrained build operations Thread 51" [_thread_blocked, id=20384, stack(0x6eb20000,0x6eb70000)]
+  0x6b416de8 JavaThread "Unconstrained build operations Thread 52" [_thread_blocked, id=20764, stack(0x6ebb0000,0x6ec00000)]
+  0x6b417110 JavaThread "Unconstrained build operations Thread 53" [_thread_blocked, id=13076, stack(0x6ec40000,0x6ec90000)]
+  0x6b417438 JavaThread "Unconstrained build operations Thread 54" [_thread_blocked, id=11564, stack(0x6ecd0000,0x6ed20000)]
+  0x6b45b220 JavaThread "Unconstrained build operations Thread 55" [_thread_blocked, id=3892, stack(0x6ed60000,0x6edb0000)]
+  0x6b4598e0 JavaThread "Unconstrained build operations Thread 56" [_thread_blocked, id=9616, stack(0x6edf0000,0x6ee40000)]
+  0x6b45c510 JavaThread "Unconstrained build operations Thread 57" [_thread_blocked, id=19668, stack(0x6ee80000,0x6eed0000)]
+  0x6b45a258 JavaThread "Unconstrained build operations Thread 58" [_thread_blocked, id=6700, stack(0x6ef10000,0x6ef60000)]
+  0x6b45a580 JavaThread "Unconstrained build operations Thread 59" [_thread_blocked, id=2096, stack(0x6efa0000,0x6eff0000)]
+  0x6b45d1b0 JavaThread "Unconstrained build operations Thread 60" [_thread_blocked, id=23096, stack(0x6f030000,0x6f080000)]
+  0x6b45a8a8 JavaThread "Unconstrained build operations Thread 61" [_thread_blocked, id=12140, stack(0x6f0c0000,0x6f110000)]
+  0x6b459c08 JavaThread "Unconstrained build operations Thread 62" [_thread_blocked, id=15720, stack(0x6f150000,0x6f1a0000)]
+  0x6b45abd0 JavaThread "Unconstrained build operations Thread 63" [_thread_blocked, id=16024, stack(0x6f1e0000,0x6f230000)]
+  0x6b45cb60 JavaThread "jar transforms Thread 4" [_thread_blocked, id=18108, stack(0x6f270000,0x6f2c0000)]
+  0x6b45aef8 JavaThread "jar transforms Thread 5" [_thread_blocked, id=22108, stack(0x01260000,0x012b0000)]
+  0x6b45bec0 JavaThread "Memory manager" [_thread_blocked, id=12476, stack(0x702d0000,0x70320000)]
+  0x6be34c38 JavaThread "jar transforms Thread 6" [_thread_blocked, id=864, stack(0x70360000,0x703b0000)]
+  0x6be33948 JavaThread "included builds" [_thread_blocked, id=8280, stack(0x70510000,0x70560000)]
+  0x6be33f98 JavaThread "Execution worker" [_thread_blocked, id=22300, stack(0x705a0000,0x705f0000)]
+  0x6be31690 JavaThread "Execution worker Thread 2" [_thread_blocked, id=4668, stack(0x70630000,0x70680000)]
+  0x6be319b8 JavaThread "Execution worker Thread 3" [_thread_blocked, id=6052, stack(0x706c0000,0x70710000)]
+  0x6be32658 JavaThread "Execution worker Thread 4" [_thread_blocked, id=21176, stack(0x70750000,0x707a0000)]
+  0x6be33c70 JavaThread "Execution worker Thread 5" [_thread_blocked, id=11400, stack(0x707e0000,0x70830000)]
+=>0x6be345e8 JavaThread "Execution worker Thread 6" [_thread_in_vm, id=2488, stack(0x70870000,0x708c0000)]
+  0x6b45c838 JavaThread "Execution worker Thread 7" [_thread_blocked, id=9596, stack(0x70900000,0x70950000)]
+  0x6f6c2ff8 JavaThread "Execution worker Thread 8" [_thread_blocked, id=11168, stack(0x70990000,0x709e0000)]
+  0x6f6c3970 JavaThread "Execution worker Thread 9" [_thread_blocked, id=17624, stack(0x70a20000,0x70a70000)]
+  0x6f6c5c28 JavaThread "Execution worker Thread 10" [_thread_blocked, id=13920, stack(0x70ab0000,0x70b00000)]
+  0x6f6c3c98 JavaThread "Execution worker Thread 11" [_thread_blocked, id=18720, stack(0x70b40000,0x70b90000)]
+  0x6f6c52b0 JavaThread "Execution worker Thread 12" [_thread_blocked, id=17192, stack(0x70bd0000,0x70c20000)]
+  0x6f6c3648 JavaThread "Execution worker Thread 13" [_thread_blocked, id=10888, stack(0x70c60000,0x70cb0000)]
+  0x6f6c3fc0 JavaThread "Execution worker Thread 14" [_thread_blocked, id=16468, stack(0x70cf0000,0x70d40000)]
+  0x6f6c2680 JavaThread "Execution worker Thread 15" [_thread_blocked, id=10924, stack(0x70d80000,0x70dd0000)]
+  0x6f6c55d8 JavaThread "Execution worker Thread 16" [_thread_blocked, id=22280, stack(0x70e10000,0x70e60000)]
+  0x6f6c29a8 JavaThread "Execution worker Thread 17" [_thread_blocked, id=21604, stack(0x70ea0000,0x70ef0000)]
+  0x6f6c5900 JavaThread "Execution worker Thread 18" [_thread_blocked, id=10268, stack(0x70f30000,0x70f80000)]
+  0x6f6c4c60 JavaThread "Execution worker Thread 19" [_thread_blocked, id=19748, stack(0x71200000,0x71250000)]
+  0x6f6c4610 JavaThread "Execution worker Thread 20" [_thread_blocked, id=4780, stack(0x71250000,0x712a0000)]
+  0x6f6c4938 JavaThread "Execution worker Thread 21" [_thread_blocked, id=3868, stack(0x712e0000,0x71330000)]
+  0x6f6c2030 JavaThread "Cache worker for execution history cache (C:\Users\ASUS\github\mcse\android-app\.gradle\8.11.1\executionHistory)" [_thread_blocked, id=5064, stack(0x71370000,0x713c0000)]
+  0x6f6c4f88 JavaThread "WorkerExecutor Queue" [_thread_blocked, id=18704, stack(0x71400000,0x71450000)]
+  0x6f6c2358 JavaThread "WorkerExecutor Queue Thread 2" [_thread_blocked, id=22768, stack(0x71490000,0x714e0000)]
+  0x6f6c42e8 JavaThread "Unconstrained build operations Thread 64" [_thread_blocked, id=10936, stack(0x716b0000,0x71700000)]
+  0x6f6c2cd0 JavaThread "Unconstrained build operations Thread 65" [_thread_blocked, id=22124, stack(0x71740000,0x71790000)]
+  0x6f6c3320 JavaThread "Unconstrained build operations Thread 66" [_thread_blocked, id=1080, stack(0x717d0000,0x71820000)]
+  0x6fdc8a50 JavaThread "Unconstrained build operations Thread 67" [_thread_blocked, id=22828, stack(0x71860000,0x718b0000)]
+  0x6fdc57d0 JavaThread "Unconstrained build operations Thread 68" [_thread_blocked, id=1544, stack(0x718f0000,0x71940000)]
+  0x6fdc6de8 JavaThread "Unconstrained build operations Thread 69" [_thread_blocked, id=18988, stack(0x71980000,0x719d0000)]
+  0x6fdc8d78 JavaThread "Unconstrained build operations Thread 70" [_thread_blocked, id=2524, stack(0x71a10000,0x71a60000)]
+  0x6fdc6148 JavaThread "Unconstrained build operations Thread 71" [_thread_blocked, id=21692, stack(0x71aa0000,0x71af0000)]
+  0x6fdc5af8 JavaThread "Unconstrained build operations Thread 72" [_thread_blocked, id=18732, stack(0x71b30000,0x71b80000)]
+  0x6fdc93c8 JavaThread "Unconstrained build operations Thread 73" [_thread_blocked, id=23248, stack(0x71bc0000,0x71c10000)]
+  0x6fdc90a0 JavaThread "Unconstrained build operations Thread 74" [_thread_blocked, id=13976, stack(0x71c50000,0x71ca0000)]
+  0x6fdc6470 JavaThread "Unconstrained build operations Thread 75" [_thread_blocked, id=4716, stack(0x71ce0000,0x71d30000)]
+  0x6fdc6ac0 JavaThread "Unconstrained build operations Thread 76" [_thread_blocked, id=1160, stack(0x71d70000,0x71dc0000)]
+  0x6fdc8728 JavaThread "Unconstrained build operations Thread 77" [_thread_blocked, id=524, stack(0x72ba0000,0x72bf0000)]
+  0x6fdc5e20 JavaThread "Unconstrained build operations Thread 78" [_thread_blocked, id=19724, stack(0x72c30000,0x72c80000)]
+  0x6fdc7438 JavaThread "Unconstrained build operations Thread 79" [_thread_blocked, id=22740, stack(0x72d80000,0x72dd0000)]
+  0x6fdc80d8 JavaThread "Unconstrained build operations Thread 80" [_thread_blocked, id=8244, stack(0x72f80000,0x72fd0000)]
+  0x6fdc7760 JavaThread "Unconstrained build operations Thread 81" [_thread_blocked, id=4520, stack(0x72fd0000,0x73020000)]
+  0x6fdc6798 JavaThread "Unconstrained build operations Thread 82" [_thread_blocked, id=20060, stack(0x73260000,0x732b0000)]
+  0x6fdc7110 JavaThread "Unconstrained build operations Thread 83" [_thread_blocked, id=1772, stack(0x732f0000,0x73340000)]
+  0x6fdc7a88 JavaThread "Unconstrained build operations Thread 84" [_thread_blocked, id=10828, stack(0x73380000,0x733d0000)]
+  0x6fdc8400 JavaThread "Unconstrained build operations Thread 85" [_thread_blocked, id=5892, stack(0x73410000,0x73460000)]
+  0x6fe69610 JavaThread "Unconstrained build operations Thread 86" [_thread_blocked, id=22716, stack(0x734a0000,0x734f0000)]
+  0x6fe6a900 JavaThread "Unconstrained build operations Thread 87" [_thread_blocked, id=10832, stack(0x73530000,0x73580000)]
+  0x6fe68fc0 JavaThread "Unconstrained build operations Thread 88" [_thread_blocked, id=19000, stack(0x735c0000,0x73610000)]
+  0x6fe69938 JavaThread "Unconstrained build operations Thread 89" [_thread_blocked, id=22676, stack(0x73650000,0x736a0000)]
+  0x6fe67358 JavaThread "Unconstrained build operations Thread 90" [_thread_blocked, id=23164, stack(0x736e0000,0x73730000)]
+  0x6fe679a8 JavaThread "Unconstrained build operations Thread 91" [_thread_blocked, id=7904, stack(0x73770000,0x737c0000)]
+  0x6fe68970 JavaThread "Unconstrained build operations Thread 92" [_thread_blocked, id=18756, stack(0x73800000,0x73850000)]
+  0x6fe6a2b0 JavaThread "Unconstrained build operations Thread 93" [_thread_blocked, id=5128, stack(0x73890000,0x738e0000)]
+  0x6fe67680 JavaThread "Unconstrained build operations Thread 94" [_thread_blocked, id=20084, stack(0x73920000,0x73970000)]
+  0x6fe67ff8 JavaThread "Unconstrained build operations Thread 95" [_thread_blocked, id=16068, stack(0x739b0000,0x73a00000)]
+  0x6fe68c98 JavaThread "Unconstrained build operations Thread 96" [_thread_blocked, id=2292, stack(0x73a40000,0x73a90000)]
+  0x6fe6ac28 JavaThread "Unconstrained build operations Thread 97" [_thread_blocked, id=592, stack(0x73ad0000,0x73b20000)]
+  0x6fe67cd0 JavaThread "Unconstrained build operations Thread 98" [_thread_blocked, id=564, stack(0x73b60000,0x73bb0000)]
+  0x6fe68320 JavaThread "Unconstrained build operations Thread 99" [_thread_blocked, id=13800, stack(0x73bf0000,0x73c40000)]
+  0x6fe692e8 JavaThread "Unconstrained build operations Thread 100" [_thread_blocked, id=13496, stack(0x73c80000,0x73cd0000)]
+  0x6fe69c60 JavaThread "Unconstrained build operations Thread 101" [_thread_blocked, id=16012, stack(0x73d10000,0x73d60000)]
+  0x6fe67030 JavaThread "Unconstrained build operations Thread 102" [_thread_blocked, id=16148, stack(0x73da0000,0x73df0000)]
+  0x6fe68648 JavaThread "Unconstrained build operations Thread 103" [_thread_blocked, id=20024, stack(0x73e30000,0x73e80000)]
+  0x6fe69f88 JavaThread "Unconstrained build operations Thread 104" [_thread_blocked, id=16988, stack(0x73ec0000,0x73f10000)]
+  0x6fe6a5d8 JavaThread "Unconstrained build operations Thread 105" [_thread_blocked, id=4924, stack(0x73f50000,0x73fa0000)]
+  0x6bc819c8 JavaThread "WorkerExecutor Queue Thread 3" [_thread_blocked, id=18368, stack(0x73fe0000,0x74030000)]
+  0x6bc81cf0 JavaThread "WorkerExecutor Queue Thread 4" [_thread_blocked, id=8200, stack(0x74070000,0x740c0000)]
+  0x6bc84c48 JavaThread "Unconstrained build operations Thread 106" [_thread_blocked, id=17392, stack(0x74100000,0x74150000)]
+  0x6bc85298 JavaThread "Unconstrained build operations Thread 107" [_thread_blocked, id=16052, stack(0x74190000,0x741e0000)]
+  0x6bc82018 JavaThread "Unconstrained build operations Thread 108" [_thread_blocked, id=20788, stack(0x74220000,0x74270000)]
+  0x6bc82340 JavaThread "Unconstrained build operations Thread 109" [_thread_blocked, id=16620, stack(0x742b0000,0x74300000)]
+  0x6bc816a0 JavaThread "Unconstrained build operations Thread 110" [_thread_blocked, id=17304, stack(0x74340000,0x74390000)]
+  0x6bc82cb8 JavaThread "Unconstrained build operations Thread 111" [_thread_blocked, id=20320, stack(0x74430000,0x74480000)]
+  0x6bc855c0 JavaThread "Unconstrained build operations Thread 112" [_thread_blocked, id=11204, stack(0x744c0000,0x74510000)]
+  0x6bc83630 JavaThread "Unconstrained build operations Thread 113" [_thread_blocked, id=13704, stack(0x74550000,0x745a0000)]
+  0x6bc86260 JavaThread "Unconstrained build operations Thread 114" [_thread_blocked, id=21728, stack(0x74660000,0x746b0000)]
+  0x6bc858e8 JavaThread "Unconstrained build operations Thread 115" [_thread_blocked, id=17824, stack(0x746f0000,0x74740000)]
+  0x6bc84920 JavaThread "Unconstrained build operations Thread 116" [_thread_blocked, id=8516, stack(0x74780000,0x747d0000)]
+  0x6bc83958 JavaThread "Unconstrained build operations Thread 117" [_thread_blocked, id=21324, stack(0x74810000,0x74860000)]
+  0x6bc83c80 JavaThread "Unconstrained build operations Thread 118" [_thread_blocked, id=18172, stack(0x748a0000,0x748f0000)]
+  0x6bc85c10 JavaThread "Unconstrained build operations Thread 119" [_thread_blocked, id=20272, stack(0x74930000,0x74980000)]
+  0x6bc82fe0 JavaThread "Unconstrained build operations Thread 120" [_thread_blocked, id=19120, stack(0x749c0000,0x74a10000)]
+  0x6bc83308 JavaThread "Unconstrained build operations Thread 121" [_thread_blocked, id=18044, stack(0x74a50000,0x74aa0000)]
+  0x6bc83fa8 JavaThread "Unconstrained build operations Thread 122" [_thread_blocked, id=15980, stack(0x74b30000,0x74b80000)]
+  0x6bc842d0 JavaThread "Unconstrained build operations Thread 123" [_thread_blocked, id=14176, stack(0x74bf0000,0x74c40000)]
+  0x6bc845f8 JavaThread "Unconstrained build operations Thread 124" [_thread_blocked, id=920, stack(0x74e40000,0x74e90000)]
+  0x6bc84f70 JavaThread "Unconstrained build operations Thread 125" [_thread_blocked, id=916, stack(0x74ed0000,0x74f20000)]
+  0x6bc82668 JavaThread "Unconstrained build operations Thread 126" [_thread_blocked, id=9424, stack(0x74f60000,0x74fb0000)]
+  0x6bc85f38 JavaThread "WorkerExecutor Queue Thread 5" [_thread_blocked, id=16412, stack(0x74ff0000,0x75040000)]
+  0x6bc86588 JavaThread "Unconstrained build operations Thread 127" [_thread_blocked, id=22856, stack(0x75080000,0x750d0000)]
+  0x6bc82990 JavaThread "Unconstrained build operations Thread 128" [_thread_blocked, id=22996, stack(0x75110000,0x75160000)]
+  0x6bc868b0 JavaThread "Unconstrained build operations Thread 129" [_thread_blocked, id=3664, stack(0x751a0000,0x751f0000)]
+  0x6bc86bd8 JavaThread "Unconstrained build operations Thread 130" [_thread_blocked, id=15336, stack(0x75230000,0x75280000)]
+  0x6bc87228 JavaThread "Unconstrained build operations Thread 131" [_thread_blocked, id=21452, stack(0x752c0000,0x75310000)]
+  0x6bc87878 JavaThread "Unconstrained build operations Thread 132" [_thread_blocked, id=19500, stack(0x75350000,0x753a0000)]
+  0x6bc86f00 JavaThread "Unconstrained build operations Thread 133" [_thread_blocked, id=21164, stack(0x75500000,0x75550000)]
+  0x6bc87550 JavaThread "Unconstrained build operations Thread 134" [_thread_blocked, id=12464, stack(0x75860000,0x758b0000)]
+  0x6bc88518 JavaThread "Unconstrained build operations Thread 135" [_thread_blocked, id=15616, stack(0x75f90000,0x75fe0000)]
+  0x6bc88e90 JavaThread "Unconstrained build operations Thread 136" [_thread_blocked, id=20100, stack(0x76020000,0x76070000)]
+  0x6bc88840 JavaThread "Unconstrained build operations Thread 137" [_thread_blocked, id=18792, stack(0x76290000,0x762e0000)]
+  0x6bc88b68 JavaThread "Unconstrained build operations Thread 138" [_thread_blocked, id=13988, stack(0x77390000,0x773e0000)]
+  0x6bc891b8 JavaThread "Unconstrained build operations Thread 139" [_thread_blocked, id=16372, stack(0x774f0000,0x77540000)]
+  0x6bc87ba0 JavaThread "Unconstrained build operations Thread 140" [_thread_blocked, id=22352, stack(0x777a0000,0x777f0000)]
+  0x6bc87ec8 JavaThread "Unconstrained build operations Thread 141" [_thread_blocked, id=3812, stack(0x77830000,0x77880000)]
+  0x6bc881f0 JavaThread "Unconstrained build operations Thread 142" [_thread_blocked, id=21772, stack(0x778c0000,0x77910000)]
+  0x682aa958 JavaThread "Unconstrained build operations Thread 143" [_thread_blocked, id=17644, stack(0x77b50000,0x77ba0000)]
+  0x682a9668 JavaThread "Unconstrained build operations Thread 144" [_thread_blocked, id=22656, stack(0x77be0000,0x77c30000)]
+  0x682aa308 JavaThread "Unconstrained build operations Thread 145" [_thread_blocked, id=6376, stack(0x77c70000,0x77cc0000)]
+  0x682a9cb8 JavaThread "Unconstrained build operations Thread 146" [_thread_blocked, id=20692, stack(0x77d00000,0x77d50000)]
+  0x682aafa8 JavaThread "Unconstrained build operations Thread 147" [_thread_blocked, id=6536, stack(0x77d90000,0x77de0000)]
+  0x682a89c8 JavaThread "WorkerExecutor Queue Thread 6" [_thread_blocked, id=884, stack(0x012f0000,0x01340000)]
+  0x682aac80 JavaThread "WorkerExecutor Queue Thread 7" [_thread_blocked, id=21600, stack(0x01380000,0x013d0000)]
+  0x682a8378 JavaThread "WorkerExecutor Queue Thread 8" [_thread_blocked, id=23112, stack(0x77e20000,0x77e70000)]
+  0x682abc48 JavaThread "WorkerExecutor Queue Thread 9" [_thread_blocked, id=23384, stack(0x77eb0000,0x77f00000)]
+  0x682a86a0 JavaThread "WorkerExecutor Queue Thread 10" [_thread_blocked, id=17632, stack(0x77f40000,0x77f90000)]
+  0x682abf70 JavaThread "WorkerExecutor Queue Thread 11" [_thread_blocked, id=18180, stack(0x7a000000,0x7a050000)]
+  0x682ab2d0 JavaThread "WorkerExecutor Queue Thread 12" [_thread_blocked, id=16168, stack(0x7a090000,0x7a0e0000)]
+  0x682a9018 JavaThread "WorkerExecutor Queue Thread 13" [_thread_blocked, id=21096, stack(0x7a120000,0x7a170000)]
+  0x682a8cf0 JavaThread "WorkerExecutor Queue Thread 14" [_thread_blocked, id=5556, stack(0x7a1b0000,0x7a200000)]
+  0x682ab5f8 JavaThread "WorkerExecutor Queue Thread 15" [_thread_blocked, id=20872, stack(0x7a240000,0x7a290000)]
+  0x682a9340 JavaThread "WorkerExecutor Queue Thread 16" [_thread_blocked, id=17280, stack(0x7a2d0000,0x7a320000)]
+  0x7008eaf0 JavaThread "WorkerExecutor Queue Thread 17" [_thread_blocked, id=22392, stack(0x7a360000,0x7a3b0000)]
+  0x7008c838 JavaThread "WorkerExecutor Queue Thread 18" [_thread_blocked, id=9632, stack(0x7a3f0000,0x7a440000)]
+  0x7008cb60 JavaThread "WorkerExecutor Queue Thread 19" [_thread_blocked, id=16548, stack(0x7a480000,0x7a4d0000)]
+  0x7008bb98 JavaThread "WorkerExecutor Queue Thread 20" [_thread_blocked, id=13796, stack(0x7a510000,0x7a560000)]
+  0x7008b548 JavaThread "WorkerExecutor Queue Thread 22" [_thread_blocked, id=13112, stack(0x7a630000,0x7a680000)]
+  0x7008bec0 JavaThread "Unconstrained build operations Thread 148" [_thread_blocked, id=5220, stack(0x7a6c0000,0x7a710000)]
+  0x7008e4a0 JavaThread "pool-3-thread-1" [_thread_blocked, id=20256, stack(0x7a7e0000,0x7a830000)]
+  0x7008c1e8 JavaThread "stderr" [_thread_in_native, id=8648, stack(0x7a870000,0x7a8c0000)]
+  0x7008d800 JavaThread "stdout" [_thread_in_native, id=8096, stack(0x7a900000,0x7a950000)]
+  0x7008db28 JavaThread "stderr" [_thread_in_native, id=15176, stack(0x7a990000,0x7a9e0000)]
+  0x7008c510 JavaThread "stdout" [_thread_in_native, id=21696, stack(0x7aa20000,0x7aa70000)]
+  0x7008ce88 JavaThread "stderr" [_thread_in_native, id=8512, stack(0x7aab0000,0x7ab00000)]
+  0x7008b870 JavaThread "stdout" [_thread_in_native, id=7352, stack(0x7ab40000,0x7ab90000)]
+  0x7008d1b0 JavaThread "stderr" [_thread_in_native, id=16496, stack(0x7abd0000,0x7ac20000)]
+  0x7008ee18 JavaThread "stdout" [_thread_in_native, id=22000, stack(0x7ac60000,0x7acb0000)]
+  0x7008d4d8 JavaThread "stderr" [_thread_in_native, id=18068, stack(0x7acf0000,0x7ad40000)]
+  0x7008e178 JavaThread "stdout" [_thread_in_native, id=9532, stack(0x7ad80000,0x7add0000)]
+  0x7008b220 JavaThread "stderr" [_thread_in_native, id=1072, stack(0x7ae10000,0x7ae60000)]
+  0x70090a80 JavaThread "stdout" [_thread_in_native, id=23136, stack(0x7aea0000,0x7aef0000)]
+  0x700913f8 JavaThread "stderr" [_thread_in_native, id=6292, stack(0x7af30000,0x7af80000)]
+  0x7008f140 JavaThread "stdout" [_thread_in_native, id=19440, stack(0x7afc0000,0x7b010000)]
+  0x7008f790 JavaThread "stderr" [_thread_in_native, id=8452, stack(0x7b050000,0x7b0a0000)]
+  0x7008fab8 JavaThread "stdout" [_thread_in_native, id=5912, stack(0x7b0e0000,0x7b130000)]
+  0x7008f468 JavaThread "Unconstrained build operations Thread 149" [_thread_blocked, id=6436, stack(0x7b170000,0x7b1c0000)]
+  0x70090108 JavaThread "Unconstrained build operations Thread 150" [_thread_blocked, id=19112, stack(0x7b400000,0x7b450000)]
+  0x7008fde0 JavaThread "Unconstrained build operations Thread 151" [_thread_blocked, id=10284, stack(0x7b490000,0x7b4e0000)]
+  0x70090430 JavaThread "Unconstrained build operations Thread 152" [_thread_blocked, id=15836, stack(0x7c4f0000,0x7c540000)]
+  0x70090da8 JavaThread "Unconstrained build operations Thread 153" [_thread_blocked, id=2084, stack(0x7c580000,0x7c5d0000)]
+  0x70090758 JavaThread "Unconstrained build operations Thread 154" [_thread_blocked, id=21424, stack(0x7c610000,0x7c660000)]
+  0x700910d0 JavaThread "Unconstrained build operations Thread 155" [_thread_blocked, id=14764, stack(0x7c6a0000,0x7c6f0000)]
+  0x700923c0 JavaThread "Unconstrained build operations Thread 156" [_thread_blocked, id=14500, stack(0x7c730000,0x7c780000)]
+  0x700926e8 JavaThread "Unconstrained build operations Thread 157" [_thread_blocked, id=9284, stack(0x7c7c0000,0x7c810000)]
+  0x70092a10 JavaThread "Unconstrained build operations Thread 158" [_thread_blocked, id=20944, stack(0x7c850000,0x7c8a0000)]
+  0x70092d38 JavaThread "Unconstrained build operations Thread 159" [_thread_blocked, id=11352, stack(0x7c8e0000,0x7c930000)]
+  0x70091d70 JavaThread "Unconstrained build operations Thread 160" [_thread_blocked, id=23192, stack(0x7c970000,0x7c9c0000)]
+  0x70091720 JavaThread "Unconstrained build operations Thread 161" [_thread_blocked, id=22028, stack(0x7ca00000,0x7ca50000)]
+  0x70091a48 JavaThread "Unconstrained build operations Thread 162" [_thread_blocked, id=21768, stack(0x7ca90000,0x7cae0000)]
+  0x70092098 JavaThread "Unconstrained build operations Thread 163" [_thread_blocked, id=312, stack(0x7cb20000,0x7cb70000)]
+  0x7b514340 JavaThread "Unconstrained build operations Thread 164" [_thread_blocked, id=21544, stack(0x7cbb0000,0x7cc00000)]
+  0x7b5162d0 JavaThread "Unconstrained build operations Thread 165" [_thread_blocked, id=22496, stack(0x7cc40000,0x7cc90000)]
+  0x7b5165f8 JavaThread "Unconstrained build operations Thread 166" [_thread_blocked, id=23052, stack(0x7ccd0000,0x7cd20000)]
+  0x7b514668 JavaThread "Unconstrained build operations Thread 167" [_thread_blocked, id=19952, stack(0x7cd60000,0x7cdb0000)]
+  0x7b514990 JavaThread "Unconstrained build operations Thread 168" [_thread_blocked, id=11712, stack(0x7cdf0000,0x7ce40000)]
+  0x7b516920 JavaThread "Unconstrained build operations Thread 169" [_thread_blocked, id=6832, stack(0x7ce80000,0x7ced0000)]
+  0x7b514cb8 JavaThread "Unconstrained build operations Thread 170" [_thread_blocked, id=7764, stack(0x7cf10000,0x7cf60000)]
+  0x7b516c48 JavaThread "Unconstrained build operations Thread 171" [_thread_blocked, id=23244, stack(0x7cfa0000,0x7cff0000)]
+  0x7b517298 JavaThread "Unconstrained build operations Thread 172" [_thread_blocked, id=21256, stack(0x7d030000,0x7d080000)]
+  0x7b513cf0 JavaThread "Unconstrained build operations Thread 173" [_thread_blocked, id=17772, stack(0x7d0c0000,0x7d110000)]
+  0x7b515308 JavaThread "Unconstrained build operations Thread 174" [_thread_blocked, id=17920, stack(0x7d150000,0x7d1a0000)]
+  0x7b5178e8 JavaThread "Unconstrained build operations Thread 175" [_thread_blocked, id=22980, stack(0x7d1e0000,0x7d230000)]
+  0x7b517c10 JavaThread "Unconstrained build operations Thread 176" [_thread_blocked, id=6480, stack(0x7d270000,0x7d2c0000)]
+  0x7b515958 JavaThread "Unconstrained build operations Thread 177" [_thread_blocked, id=17404, stack(0x7d300000,0x7d350000)]
+  0x7b514018 JavaThread "Unconstrained build operations Thread 178" [_thread_blocked, id=20028, stack(0x7d390000,0x7d3e0000)]
+  0x7b517f38 JavaThread "Unconstrained build operations Thread 179" [_thread_blocked, id=17356, stack(0x7d420000,0x7d470000)]
+  0x7b518260 JavaThread "Unconstrained build operations Thread 180" [_thread_blocked, id=7160, stack(0x7d4b0000,0x7d500000)]
+  0x7b518588 JavaThread "Unconstrained build operations Thread 181" [_thread_blocked, id=15312, stack(0x7d540000,0x7d590000)]
+  0x7b515fa8 JavaThread "Unconstrained build operations Thread 182" [_thread_blocked, id=21748, stack(0x7d5d0000,0x7d620000)]
+  0x7b5188b0 JavaThread "Unconstrained build operations Thread 183" [_thread_blocked, id=17468, stack(0x7d660000,0x7d6b0000)]
+  0x7b518bd8 JavaThread "Unconstrained build operations Thread 184" [_thread_blocked, id=856, stack(0x7d6f0000,0x7d740000)]
+  0x7b518f00 JavaThread "Unconstrained build operations Thread 185" [_thread_blocked, id=17828, stack(0x7d780000,0x7d7d0000)]
+  0x7b519228 JavaThread "Unconstrained build operations Thread 186" [_thread_blocked, id=17172, stack(0x7d810000,0x7d860000)]
+  0x7b515630 JavaThread "Unconstrained build operations Thread 187" [_thread_blocked, id=22128, stack(0x7d8a0000,0x7d8f0000)]
+  0x7b519550 JavaThread "Unconstrained build operations Thread 188" [_thread_blocked, id=20816, stack(0x7d930000,0x7d980000)]
+  0x7b519878 JavaThread "Unconstrained build operations Thread 189" [_thread_blocked, id=2680, stack(0x7d9c0000,0x7da10000)]
+  0x7b515c80 JavaThread "Unconstrained build operations Thread 190" [_thread_blocked, id=16460, stack(0x7da50000,0x7daa0000)]
+  0x7b519ba0 JavaThread "Unconstrained build operations Thread 191" [_thread_blocked, id=22928, stack(0x7dae0000,0x7db30000)]
+  0x7b519ec8 JavaThread "Unconstrained build operations Thread 192" [_thread_blocked, id=10896, stack(0x7db70000,0x7dbc0000)]
+  0x7b51ab68 JavaThread "Unconstrained build operations Thread 193" [_thread_blocked, id=608, stack(0x7dc00000,0x7dc50000)]
+  0x7b51b4e0 JavaThread "Unconstrained build operations Thread 194" [_thread_blocked, id=22380, stack(0x7dc90000,0x7dce0000)]
+  0x7b51a518 JavaThread "Unconstrained build operations Thread 195" [_thread_blocked, id=13364, stack(0x7dd20000,0x7dd70000)]
+  0x7b51b1b8 JavaThread "Unconstrained build operations Thread 196" [_thread_blocked, id=21008, stack(0x7ddb0000,0x7de00000)]
+  0x7b51b808 JavaThread "Unconstrained build operations Thread 197" [_thread_blocked, id=21576, stack(0x7de40000,0x7de90000)]
+  0x7b51a1f0 JavaThread "Unconstrained build operations Thread 198" [_thread_blocked, id=22096, stack(0x7ded0000,0x7df20000)]
+  0x7b76bb18 JavaThread "Unconstrained build operations Thread 199" [_thread_blocked, id=22312, stack(0x7df60000,0x7dfb0000)]
+  0x7b76ae78 JavaThread "Unconstrained build operations Thread 200" [_thread_blocked, id=20240, stack(0x7dff0000,0x7e040000)]
+  0x7b76a828 JavaThread "Unconstrained build operations Thread 201" [_thread_blocked, id=19296, stack(0x7e080000,0x7e0d0000)]
+  0x7b76b1a0 JavaThread "Unconstrained build operations Thread 202" [_thread_blocked, id=9748, stack(0x7e110000,0x7e160000)]
+  0x7b76b7f0 JavaThread "Unconstrained build operations Thread 203" [_thread_blocked, id=17396, stack(0x7e1a0000,0x7e1f0000)]
+  0x7b76be40 JavaThread "Unconstrained build operations Thread 204" [_thread_blocked, id=1576, stack(0x7e230000,0x7e280000)]
+  0x7b76b4c8 JavaThread "Unconstrained build operations Thread 205" [_thread_blocked, id=3944, stack(0x7e2c0000,0x7e310000)]
+  0x7b76ab50 JavaThread "Unconstrained build operations Thread 206" [_thread_blocked, id=20916, stack(0x7e350000,0x7e3a0000)]
+  0x7b76c168 JavaThread "Unconstrained build operations Thread 207" [_thread_blocked, id=18428, stack(0x7e3e0000,0x7e430000)]
+  0x7b76c490 JavaThread "Unconstrained build operations Thread 208" [_thread_blocked, id=22572, stack(0x7e470000,0x7e4c0000)]
+  0x7b76daa8 JavaThread "Unconstrained build operations Thread 209" [_thread_blocked, id=22048, stack(0x7e500000,0x7e550000)]
+  0x7b76d458 JavaThread "Unconstrained build operations Thread 210" [_thread_blocked, id=1704, stack(0x7e590000,0x7e5e0000)]
+  0x7b76c7b8 JavaThread "Unconstrained build operations Thread 211" [_thread_blocked, id=7984, stack(0x7e620000,0x7e670000)]
+  0x7b76cae0 JavaThread "Unconstrained build operations Thread 212" [_thread_blocked, id=12976, stack(0x7e6b0000,0x7e700000)]
+  0x7b76ce08 JavaThread "Unconstrained build operations Thread 213" [_thread_blocked, id=4392, stack(0x7e740000,0x7e790000)]
+  0x7b76d780 JavaThread "Unconstrained build operations Thread 214" [_thread_blocked, id=18568, stack(0x7e7d0000,0x7e820000)]
+  0x7b76ddd0 JavaThread "Unconstrained build operations Thread 215" [_thread_blocked, id=18592, stack(0x7e860000,0x7e8b0000)]
+  0x7b76e0f8 JavaThread "Unconstrained build operations Thread 216" [_thread_blocked, id=5992, stack(0x7e8f0000,0x7e940000)]
+  0x7b76a500 JavaThread "Unconstrained build operations Thread 217" [_thread_blocked, id=3224, stack(0x7e980000,0x7e9d0000)]
+  0x7b76f0c0 JavaThread "Unconstrained build operations Thread 218" [_thread_blocked, id=18508, stack(0x7ea10000,0x7ea60000)]
+  0x7b76e420 JavaThread "Unconstrained build operations Thread 219" [_thread_blocked, id=15640, stack(0x7eaa0000,0x7eaf0000)]
+  0x7b7706d8 JavaThread "Unconstrained build operations Thread 220" [_thread_blocked, id=18472, stack(0x7eb30000,0x7eb80000)]
+  0x7b76ea70 JavaThread "WorkerExecutor Queue Thread 23" [_thread_blocked, id=22704, stack(0x7ebc0000,0x7ec10000)]
+  0x7b76f710 JavaThread "Cache worker for Java compile cache (C:\Users\ASUS\.gradle\caches\8.11.1\javaCompile)" [_thread_blocked, id=17372, stack(0x7a5a0000,0x7a5f0000)]
+
+Other Threads:
+  0x656145b8 VMThread "VM Thread" [stack: 0x033b0000,0x03400000] [id=22952] _threads_hazard_ptr=0x7ec10718
+  0x657ea110 WatcherThread [stack: 0x65e20000,0x65e70000] [id=21616]
+
+Threads with active compile tasks:
+
+VM state: synchronizing (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x010650d8] Metaspace_lock - owner thread: 0x6be345e8
+[0x034935e8] Threads_lock - owner thread: 0x656145b8
+
+GC Precious Log:
+ CPUs: 22 total, 22 available
+ Memory: 15789M
+ Large Page Support: Disabled
+ NUMA Support: Disabled
+ Compressed Oops: Disabled
+ Heap Min Capacity: 6M
+ Heap Initial Capacity: 16M
+ Heap Max Capacity: 1536M
+ Pre-touch: Disabled
+
+Heap:
+ def new generation   total 56896K, used 26717K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,  46% used [0x05600000, 0x06d09528, 0x08770000)
+  from space 6272K,  49% used [0x08d90000, 0x0909ded8, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 94936K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b2b63e8, 0x2b2b6400, 0x2d067000)
+ Metaspace       used 80850K, committed 81280K, reserved 81920K
+
+Card table byte_map: [0x02e50000,0x03160000] _byte_map_base: 0x02e25000
+
+Polling page: 0x01410000
+
+Metaspace:
+
+Usage:
+   78.96 MB used.
+
+Virtual space:
+     80.00 MB reserved,      79.38 MB (>99%) committed,  5 nodes.
+
+Chunk freelists:
+0 bytes
+
+MaxMetaspaceSize: unlimited
+No class space
+Initial GC threshold: 16.00 MB
+Current GC threshold: 104.38 MB
+CDS: off
+MetaspaceReclaimPolicy: balanced
+ - commit_granule_bytes: 65536.
+ - commit_granule_words: 16384.
+ - virtual_space_node_default_size: 4194304.
+ - enlarge_chunks_in_place: 1.
+ - new_chunks_are_fully_committed: 0.
+ - uncommit_free_chunks: 1.
+ - use_allocation_guard: 0.
+ - handle_deallocations: 1.
+
+
+Internal statistics:
+
+num_allocs_failed_limit: 9.
+num_arena_births: 659.
+num_arena_deaths: 66.
+num_vsnodes_births: 5.
+num_vsnodes_deaths: 0.
+num_space_committed: 1270.
+num_space_uncommitted: 0.
+num_chunks_returned_to_freelist: 84.
+num_chunks_taken_from_freelist: 3417.
+num_chunk_merges: 25.
+num_chunk_splits: 2512.
+num_chunks_enlarged: 2026.
+num_inconsistent_stats: 0.
+
+CodeCache: size=32768Kb used=17821Kb max_used=17821Kb free=14946Kb
+ bounds [0x03560000, 0x046d0000, 0x05560000]
+ total_blobs=14301 nmethods=13782 adapters=450
+ compilation: enabled
+              stopped_count=0, restarted_count=0
+ full_count=0
+
+Compilation events (20 events):
+Event: 78.097 Thread 0x65639a18 14109             com.sun.tools.javac.util.Context::get (82 bytes)
+Event: 78.098 Thread 0x65639a18 nmethod 14109 0x046cb548 code [0x046cb6d0, 0x046cba54]
+Event: 78.110 Thread 0x65639a18 14110             com.sun.tools.javac.util.Name$Table::hashValue (36 bytes)
+Event: 78.111 Thread 0x65639a18 nmethod 14110 0x046cbc88 code [0x046cbda0, 0x046cbea0]
+Event: 78.111 Thread 0x65639a18 14112             com.sun.tools.javac.util.UnsharedNameTable$NameImpl::getByteArray (5 bytes)
+Event: 78.111 Thread 0x65639a18 nmethod 14112 0x046cbf88 code [0x046cc090, 0x046cc140]
+Event: 78.111 Thread 0x65639a18 14111             com.sun.tools.javac.util.List::nil (4 bytes)
+Event: 78.111 Thread 0x65639a18 nmethod 14111 0x046cc188 code [0x046cc290, 0x046cc330]
+Event: 78.111 Thread 0x65639a18 14115             com.sun.tools.javac.util.UnsharedNameTable::fromUtf (224 bytes)
+Event: 78.112 Thread 0x65639a18 nmethod 14115 0x046cc388 code [0x046cc530, 0x046ccc58]
+Event: 78.112 Thread 0x65639a18 14114             com.sun.tools.javac.util.UnsharedNameTable$NameImpl::getByteLength (6 bytes)
+Event: 78.112 Thread 0x65639a18 nmethod 14114 0x046cd188 code [0x046cd290, 0x046cd350]
+Event: 78.112 Thread 0x65639a18 14113             com.sun.tools.javac.util.UnsharedNameTable$NameImpl::getByteOffset (2 bytes)
+Event: 78.112 Thread 0x65639a18 nmethod 14113 0x046cd3c8 code [0x046cd4d0, 0x046cd580]
+Event: 78.112 Thread 0x65639a18 14116             com.sun.tools.javac.util.Assert::checkNonNull (9 bytes)
+Event: 78.112 Thread 0x65639a18 nmethod 14116 0x046cd5c8 code [0x046cd6e0, 0x046cd80c]
+Event: 78.112 Thread 0x65639a18 14117             com.sun.tools.javac.code.Symbol$PackageSymbol::getQualifiedName (5 bytes)
+Event: 78.112 Thread 0x65639a18 nmethod 14117 0x046cd8c8 code [0x046cd9d0, 0x046cda80]
+Event: 78.112 Thread 0x65639a18 14118             com.sun.tools.javac.util.Name$Table::equals (44 bytes)
+Event: 78.113 Thread 0x65639a18 nmethod 14118 0x046cdac8 code [0x046cdbe0, 0x046cdd40]
+
+GC Heap History (20 events):
+Event: 62.315 GC heap before
+{Heap before GC invocations=76 (full 5):
+ def new generation   total 56896K, used 56895K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  99% used [0x08d90000, 0x093afff8, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 83523K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  66% used [0x25600000, 0x2a790ff8, 0x2a791000, 0x2d067000)
+ Metaspace       used 69740K, committed 70208K, reserved 81920K
+}
+Event: 62.340 GC heap after
+{Heap after GC invocations=77 (full 5):
+ def new generation   total 56896K, used 5291K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  84% used [0x08770000, 0x08c9adb0, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 87431K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  69% used [0x25600000, 0x2ab61d00, 0x2ab61e00, 0x2d067000)
+ Metaspace       used 69740K, committed 70208K, reserved 81920K
+}
+Event: 64.498 GC heap before
+{Heap before GC invocations=77 (full 5):
+ def new generation   total 56896K, used 55915K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  84% used [0x08770000, 0x08c9adb0, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 87431K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  69% used [0x25600000, 0x2ab61d00, 0x2ab61e00, 0x2d067000)
+ Metaspace       used 70851K, committed 71296K, reserved 81920K
+}
+Event: 64.508 GC heap after
+{Heap after GC invocations=78 (full 5):
+ def new generation   total 56896K, used 1630K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  25% used [0x08d90000, 0x08f27a78, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 87824K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  70% used [0x25600000, 0x2abc4158, 0x2abc4200, 0x2d067000)
+ Metaspace       used 70851K, committed 71296K, reserved 81920K
+}
+Event: 65.615 GC heap before
+{Heap before GC invocations=78 (full 5):
+ def new generation   total 56896K, used 52254K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,  99% used [0x05600000, 0x0876fe88, 0x08770000)
+  from space 6272K,  25% used [0x08d90000, 0x08f27a78, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 87824K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  70% used [0x25600000, 0x2abc4158, 0x2abc4200, 0x2d067000)
+ Metaspace       used 73612K, committed 74112K, reserved 81920K
+}
+Event: 65.630 GC heap after
+{Heap after GC invocations=79 (full 5):
+ def new generation   total 56896K, used 4428K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  70% used [0x08770000, 0x08bc3260, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 87824K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  70% used [0x25600000, 0x2abc4158, 0x2abc4200, 0x2d067000)
+ Metaspace       used 73612K, committed 74112K, reserved 81920K
+}
+Event: 66.666 GC heap before
+{Heap before GC invocations=79 (full 5):
+ def new generation   total 56896K, used 55052K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  70% used [0x08770000, 0x08bc3260, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 87824K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  70% used [0x25600000, 0x2abc4158, 0x2abc4200, 0x2d067000)
+ Metaspace       used 75458K, committed 75904K, reserved 81920K
+}
+Event: 66.694 GC heap after
+{Heap after GC invocations=80 (full 5):
+ def new generation   total 56896K, used 5274K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  84% used [0x08d90000, 0x092b6888, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 89409K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  71% used [0x25600000, 0x2ad507f8, 0x2ad50800, 0x2d067000)
+ Metaspace       used 75458K, committed 75904K, reserved 81920K
+}
+Event: 69.359 GC heap before
+{Heap before GC invocations=80 (full 5):
+ def new generation   total 56896K, used 55894K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,  99% used [0x05600000, 0x0876f138, 0x08770000)
+  from space 6272K,  84% used [0x08d90000, 0x092b6888, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 89409K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  71% used [0x25600000, 0x2ad507f8, 0x2ad50800, 0x2d067000)
+ Metaspace       used 76510K, committed 76928K, reserved 81920K
+}
+Event: 69.383 GC heap after
+{Heap after GC invocations=81 (full 5):
+ def new generation   total 56896K, used 5674K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  90% used [0x08770000, 0x08cfa800, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 92169K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  73% used [0x25600000, 0x2b0025c0, 0x2b002600, 0x2d067000)
+ Metaspace       used 76510K, committed 76928K, reserved 81920K
+}
+Event: 70.382 GC heap before
+{Heap before GC invocations=81 (full 5):
+ def new generation   total 56896K, used 56298K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  90% used [0x08770000, 0x08cfa800, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 92169K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  73% used [0x25600000, 0x2b0025c0, 0x2b002600, 0x2d067000)
+ Metaspace       used 76826K, committed 77312K, reserved 81920K
+}
+Event: 70.394 GC heap after
+{Heap after GC invocations=82 (full 5):
+ def new generation   total 56896K, used 162K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,   2% used [0x08d90000, 0x08db8b00, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 76826K, committed 77312K, reserved 81920K
+}
+Event: 75.715 GC heap before
+{Heap before GC invocations=82 (full 5):
+ def new generation   total 56896K, used 50786K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,   2% used [0x08d90000, 0x08db8b00, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77069K, committed 77568K, reserved 81920K
+}
+Event: 75.725 GC heap after
+{Heap after GC invocations=83 (full 5):
+ def new generation   total 56896K, used 2631K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  41% used [0x08770000, 0x08a01ff0, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77069K, committed 77568K, reserved 81920K
+}
+Event: 75.860 GC heap before
+{Heap before GC invocations=83 (full 5):
+ def new generation   total 56896K, used 53255K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  41% used [0x08770000, 0x08a01ff0, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77070K, committed 77568K, reserved 81920K
+}
+Event: 75.866 GC heap after
+{Heap after GC invocations=84 (full 5):
+ def new generation   total 56896K, used 2876K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  45% used [0x08d90000, 0x0905f358, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77070K, committed 77568K, reserved 81920K
+}
+Event: 75.999 GC heap before
+{Heap before GC invocations=84 (full 5):
+ def new generation   total 56896K, used 53500K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  45% used [0x08d90000, 0x0905f358, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77070K, committed 77568K, reserved 81920K
+}
+Event: 76.005 GC heap after
+{Heap after GC invocations=85 (full 5):
+ def new generation   total 56896K, used 3175K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  50% used [0x08770000, 0x08a89d28, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77070K, committed 77568K, reserved 81920K
+}
+Event: 76.138 GC heap before
+{Heap before GC invocations=85 (full 5):
+ def new generation   total 56896K, used 53799K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K, 100% used [0x05600000, 0x08770000, 0x08770000)
+  from space 6272K,  50% used [0x08770000, 0x08a89d28, 0x08d90000)
+  to   space 6272K,   0% used [0x08d90000, 0x08d90000, 0x093b0000)
+ tenured generation   total 125340K, used 94804K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b295110, 0x2b295200, 0x2d067000)
+ Metaspace       used 77070K, committed 77568K, reserved 81920K
+}
+Event: 76.145 GC heap after
+{Heap after GC invocations=86 (full 5):
+ def new generation   total 56896K, used 3127K [0x05600000, 0x093b0000, 0x25600000)
+  eden space 50624K,   0% used [0x05600000, 0x05600000, 0x08770000)
+  from space 6272K,  49% used [0x08d90000, 0x0909ded8, 0x093b0000)
+  to   space 6272K,   0% used [0x08770000, 0x08770000, 0x08d90000)
+ tenured generation   total 125340K, used 94936K [0x25600000, 0x2d067000, 0x65600000)
+   the space 125340K,  75% used [0x25600000, 0x2b2b63e8, 0x2b2b6400, 0x2d067000)
+ Metaspace       used 77070K, committed 77568K, reserved 81920K
+}
+
+Dll operation events (14 events):
+Event: 0.015 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\java.dll
+Event: 0.122 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\zip.dll
+Event: 0.126 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\instrument.dll
+Event: 0.135 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\net.dll
+Event: 0.138 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\nio.dll
+Event: 0.144 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\zip.dll
+Event: 0.524 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\jimage.dll
+Event: 0.645 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\verify.dll
+Event: 0.758 Loaded shared library C:\Users\ASUS\.gradle\native\c067742578af261105cb4f569cf0c3c89f3d7b1fecec35dd04571415982c5e48\windows-i386\native-platform.dll
+Event: 1.143 Loaded shared library C:\Users\ASUS\.gradle\native\100fb08df4bc3b14c8652ba06237920a3bd2aa13389f12d3474272988ae205f9\windows-i386\native-platform-file-events.dll
+Event: 19.293 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\management.dll
+Event: 19.298 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\management_ext.dll
+Event: 19.499 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\extnet.dll
+Event: 19.826 Loaded shared library C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\sunmscapi.dll
+
+Deoptimization events (20 events):
+Event: 42.173 Thread 0x683e5dc8 DEOPT PACKING pc=0x03dad9a4 sp=0x6936af00
+Event: 42.173 Thread 0x683e5dc8 DEOPT UNPACKING pc=0x035a5587 sp=0x6936ad74 mode 0
+Event: 42.173 Thread 0x683e5dc8 DEOPT PACKING pc=0x03dac334 sp=0x6936af70
+Event: 42.174 Thread 0x683e5dc8 DEOPT UNPACKING pc=0x035a5587 sp=0x6936ae44 mode 0
+Event: 49.999 Thread 0x683e5dc8 DEOPT PACKING pc=0x036e12b4 sp=0x6936af50
+Event: 49.999 Thread 0x683e5dc8 DEOPT UNPACKING pc=0x035a5587 sp=0x6936adfc mode 0
+Event: 51.286 Thread 0x6be31690 DEOPT PACKING pc=0x03c12f50 sp=0x7067f070
+Event: 51.286 Thread 0x6be31690 DEOPT UNPACKING pc=0x035a5587 sp=0x7067ef64 mode 0
+Event: 51.336 Thread 0x6be31690 DEOPT PACKING pc=0x03c71d44 sp=0x7067d5a0
+Event: 51.336 Thread 0x6be31690 DEOPT UNPACKING pc=0x035a5587 sp=0x7067d478 mode 0
+Event: 51.336 Thread 0x6be31690 DEOPT PACKING pc=0x03c71d44 sp=0x7067d7d0
+Event: 51.336 Thread 0x6be31690 DEOPT UNPACKING pc=0x035a5587 sp=0x7067d694 mode 0
+Event: 51.535 Thread 0x6be31690 DEOPT PACKING pc=0x03cadd30 sp=0x7067f360
+Event: 51.535 Thread 0x6be31690 DEOPT UNPACKING pc=0x035a5587 sp=0x7067f1fc mode 0
+Event: 53.056 Thread 0x6be31690 DEOPT PACKING pc=0x037db578 sp=0x7067ccf0
+Event: 53.056 Thread 0x6be31690 DEOPT UNPACKING pc=0x035a5587 sp=0x7067cbf4 mode 3
+Event: 55.035 Thread 0x6be31690 DEOPT PACKING pc=0x03d703e4 sp=0x7067dd30
+Event: 55.035 Thread 0x6be31690 DEOPT UNPACKING pc=0x035a5587 sp=0x7067dbe0 mode 0
+Event: 62.532 Thread 0x6f6c4610 DEOPT PACKING pc=0x04200e04 sp=0x7129d2b0
+Event: 62.532 Thread 0x6f6c4610 DEOPT UNPACKING pc=0x035a5587 sp=0x7129d150 mode 0
+
+Classes unloaded (20 events):
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78048938 '_BuildScript_$_run_closure1$_closure8'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78048000 '_BuildScript_$_run_closure1$_closure7'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78047620 '_BuildScript_$_run_closure1$_closure6$_closure10'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78046cc0 '_BuildScript_$_run_closure1$_closure6'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78046350 '_BuildScript_$_run_closure1$_closure5$_closure9'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78045880 '_BuildScript_$_run_closure1$_closure5'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78044828 '_BuildScript_$_run_closure1'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x78034a18 '_BuildScript_'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c784000 '_BuildScript_$_run_closure1'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c7685f0 '_BuildScript_'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c330280 'java/lang/invoke/LambdaForm$DMH+0x6c330280'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c113b68 'java/lang/invoke/LambdaForm$MH+0x6c113b68'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c113348 'java/lang/invoke/LambdaForm$MH+0x6c113348'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c112b28 'java/lang/invoke/LambdaForm$MH+0x6c112b28'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c112300 'java/lang/invoke/LambdaForm$MH+0x6c112300'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c111ae8 'java/lang/invoke/LambdaForm$MH+0x6c111ae8'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c1112c0 'java/lang/invoke/LambdaForm$MH+0x6c1112c0'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c110b30 'java/lang/invoke/LambdaForm$MH+0x6c110b30'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6c110290 'java/lang/invoke/LambdaForm$MH+0x6c110290'
+Event: 52.778 Thread 0x656145b8 Unloading class 0x6aed04b0 'org/gradle/api/Script$buildscript'
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (20 events):
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083efd48}> (0x083efd48) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083f0208}> (0x083f0208) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083f1b30}> (0x083f1b30) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083f2748}> (0x083f2748) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083f27c8}> (0x083f27c8) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083f2ba0}> (0x083f2ba0) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.325 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x083f44b0}> (0x083f44b0) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 69.335 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x0851e880}: static Lcom/android/builder/internal/aapt/AaptOptions;.<clinit>()V> (0x0851e880) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 1112]
+Event: 69.338 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x0855eaf0}: static Ljava/lang/Object;.<clinit>()V> (0x0855eaf0) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 1112]
+Event: 69.339 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x085789d8}: static Lcom/android/build/api/variant/impl/SerializableApplicationMultiOutputHandler;.<clinit>()V> (0x085789d8) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 1112]
+Event: 69.340 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x0858c690}: static Lcom/android/build/api/variant/impl/VariantOutputImpl$SerializedForm;.<clinit>()V> (0x0858c690) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 1112]
+Event: 69.341 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x0859e838}: static Lcom/android/build/api/variant/impl/VariantOutputConfigurationImpl;.<clinit>()V> (0x0859e838) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 1112]
+Event: 70.845 Thread 0x682a9018 Exception <a 'sun/nio/fs/WindowsException'{0x05c06f38}> (0x05c06f38) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 70.866 Thread 0x682a9018 Exception <a 'sun/nio/fs/WindowsException'{0x05c398b8}> (0x05c398b8) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 70.866 Thread 0x682a9018 Exception <a 'sun/nio/fs/WindowsException'{0x05c39d30}> (0x05c39d30) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 70.972 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x0615e330}> (0x0615e330) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 70.972 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x0615fd68}> (0x0615fd68) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 70.973 Thread 0x6be345e8 Exception <a 'sun/nio/fs/WindowsException'{0x06161a58}> (0x06161a58) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 516]
+Event: 71.038 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x061d33f8}: static Ljava/lang/Object;.<clinit>()V> (0x061d33f8) 
+thrown [s\src\hotspot\share\prims\jni.cpp, line 1112]
+Event: 77.854 Thread 0x6be345e8 Exception <a 'java/lang/NoSuchMethodError'{0x065dfb78}: 'void java.lang.invoke.DirectMethodHandle$Holder.invokeVirtual(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x065dfb78) 
+thrown [s\src\hotspot\share\interpreter\linkResolver.cpp, line 759]
+
+VM Operations (20 events):
+Event: 75.449 Executing VM operation: Cleanup
+Event: 75.449 Executing VM operation: Cleanup done
+Event: 75.609 Executing VM operation: HandshakeAllThreads
+Event: 75.611 Executing VM operation: HandshakeAllThreads done
+Event: 75.611 Executing VM operation: HandshakeAllThreads
+Event: 75.611 Executing VM operation: HandshakeAllThreads done
+Event: 75.715 Executing VM operation: GenCollectForAllocation
+Event: 75.725 Executing VM operation: GenCollectForAllocation done
+Event: 75.860 Executing VM operation: GenCollectForAllocation
+Event: 75.866 Executing VM operation: GenCollectForAllocation done
+Event: 75.999 Executing VM operation: GenCollectForAllocation
+Event: 76.006 Executing VM operation: GenCollectForAllocation done
+Event: 76.138 Executing VM operation: GenCollectForAllocation
+Event: 76.145 Executing VM operation: GenCollectForAllocation done
+Event: 76.298 Executing VM operation: HandshakeAllThreads
+Event: 76.299 Executing VM operation: HandshakeAllThreads done
+Event: 76.371 Executing VM operation: HandshakeAllThreads
+Event: 76.372 Executing VM operation: HandshakeAllThreads done
+Event: 77.378 Executing VM operation: Cleanup
+Event: 77.378 Executing VM operation: Cleanup done
+
+Events (20 events):
+Event: 76.248 loading class java/nio/file/FileTreeWalker$1
+Event: 76.248 loading class java/nio/file/FileTreeWalker$1 done
+Event: 76.277 loading class java/nio/charset/IllegalCharsetNameException
+Event: 76.277 loading class java/nio/charset/IllegalCharsetNameException done
+Event: 76.280 loading class java/nio/file/ProviderNotFoundException
+Event: 76.280 loading class java/nio/file/ProviderNotFoundException done
+Event: 76.295 loading class java/util/JumboEnumSet
+Event: 76.296 loading class java/util/JumboEnumSet done
+Event: 76.307 loading class java/util/JumboEnumSet$EnumSetIterator
+Event: 76.307 loading class java/util/JumboEnumSet$EnumSetIterator done
+Event: 76.313 loading class java/util/ResourceBundle$KeyElementReference
+Event: 76.314 loading class java/util/ResourceBundle$CacheKeyReference
+Event: 76.314 loading class java/util/ResourceBundle$CacheKeyReference done
+Event: 76.314 loading class java/util/ResourceBundle$KeyElementReference done
+Event: 76.314 loading class java/util/ResourceBundle$3
+Event: 76.314 loading class java/util/ResourceBundle$3 done
+Event: 76.318 loading class java/util/ResourceBundle$BundleReference
+Event: 76.318 loading class java/util/ResourceBundle$BundleReference done
+Event: 76.360 loading class java/util/ServiceLoader$ProviderSpliterator
+Event: 76.361 loading class java/util/ServiceLoader$ProviderSpliterator done
+
+
+Dynamic libraries:
+0x00db0000 - 0x00dbc000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\java.exe
+0x77940000 - 0x77aff000 	C:\WINDOWS\SYSTEM32\ntdll.dll
+0x76f10000 - 0x77000000 	C:\WINDOWS\System32\KERNEL32.DLL
+0x76a80000 - 0x76d48000 	C:\WINDOWS\System32\KERNELBASE.dll
+0x73160000 - 0x7320e000 	C:\WINDOWS\SYSTEM32\apphelp.dll
+0x770b0000 - 0x771c0000 	C:\WINDOWS\System32\ucrtbase.dll
+0x72b60000 - 0x72b75000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\jli.dll
+0x72b80000 - 0x72b94000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\VCRUNTIME140.dll
+0x760c0000 - 0x76289000 	C:\WINDOWS\System32\USER32.dll
+0x75470000 - 0x7548a000 	C:\WINDOWS\System32\win32u.dll
+0x72930000 - 0x72b59000 	C:\WINDOWS\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8037_none_85b66681f7afde41\COMCTL32.dll
+0x77010000 - 0x77032000 	C:\WINDOWS\System32\GDI32.dll
+0x771d0000 - 0x772bb000 	C:\WINDOWS\System32\gdi32full.dll
+0x772c0000 - 0x77387000 	C:\WINDOWS\System32\msvcrt.dll
+0x753e0000 - 0x75465000 	C:\WINDOWS\System32\msvcp_win.dll
+0x75f60000 - 0x75f85000 	C:\WINDOWS\System32\IMM32.DLL
+0x728c0000 - 0x7292d000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\msvcp140.dll
+0x72380000 - 0x728b4000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\client\jvm.dll
+0x76e80000 - 0x76f05000 	C:\WINDOWS\System32\ADVAPI32.dll
+0x76300000 - 0x76383000 	C:\WINDOWS\System32\sechost.dll
+0x773f0000 - 0x774ac000 	C:\WINDOWS\System32\RPCRT4.dll
+0x72320000 - 0x72375000 	C:\WINDOWS\SYSTEM32\POWRPROF.dll
+0x72310000 - 0x72318000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x722d0000 - 0x72303000 	C:\WINDOWS\SYSTEM32\WINMM.dll
+0x75490000 - 0x754f1000 	C:\WINDOWS\System32\WS2_32.dll
+0x74c40000 - 0x74c48000 	C:\WINDOWS\SYSTEM32\VERSION.dll
+0x722b0000 - 0x722be000 	C:\WINDOWS\SYSTEM32\UMPDC.dll
+0x74bd0000 - 0x74be5000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
+0x722a0000 - 0x722a9000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\jimage.dll
+0x720b0000 - 0x72290000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
+0x755c0000 - 0x75852000 	C:\WINDOWS\System32\combase.dll
+0x76dd0000 - 0x76e6f000 	C:\WINDOWS\System32\OLEAUT32.dll
+0x72070000 - 0x7209f000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
+0x76d50000 - 0x76dc4000 	C:\WINDOWS\System32\bcryptPrimitives.dll
+0x71f10000 - 0x71f1d000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\instrument.dll
+0x72040000 - 0x72061000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\java.dll
+0x75920000 - 0x75f56000 	C:\WINDOWS\System32\SHELL32.dll
+0x77660000 - 0x77759000 	C:\WINDOWS\System32\wintypes.dll
+0x76390000 - 0x76a74000 	C:\WINDOWS\System32\windows.storage.dll
+0x74cb0000 - 0x74d82000 	C:\WINDOWS\System32\SHCORE.dll
+0x74d90000 - 0x74de2000 	C:\WINDOWS\System32\shlwapi.dll
+0x74ad0000 - 0x74aed000 	C:\WINDOWS\SYSTEM32\profapi.dll
+0x71fe0000 - 0x71ff6000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\zip.dll
+0x72020000 - 0x72034000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\net.dll
+0x73070000 - 0x73151000 	C:\WINDOWS\SYSTEM32\WINHTTP.dll
+0x74390000 - 0x743e4000 	C:\WINDOWS\system32\mswsock.dll
+0x72000000 - 0x72012000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\nio.dll
+0x71fd0000 - 0x71fdd000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\verify.dll
+0x71f90000 - 0x71fb0000 	C:\Users\ASUS\.gradle\native\c067742578af261105cb4f569cf0c3c89f3d7b1fecec35dd04571415982c5e48\windows-i386\native-platform.dll
+0x71e20000 - 0x71f10000 	C:\Users\ASUS\.gradle\native\100fb08df4bc3b14c8652ba06237920a3bd2aa13389f12d3474272988ae205f9\windows-i386\native-platform-file-events.dll
+0x71fc0000 - 0x71fc8000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\management.dll
+0x71fb0000 - 0x71fb9000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\management_ext.dll
+0x760b0000 - 0x760b6000 	C:\WINDOWS\System32\PSAPI.DLL
+0x71f70000 - 0x71f84000 	C:\WINDOWS\SYSTEM32\CRYPTSP.dll
+0x71f30000 - 0x71f62000 	C:\WINDOWS\system32\rsaenh.dll
+0x74c50000 - 0x74c78000 	C:\WINDOWS\SYSTEM32\USERENV.dll
+0x72d00000 - 0x72d1c000 	C:\WINDOWS\SYSTEM32\bcrypt.dll
+0x745c0000 - 0x745ca000 	C:\WINDOWS\SYSTEM32\CRYPTBASE.dll
+0x745f0000 - 0x74617000 	C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+0x74df0000 - 0x74df7000 	C:\WINDOWS\System32\NSI.dll
+0x73050000 - 0x73067000 	C:\WINDOWS\SYSTEM32\dhcpcsvc6.DLL
+0x73030000 - 0x7304c000 	C:\WINDOWS\SYSTEM32\dhcpcsvc.DLL
+0x72e90000 - 0x72f74000 	C:\WINDOWS\SYSTEM32\DNSAPI.dll
+0x71f20000 - 0x71f26000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\extnet.dll
+0x71e10000 - 0x71e1b000 	C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\sunmscapi.dll
+0x77550000 - 0x77659000 	C:\WINDOWS\System32\CRYPT32.dll
+0x72d50000 - 0x72d78000 	C:\WINDOWS\SYSTEM32\ncrypt.dll
+0x72d20000 - 0x72d48000 	C:\WINDOWS\SYSTEM32\NTASN1.dll
+0x71e00000 - 0x71e07000 	C:\WINDOWS\system32\wshunix.dll
+0x72e80000 - 0x72e88000 	C:\Windows\System32\rasadhlp.dll
+0x72e10000 - 0x72e72000 	C:\WINDOWS\System32\fwpuclnt.dll
+0x65fd0000 - 0x65ff9000 	C:\WINDOWS\SYSTEM32\ntmarta.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8037_none_85b66681f7afde41;C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\client;C:\Users\ASUS\.gradle\native\c067742578af261105cb4f569cf0c3c89f3d7b1fecec35dd04571415982c5e48\windows-i386;C:\Users\ASUS\.gradle\native\100fb08df4bc3b14c8652ba06237920a3bd2aa13389f12d3474272988ae205f9\windows-i386
+
+VM Arguments:
+jvm_args: --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.xml/javax.xml.namespace=ALL-UNNAMED -Xmx1536m -Dfile.encoding=windows-1252 -Duser.country=US -Duser.language=en -Duser.variant -javaagent:C:\Users\ASUS\.gradle\wrapper\dists\gradle-8.11.1-bin\bpt9gzteqjrbo1mjrsomdt32c\gradle-8.11.1\lib\agents\gradle-instrumentation-agent-8.11.1.jar 
+java_command: org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.11.1
+java_class_path (initial): C:\Users\ASUS\.gradle\wrapper\dists\gradle-8.11.1-bin\bpt9gzteqjrbo1mjrsomdt32c\gradle-8.11.1\lib\gradle-daemon-main-8.11.1.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 1                                         {product} {ergonomic}
+    uintx CodeCacheExpansionSize                   = 32768                                  {pd product} {ergonomic}
+    uintx InitialCodeCacheSize                     = 163840                                 {pd product} {ergonomic}
+   size_t InitialHeapSize                          = 16777216                                  {product} {ergonomic}
+   size_t MaxHeapSize                              = 1610612736                                {product} {command line}
+   size_t MaxNewSize                               = 536870912                                 {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 131072                                    {product} {ergonomic}
+   size_t MinHeapSize                              = 6291456                                   {product} {ergonomic}
+     bool NeverActAsServerClassMachine             = true                                   {pd product} {ergonomic}
+   size_t NewSize                                  = 5570560                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5242880                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 0                                      {pd product} {ergonomic}
+   size_t OldSize                                  = 11206656                                  {product} {ergonomic}
+     bool ProfileInterpreter                       = false                                  {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 0                                      {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 33554432                               {pd product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 1610612736                             {manageable} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+     bool UseSerialGC                              = true                                      {product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\
+CLASSPATH=C:\Users\ASUS\github\mcse\android-app\\gradle\wrapper\gradle-wrapper.jar
+PATH=C:\Users\ASUS\.bubblewrap\jdk\jdk-17.0.11+9\bin\;c:\Users\ASUS\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;c:\Users\ASUS\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\copilotCli;C:\Users\ASUS\AppData\Local\Programs\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\MySQL\MySQL Server 8.0\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Cloudflare\Cloudflare WARP\;C:\Program Files\Git\cmd;C:\Strawberry\c\bin;C:\Strawberry\perl\site\bin;C:\Strawberry\perl\bin;C:\Users\ASUS\AppData\Local\Programs\Python\Python313\Scripts\;C:\Users\ASUS\AppData\Local\Programs\Python\Python313\;C:\Users\ASUS\AppData\Local\Programs\Python\Launcher\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\ASUS\scoop\shims;C:\Users\ASUS\AppData\Local\Microsoft\WindowsApps;C:\mingw64\bin;C:\Users\ASUS\AppData\Local\GitHubDesktop\bin;C:\Users\ASUS\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ASUS\AppData\Roaming\npm;C:\Users\ASUS\AppData\Local\Programs\Antigravity\bin;C:\Users\ASUS\flutter\bin;C:\Users\ASUS\AppData\Local\PowerToys\DSCModules\;c:\Users\ASUS\.vscode\extensions\vscjava.vscode-java-debug-0.58.5\bundled\scripts\noConfigScripts
+USERNAME=ASUS
+LANG=en_US.UTF-8
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 170 Stepping 4, GenuineIntel
+TMP=C:\Users\ASUS\AppData\Local\Temp
+TEMP=C:\Users\ASUS\AppData\Local\Temp
+
+
+
+Periodic native trim disabled
+
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 11 , 64 bit Build 26100 (10.0.26100.7920)
+OS uptime: 1 days 3:04 hours
+Hyper-V role detected
+
+CPU: total 22 (initial active 22) (11 cores per cpu, 2 threads per core) family 6 model 170 stepping 4 microcode 0x1c, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, sha, fma, vzeroupper, clflush, clflushopt, clwb, hv
+Processor Information for processor 0
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 1
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 2
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 3
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 4
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 5
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 6
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 7
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 8
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 9
+  Max Mhz: 3800, Current Mhz: 900, Mhz Limit: 874
+Processor Information for processor 10
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 11
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 12
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 13
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 14
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 15
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 16
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 17
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 18
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 19
+  Max Mhz: 1400, Current Mhz: 1400, Mhz Limit: 1400
+Processor Information for processor 20
+  Max Mhz: 2500, Current Mhz: 700, Mhz Limit: 700
+Processor Information for processor 21
+  Max Mhz: 2500, Current Mhz: 700, Mhz Limit: 700
+
+Memory: 4k page, system-wide physical 15789M (3760M free)
+TotalPageFile size 37293M (AvailPageFile size 19732M), user-mode portion of virtual address-space 2047M (19M free)
+current process WorkingSet (physical memory assigned to process): 352M, peak: 352M
+current process commit charge ("private bytes"): 397M, peak: 397M
+
+vm_info: OpenJDK Client VM (17.0.11+9) for windows-x86 JRE (17.0.11+9), built on Apr 18 2024 18:23:17 by "admin" with MS VC++ 16.10 / 16.11 (VS2019)
+
+END.
