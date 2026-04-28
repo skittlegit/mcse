@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import LoadingScreen from "./LoadingScreen";
 import TopNav from "./TopNav";
@@ -9,6 +10,9 @@ import AnnouncementBanner from "./AnnouncementBanner";
 import MarketClosedBanner from "./MarketClosedBanner";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isFullscreen = pathname === "/loading";
+
   const [loading, setLoading] = useState(() => {
     if (typeof window !== "undefined" && sessionStorage.getItem("mcse-booted")) {
       return false;
@@ -30,6 +34,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     const t = setTimeout(() => handleDone(), 5000);
     return () => clearTimeout(t);
   }, [loading, handleDone]);
+
+  // Full-screen routes bypass the entire shell chrome.
+  if (isFullscreen) {
+    return <>{children}</>;
+  }
 
   return (
     <>

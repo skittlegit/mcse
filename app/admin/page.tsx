@@ -852,6 +852,10 @@ function TotalAdminDashboard() {
   const [topupTarget, setTopupTarget] = useState<string | null>(null);
   const [topupAmount, setTopupAmount] = useState("");
 
+  // Sort state for the USERS tab table.
+  type UserSortKey = "name" | "email" | "role" | "trades" | "balance" | "returns" | "networth" | "joined";
+  const [userSort, setUserSort] = useState<{ key: UserSortKey; dir: "asc" | "desc" }>({ key: "joined", dir: "desc" });
+
   // Live USERS list (from /api/admin/users → Convex investors with live stats).
   // Polled every 10 s so balance / trades / returns stay current.
   const [recentUsers, setRecentUsers] = useState<LiveUser[]>([]);
@@ -976,6 +980,52 @@ function TotalAdminDashboard() {
 
   /* ——— USERS TAB ——— */
   if (tab === "users") {
+    // Compute net worth (cash + locked margin + portfolio mark-to-market) and
+    // sort the list by the active column.
+    const networthOf = (u: LiveUser) => u.balance + u.cashLocked + u.currentValue;
+    const sortedUsers = [...recentUsers].sort((a, b) => {
+      const dir = userSort.dir === "asc" ? 1 : -1;
+      switch (userSort.key) {
+        case "name": return a.name.localeCompare(b.name) * dir;
+        case "email": return a.email.localeCompare(b.email) * dir;
+        case "role": return a.role.localeCompare(b.role) * dir;
+        case "trades": return (a.trades - b.trades) * dir;
+        case "balance": return (a.balance - b.balance) * dir;
+        case "returns": return (a.returns - b.returns) * dir;
+        case "networth": return (networthOf(a) - networthOf(b)) * dir;
+        case "joined": return (new Date(a.joined).getTime() - new Date(b.joined).getTime()) * dir;
+        default: return 0;
+      }
+    });
+
+    function toggleSort(key: UserSortKey) {
+      setUserSort((prev) =>
+        prev.key === key
+          ? { key, dir: prev.dir === "asc" ? "desc" : "asc" }
+          : { key, dir: key === "name" || key === "email" || key === "role" ? "asc" : "desc" },
+      );
+    }
+
+    const SortHeader = ({ label, sortKey, align = "left" }: { label: string; sortKey: UserSortKey; align?: "left" | "right" }) => {
+      const active = userSort.key === sortKey;
+      return (
+        <button
+          type="button"
+          onClick={() => toggleSort(sortKey)}
+          className={`flex items-center gap-1 text-[9px] tracking-[0.15em] transition-colors ${
+            active ? "text-white/70" : "text-white/25 hover:text-white/50"
+          } ${align === "right" ? "justify-end" : "justify-start"}`}
+        >
+          <span>{label}</span>
+          {active ? (
+            userSort.dir === "asc" ? <ChevronUp size={10} /> : <ChevronDown size={10} />
+          ) : (
+            <ChevronDown size={10} className="opacity-30" />
+          )}
+        </button>
+      );
+    };
+
     return (
       <>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
@@ -984,23 +1034,26 @@ function TotalAdminDashboard() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="border border-white/10">
-          <div className="hidden md:grid grid-cols-[1.6fr_1.8fr_60px_60px_100px_140px_70px] gap-4 px-5 py-3 border-b border-white/8">
-            <span className="text-[9px] tracking-[0.15em] text-white/25">NAME</span>
-            <span className="text-[9px] tracking-[0.15em] text-white/25">EMAIL</span>
-            <span className="text-[9px] tracking-[0.15em] text-white/25">ROLE</span>
-            <span className="text-[9px] tracking-[0.15em] text-white/25 text-right">TRADES</span>
-            <span className="text-[9px] tracking-[0.15em] text-white/25 text-right">BALANCE</span>
-            <span className="text-[9px] tracking-[0.15em] text-white/25 text-right">RETURNS (P&amp;L)</span>
-            <span className="text-[9px] tracking-[0.15em] text-white/25">JOINED</span>
+          <div className="hidden md:grid grid-cols-[1.5fr_1.7fr_60px_60px_100px_140px_120px_70px] gap-4 px-5 py-3 border-b border-white/8">
+            <SortHeader label="NAME" sortKey="name" />
+            <SortHeader label="EMAIL" sortKey="email" />
+            <SortHeader label="ROLE" sortKey="role" />
+            <SortHeader label="TRADES" sortKey="trades" align="right" />
+            <SortHeader label="BALANCE" sortKey="balance" align="right" />
+            <SortHeader label="RETURNS (P&L)" sortKey="returns" align="right" />
+            <SortHeader label="NET WORTH" sortKey="networth" align="right" />
+            <SortHeader label="JOINED" sortKey="joined" />
           </div>
           {recentUsers.length === 0 && (
             <div className="px-5 py-6 text-center">
               <p className="text-[10px] text-white/20">Loading users from live database…</p>
             </div>
           )}
-          {recentUsers.map((user, i) => (
-            <div key={user.email} className={`px-5 py-3.5 ${i < recentUsers.length - 1 ? "border-b border-white/6" : ""}`}>
-              <div className="hidden md:grid grid-cols-[1.6fr_1.8fr_60px_60px_100px_140px_70px] gap-4 items-center">
+          {sortedUsers.map((user, i) => {
+            const networth = networthOf(user);
+            return (
+            <div key={user.email} className={`px-5 py-3.5 ${i < sortedUsers.length - 1 ? "border-b border-white/6" : ""}`}>
+              <div className="hidden md:grid grid-cols-[1.5fr_1.7fr_60px_60px_100px_140px_120px_70px] gap-4 items-center">
                 <div className="flex items-center gap-3">
                   <div className="w-7 h-7 border border-white/20 flex items-center justify-center shrink-0">
                     <span className="text-[7px] tracking-wider text-white/40">{user.name.split(" ").map(w => w[0]).join("")}</span>
@@ -1014,11 +1067,12 @@ function TotalAdminDashboard() {
                   "text-white/30 border-white/15"
                 }`}>{user.role === "company" ? "CO." : user.role === "admin" ? "ADM" : "USER"}</span>
                 <span className="text-[10px] text-white/40 text-right">{user.trades}</span>
-                <span className="text-[10px] text-white/40">{"\u20B9"}{user.balance.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
+                <span className="text-[10px] text-white/40 text-right">{"\u20B9"}{user.balance.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
                 <span className={`text-[10px] text-right ${user.returns > 0 ? "text-up" : user.returns < 0 ? "text-down" : "text-white/40"}`}>
                   {user.returns >= 0 ? "+" : ""}{"₹"}{Math.abs(user.returns).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
                   <span className="text-[8px] text-white/30 ml-1">({user.returnsPct >= 0 ? "+" : ""}{user.returnsPct.toFixed(2)}%)</span>
                 </span>
+                <span className="text-[10px] text-white/70 text-right font-medium">{"\u20B9"}{networth.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</span>
                 <span className="text-[10px] text-white/30">{new Date(user.joined).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</span>
               </div>
               <div className="md:hidden flex items-center justify-between">
@@ -1032,7 +1086,8 @@ function TotalAdminDashboard() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-[9px] text-white/40">{user.trades} trades · {"\u20B9"}{user.balance.toLocaleString("en-IN")}</p>
+                  <p className="text-[9px] text-white/60">NW {"\u20B9"}{networth.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</p>
+                  <p className="text-[8px] text-white/30">{user.trades} trades · {"\u20B9"}{user.balance.toLocaleString("en-IN")}</p>
                   <span className={`text-[7px] tracking-[0.1em] px-1 py-0.5 border ${
                     user.role === "admin" ? "text-amber-400 border-amber-400/20" :
                     user.role === "company" ? "text-blue-400 border-blue-400/20" :
@@ -1041,7 +1096,8 @@ function TotalAdminDashboard() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </motion.div>
       </>
     );
